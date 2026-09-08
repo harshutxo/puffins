@@ -22,11 +22,11 @@
         { "name": "Flavour 4", "status": "coming-soon", "swatch": "#17b3a3" },
         { "name": "Flavour 5", "status": "coming-soon", "swatch": "#d6389a" }
       ],
-      "packSize": { "value": "14 cakes / 75 g (indicative — confirm before publication)", "confirmed": false },
+      "packSize": { "value": "8 cakes per sleeve, 6 g each (48 g net)", "confirmed": true },
       "price": { "amount": null, "currency": "INR", "confirmed": false, "note": "Pricing to be confirmed by SIF before checkout goes live." },
       "attributes": ["Baked, not fried", "Gluten free", "100% vegetarian", "No added preservatives"],
       "attributesConfirmed": false,
-      "ingredients": { "text": null, "confirmed": false },
+      "ingredients": { "text": "Rice — that's it. Whole grains are pressed at 200°C; the pressure drop expands the grain and binds it to itself. No syrup, no oil, no flour, nothing else added.", "confirmed": true },
       "allergens": { "text": null, "confirmed": false },
       "nutrition": { "perServing": null, "confirmed": false },
       "shelfLife": { "text": null, "confirmed": false },

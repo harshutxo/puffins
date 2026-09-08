@@ -13,6 +13,32 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.saramthyafoods.com/" },
+    { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://www.saramthyafoods.com/faq.html" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What are Puffins Rice Cakes made of?", "acceptedAnswer": { "@type": "Answer", "text": "Puffed rice, baked (not fried) into a light, crunchy cake. Full ingredient and nutrition information will be published here once SIF finalizes and approves final labels." } },
+    { "@type": "Question", "name": "Are Puffins products vegetarian and gluten free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — Puffins Rice Cakes are 100% vegetarian and gluten free, made from puffed rice with no added preservatives." } },
+    { "@type": "Question", "name": "What flavours are available?", "acceptedAnswer": { "@type": "Answer", "text": "Sea Salt is available now. Unsalted and three additional flavours are in development — final names will be announced soon." } },
+    { "@type": "Question", "name": "How should I store Puffins Rice Cakes?", "acceptedAnswer": { "@type": "Answer", "text": "Keep the pack sealed in a cool, dry place, and reseal it after opening to keep every cake crunchy." } },
+    { "@type": "Question", "name": "Can I buy Puffins online right now?", "acceptedAnswer": { "@type": "Answer", "text": "We're launching in phases — this site currently showcases our catalogue. Contact us to find current availability, or check back soon as online ordering goes live." } },
+    { "@type": "Question", "name": "What are your shipping timelines?", "acceptedAnswer": { "@type": "Answer", "text": "Shipping details will be published on our Shipping & Returns page once online ordering is active." } },
+    { "@type": "Question", "name": "Do you offer returns or refunds?", "acceptedAnswer": { "@type": "Answer", "text": "See our Shipping & Returns page for our policy, published once e-commerce goes live." } },
+    { "@type": "Question", "name": "I'm a retailer or distributor — how do I stock Puffins?", "acceptedAnswer": { "@type": "Answer", "text": "We'd love to hear from you. Use our business enquiry form and our team will be in touch." } }
+  ]
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -21,7 +47,7 @@
   <div class="container header-inner">
     <a class="nav-link nav-link-left" href="shop.html">Our Products</a>
     <a class="brand" href="index.html" aria-label="Puffins home">
-      <img src="assets/img/brand/favicon-192.png" alt="Puffins" style="height:40px;width:40px;">
+      <img src="assets/img/brand/logo-mark-2026.svg" alt="Puffins" class="brand-mark">
     </a>
     <a class="nav-link nav-link-right" href="our-story.html">Our Story</a>
     <button class="nav-toggle" data-nav-toggle aria-label="Toggle menu" aria-expanded="false">
@@ -43,6 +69,8 @@
 
 <main id="main">
   <section class="hero-photo" style="background-image:url('assets/img/brand/plain-rice-cakes.webp');padding-bottom:56px;">
+    <img class="hero-accent hero-accent-tr" src="assets/img/brand/topped-four-ways.webp" alt="" aria-hidden="true" loading="lazy">
+    <img class="hero-accent hero-accent-bl" src="assets/img/brand/lifestyle-topped-egg-prosciutto.jpg" alt="" aria-hidden="true" loading="lazy">
     <div class="container">
       <div class="breadcrumb"><a href="index.html">Home</a> / FAQ</div>
       <div style="max-width:640px;">
@@ -117,11 +145,15 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand">
-          <img src="assets/img/brand/favicon-32.png" alt="" style="height:28px;width:28px;">
+          <img src="assets/img/brand/favicon-32.png" alt="" style="height:28px;width:28px;" loading="lazy" width="28" height="28">
           Puffins
         </div>
         <div class="footer-tagline">Light. Flavorful. <span>Anytime.</span></div>
         <p style="color:#a9b7c4;font-size:.92rem;max-width:320px;">A consumer brand by Samarthya Innovative Foods Pvt. Ltd., built in Jaipur, Rajasthan.</p>
+        <!-- TODO: real Instagram / Facebook / LinkedIn URLs pending client
+             (redesign spec item 6: "Partners Section — update outdated links,
+             add official LinkedIn"). Hrefs intentionally left as "#" rather
+             than a fabricated URL. -->
         <div class="footer-social" aria-label="Social media">
           <a href="#" aria-label="Instagram">IG</a>
           <a href="#" aria-label="Facebook">FB</a>
@@ -166,6 +198,7 @@
 </footer>
 
 <script src="assets/js/products-data.js"></script>
+<script src="assets/js/assistant-data.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

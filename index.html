@@ -18,6 +18,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Puffins",
+  "url": "https://www.saramthyafoods.com/",
+  "logo": "https://www.saramthyafoods.com/assets/img/brand/logo-mark-2026.svg",
+  "description": "Puffins turns puffed rice cakes into an everyday, flavour-led snack — baked not fried, light, crunchy and made for anytime snacking.",
+  "brand": { "@type": "Brand", "name": "Puffins" },
+  "parentOrganization": { "@type": "Organization", "name": "Samarthya Innovative Foods Pvt. Ltd." }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Puffins",
+  "url": "https://www.saramthyafoods.com/"
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -27,7 +47,7 @@
   <div class="container header-inner">
     <a class="nav-link nav-link-left" href="shop.html">Our Products</a>
     <a class="brand" href="index.html" aria-label="Puffins home">
-      <img src="assets/img/brand/favicon-192.png" alt="Puffins" style="height:40px;width:40px;">
+      <img src="assets/img/brand/logo-mark-2026.svg" alt="Puffins" class="brand-mark">
     </a>
     <a class="nav-link nav-link-right" href="our-story.html">Our Story</a>
     <button class="nav-toggle" data-nav-toggle aria-label="Toggle menu" aria-expanded="false">
@@ -55,7 +75,7 @@
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">By Samarthya Innovative Foods</p>
-        <h1 class="h1">Rice cakes,<br>redefined as an<br><span style="color:var(--orange)">everyday snack.</span></h1>
+        <h1 class="h1">Rice cakes,<br>redefined as an<br><span class="hero-hl">everyday snack.</span></h1>
         <p class="lead">Light, crunchy, baked-not-fried puffed rice cakes made for your morning rush, work break, travel bag or evening craving. Meet Puffins.</p>
         <div class="btnrow">
           <a href="shop.html" class="btn btn-primary">Shop Rice Cakes</a>
@@ -69,7 +89,7 @@
       </div>
       <div class="hero-media">
         <div class="hero-blob" aria-hidden="true"></div>
-        <img src="assets/img/brand/packshot-sea-salt.jpg" alt="Puffins Sea Salt Rice Cakes tube pack" width="400" height="850">
+        <img src="assets/img/brand/packshot-sea-salt.jpg" alt="Puffins Sea Salt Rice Cakes tube pack" width="400" height="850" fetchpriority="high">
         <div class="hero-floatcard">
           <strong>🌾 100%</strong>
           <span>Puffed rice, baked not fried</span>
@@ -119,41 +139,29 @@
     </div>
   </section>
 
-  <!-- PRODUCT RANGE -->
-  <section class="bg-cream">
+  <!-- PRODUCT RANGE — redesign spec item 7: homepage shows a showcase video
+       instead of the shopping grid. Source: assets/video/puffins-showcase.mp4
+       (copied from the brand's own "Advertisements.mp4"). The product-card
+       grid still renders underneath, hidden, as a fallback main.js reveals
+       automatically if this video ever fails to load. Sunburst accent below
+       is a low-opacity texture layer sourced from the brand reference video's
+       warm-template slides — see style.css .sunburst-accent. -->
+  <section class="bg-cream sunburst-accent">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">Product Range</p>
+        <div class="category-head">
+          <p class="eyebrow" style="margin-bottom:0;">Baked Puffed</p>
+          <span class="product-count" data-product-count>Loading…</span>
+        </div>
         <h2 class="h2">Two formats. One craveable format, unlocked.</h2>
       </div>
-      <div class="grid grid-2" data-product-grid>
-        <!-- rendered by main.js from products-data.js -->
-      </div>
-    </div>
-  </section>
-
-  <!-- WHY PUFFINS -->
-  <section>
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Why Puffins?</p>
-        <h2 class="h2">Health, without boring. Taste, without compromise.</h2>
-      </div>
-      <div class="grid grid-3">
-        <div class="card">
-          <div class="icon">🔥</div>
-          <h3>Flavour first</h3>
-          <p>From plain to craveable — exciting flavours designed for Indian taste preferences.</p>
-        </div>
-        <div class="card">
-          <div class="icon">🕐</div>
-          <h3>Anytime occasion</h3>
-          <p>From a specific eating routine to an anytime snack — morning, work, college, travel or evening.</p>
-        </div>
-        <div class="card">
-          <div class="icon">🛒</div>
-          <h3>Accessible</h3>
-          <p>Built to be available through modern retail, D2C and quick commerce as we grow.</p>
+      <div class="product-showcase" data-product-showcase>
+        <video class="showcase-video" data-showcase-video controls playsinline poster="assets/img/brand/showcase-poster.jpg" aria-label="Puffins product range showcase">
+          <source src="assets/video/puffins-showcase.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="grid grid-2" data-product-grid hidden>
+          <!-- rendered by main.js from products-data.js -->
         </div>
       </div>
     </div>
@@ -194,25 +202,10 @@
           <a href="shop.html" class="btn btn-light">Explore flavours</a>
         </div>
         <div class="cinemagraph" role="img" aria-label="Puffins rice cakes shown topped four ways, plain, and packaged">
-          <img src="assets/img/brand/topped-four-ways.webp" alt="">
-          <img src="assets/img/brand/lifestyle-topped-egg-prosciutto.jpg" alt="">
-          <img src="assets/img/brand/plain-rice-cakes.webp" alt="">
-          <img src="assets/img/brand/packshot-sea-salt.jpg" alt="">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OUR STORY TEASER -->
-  <section>
-    <div class="container">
-      <div class="grid grid-2" style="align-items:center;">
-        <img src="assets/img/brand/lifestyle-topped-egg-prosciutto.jpg" alt="Puffins rice cakes topped with prosciutto, avocado and egg" style="border-radius:var(--radius-lg);box-shadow:var(--shadow-md);order:2;">
-        <div style="order:1;">
-          <p class="eyebrow">Our Story</p>
-          <h2 class="h2">"Why can't a rice cake just be a snack?"</h2>
-          <p class="lead">Rice had always been part of our founder's world — he just hadn't thought of it as a snack. That simple observation became Puffins: a dependable, modern Indian snacking brand built on a familiar staple.</p>
-          <a href="our-story.html" class="btn btn-outline">Read the full story →</a>
+          <img src="assets/img/brand/topped-four-ways.webp" alt="" loading="lazy">
+          <img src="assets/img/brand/lifestyle-topped-egg-prosciutto.jpg" alt="" loading="lazy">
+          <img src="assets/img/brand/plain-rice-cakes.webp" alt="" loading="lazy">
+          <img src="assets/img/brand/packshot-sea-salt.jpg" alt="" loading="lazy">
         </div>
       </div>
     </div>
@@ -254,21 +247,36 @@
       <div class="pending text-center" style="max-width:640px;margin:0 auto 32px;">
         <strong>Coming soon —</strong> this section will carry real customer reviews and UGC only. No testimonials are published until genuine feedback is collected post-launch.
       </div>
-      <div class="grid grid-3">
-        <div class="quote-card">
-          <div class="stars">★★★★★</div>
-          <p class="text-soft">Real review placeholder — replace with verified customer feedback.</p>
-          <div class="who">Reserved for a real customer<span>Pending launch</span></div>
+      <!-- Browsing mechanic only changed to the swipe carousel (redesign spec item 1)
+           — content is unchanged placeholder copy per README's no-fake-testimonials rule. -->
+      <div class="carousel3d" data-carousel style="--c3d-h:280px;--c3d-w:min(88%,460px);">
+        <div class="carousel3d-viewport" data-carousel-viewport>
+          <div class="carousel3d-item">
+            <div class="quote-card">
+              <div class="stars">★★★★★</div>
+              <p class="text-soft">Real review placeholder — replace with verified customer feedback.</p>
+              <div class="who">Reserved for a real customer<span>Pending launch</span></div>
+            </div>
+          </div>
+          <div class="carousel3d-item">
+            <div class="quote-card">
+              <div class="stars">★★★★★</div>
+              <p class="text-soft">Real review placeholder — replace with verified customer feedback.</p>
+              <div class="who">Reserved for a real customer<span>Pending launch</span></div>
+            </div>
+          </div>
+          <div class="carousel3d-item">
+            <div class="quote-card">
+              <div class="stars">★★★★★</div>
+              <p class="text-soft">Real review placeholder — replace with verified customer feedback.</p>
+              <div class="who">Reserved for a real customer<span>Pending launch</span></div>
+            </div>
+          </div>
         </div>
-        <div class="quote-card">
-          <div class="stars">★★★★★</div>
-          <p class="text-soft">Real review placeholder — replace with verified customer feedback.</p>
-          <div class="who">Reserved for a real customer<span>Pending launch</span></div>
-        </div>
-        <div class="quote-card">
-          <div class="stars">★★★★★</div>
-          <p class="text-soft">Real review placeholder — replace with verified customer feedback.</p>
-          <div class="who">Reserved for a real customer<span>Pending launch</span></div>
+        <div class="carousel3d-nav">
+          <button type="button" class="carousel3d-btn" data-carousel-prev aria-label="Previous testimonial">‹</button>
+          <div class="carousel3d-dots" data-carousel-dots></div>
+          <button type="button" class="carousel3d-btn" data-carousel-next aria-label="Next testimonial">›</button>
         </div>
       </div>
     </div>
@@ -296,11 +304,15 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand">
-          <img src="assets/img/brand/favicon-32.png" alt="" style="height:28px;width:28px;">
+          <img src="assets/img/brand/favicon-32.png" alt="" style="height:28px;width:28px;" loading="lazy" width="28" height="28">
           Puffins
         </div>
         <div class="footer-tagline">Light. Flavorful. <span>Anytime.</span></div>
         <p style="color:#a9b7c4;font-size:.92rem;max-width:320px;">A consumer brand by Samarthya Innovative Foods Pvt. Ltd., built in Jaipur, Rajasthan.</p>
+        <!-- TODO: real Instagram / Facebook / LinkedIn URLs pending client
+             (redesign spec item 6: "Partners Section — update outdated links,
+             add official LinkedIn"). Hrefs intentionally left as "#" rather
+             than a fabricated URL. -->
         <div class="footer-social" aria-label="Social media">
           <a href="#" aria-label="Instagram">IG</a>
           <a href="#" aria-label="Facebook">FB</a>
@@ -346,6 +358,7 @@
 <!--#endinclude -->
 
 <script src="assets/js/products-data.js"></script>
+<script src="assets/js/assistant-data.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

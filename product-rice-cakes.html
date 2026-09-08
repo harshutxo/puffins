@@ -16,11 +16,28 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
-<style>
-  .gallery-thumbs{ display:flex; gap:10px; margin-top:14px; }
-  .gallery-thumb{ width:64px; height:64px; border-radius:10px; overflow:hidden; border:2px solid var(--line); padding:0; background:none; }
-  .gallery-thumb img{ width:100%; height:100%; object-fit:cover; }
-</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Puffins Rice Cakes — Sea Salt",
+  "description": "Baked, not fried. Light, crunchy puffed-rice cakes made for anytime snacking. Gluten free, 100% vegetarian, no added preservatives.",
+  "image": "https://www.saramthyafoods.com/assets/img/brand/packshot-sea-salt.jpg",
+  "brand": { "@type": "Brand", "name": "Puffins" },
+  "manufacturer": { "@type": "Organization", "name": "Samarthya Innovative Foods Pvt. Ltd." }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.saramthyafoods.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Shop", "item": "https://www.saramthyafoods.com/shop.html" },
+    { "@type": "ListItem", "position": 3, "name": "Rice Cakes", "item": "https://www.saramthyafoods.com/product-rice-cakes.html" }
+  ]
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -29,7 +46,7 @@
   <div class="container header-inner">
     <a class="nav-link nav-link-left active" href="shop.html">Our Products</a>
     <a class="brand" href="index.html" aria-label="Puffins home">
-      <img src="assets/img/brand/favicon-192.png" alt="Puffins" style="height:40px;width:40px;">
+      <img src="assets/img/brand/logo-mark-2026.svg" alt="Puffins" class="brand-mark">
     </a>
     <a class="nav-link nav-link-right" href="our-story.html">Our Story</a>
     <button class="nav-toggle" data-nav-toggle aria-label="Toggle menu" aria-expanded="false">
@@ -60,10 +77,16 @@
     <div class="container">
       <div class="grid grid-2" style="align-items:start;gap:48px;">
         <div>
-          <div style="border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);">
-            <img data-hero-img src="assets/img/brand/packshot-sea-salt.jpg" alt="Puffins Sea Salt Rice Cakes pack">
+          <!-- Swipeable 3D gallery carousel (redesign spec item 1) — items filled in by
+               renderProductDetail() in main.js from product.galleryImages. -->
+          <div class="carousel3d" data-carousel data-gallery-carousel style="--c3d-h:400px;--c3d-w:min(84%,400px);">
+            <div class="carousel3d-viewport" data-carousel-viewport></div>
+            <div class="carousel3d-nav">
+              <button type="button" class="carousel3d-btn" data-carousel-prev aria-label="Previous image">‹</button>
+              <div class="carousel3d-dots" data-carousel-dots></div>
+              <button type="button" class="carousel3d-btn" data-carousel-next aria-label="Next image">›</button>
+            </div>
           </div>
-          <div class="gallery-thumbs" data-gallery-thumbs></div>
         </div>
         <div>
           <div class="badges" data-attributes style="margin-bottom:14px;"></div>
@@ -128,7 +151,7 @@
           <p class="text-soft" style="max-width:480px;">Thin, crispy puffed-rice chips in a sealed bag — a snackier bite for on-the-go moments.</p>
           <a href="product-rice-chips.html" class="btn btn-light">Preview Rice Chips</a>
         </div>
-        <img src="assets/img/brand/topped-four-ways.webp" alt="Rice cakes topped four ways" style="border-radius:var(--radius-lg);">
+        <img src="assets/img/brand/topped-four-ways.webp" alt="Rice cakes topped four ways" style="border-radius:var(--radius-lg);" loading="lazy">
       </div>
     </div>
   </section>
@@ -139,11 +162,15 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand">
-          <img src="assets/img/brand/favicon-32.png" alt="" style="height:28px;width:28px;">
+          <img src="assets/img/brand/favicon-32.png" alt="" style="height:28px;width:28px;" loading="lazy" width="28" height="28">
           Puffins
         </div>
         <div class="footer-tagline">Light. Flavorful. <span>Anytime.</span></div>
         <p style="color:#a9b7c4;font-size:.92rem;max-width:320px;">A consumer brand by Samarthya Innovative Foods Pvt. Ltd., built in Jaipur, Rajasthan.</p>
+        <!-- TODO: real Instagram / Facebook / LinkedIn URLs pending client
+             (redesign spec item 6: "Partners Section — update outdated links,
+             add official LinkedIn"). Hrefs intentionally left as "#" rather
+             than a fabricated URL. -->
         <div class="footer-social" aria-label="Social media">
           <a href="#" aria-label="Instagram">IG</a>
           <a href="#" aria-label="Facebook">FB</a>
@@ -188,6 +215,7 @@
 </footer>
 
 <script src="assets/js/products-data.js"></script>
+<script src="assets/js/assistant-data.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
