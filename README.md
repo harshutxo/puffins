@@ -44,9 +44,18 @@ notices disappear automatically, in the tabs and in the chat assistant below.
 
 ## "Puff" chat assistant
 A floating chat widget (bottom-right, on every page) built by `initAssistant()` in
-`main.js`, using the walking-mascot's face as its avatar. It's a **rule-based
-keyword matcher, not a hosted-LLM integration** — this is a static, no-build,
-no-backend site, so there's nowhere to hold an API key securely. It answers from:
+`main.js`. It's a **rule-based keyword matcher, not a hosted-LLM integration** —
+this is a static, no-build, no-backend site, so there's nowhere to hold an API key
+securely. It answers from:
+
+The launcher, the chat-header avatar, and the homepage's scroll-driven walking
+mascot are literally the same character — one shared SVG rig (`mascotRigMarkup()`
+in `main.js`), not a lookalike icon. On the homepage, while the walking mascot is
+on screen crossing the trust marquee, it *is* the clickable way to open the chat,
+and the fixed launcher docks out of the way (`assistant-launcher.is-docked`) so
+Puff never appears twice at once; the launcher re-docks in once the mascot exits.
+Both drive the exact same panel/open-state via the `assistantAPI` handle in
+`main.js`.
 - `assets/js/assistant-data.js` — general business/brand Q&A (founder story, method,
   location, contact routing, honest "not published yet" answers for anything
   regulated that isn't confirmed).
