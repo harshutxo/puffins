@@ -20,8 +20,8 @@
     initHeroGlow();
     initSwipeCarousels();
     initProductShowcase();
-    initWalkingMascot();
     initAssistant();
+    initWalkingMascot();
   });
 
   var prefersReducedMotion = function () {
@@ -30,6 +30,12 @@
   var supportsHover = function () {
     return window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   };
+
+  /* Shared handle so the walking mascot (homepage-only) and the site-wide
+     launcher can both drive the one assistant panel — the stickman itself
+     is the chat entry point, not a separate icon. Populated by
+     initAssistant(); read by initWalkingMascot(), whichever order they run. */
+  var assistantAPI = { launcher: null, open: function () {} };
 
   /* ---------------- Scroll progress bar ---------------- */
   function initScrollProgress() {
@@ -249,43 +255,36 @@
     }
   }
 
-  /* ---------------- Walking mascot (scroll-scrubbed, homepage only) ----------------
+  /* ---------------- Walking mascot = the assistant, in motion (homepage only) ----------------
      A puffed-rice-cake-bodied stickman: the circular body IS the rice cake (a
      cream disc with a scatter of puffed-grain dots and a simple face drawn on
      it), with thin stick arms/legs. Walks in from the left as the trust
      marquee scrolls into view, crosses, and exits as it scrolls past — reads
      as "a visitor walking into the site." Position is a pure function of
      scroll progress through the existing `.marquee` element (no added page
-     height), so it reverses naturally on scroll-up rather than firing once. */
+     height), so it reverses naturally on scroll-up rather than firing once.
+     This IS Puff, the chat assistant — not a lookalike prop — so while it's
+     on screen it's the clickable way to open the chat, and the fixed
+     launcher (see initAssistant) steps aside to avoid showing the same
+     character twice at once, docking back in once the mascot exits. */
   function initWalkingMascot() {
     var anchor = document.querySelector(".marquee");
     if (!anchor || prefersReducedMotion()) return;
 
     var mascot = document.createElement("div");
     mascot.className = "mascot";
+    mascot.setAttribute("role", "button");
+    mascot.setAttribute("aria-label", "Chat with Puff, the Puffins assistant");
     mascot.setAttribute("aria-hidden", "true");
-    mascot.innerHTML =
-      '<svg viewBox="0 0 100 130" width="100%" height="100%">' +
-        '<g class="mascot-rig">' +
-          '<line class="mascot-arm-l" x1="35" y1="58" x2="16" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
-          '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
-          '<line class="mascot-leg-l" x1="42" y1="94" x2="32" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
-          '<line class="mascot-leg-r" x1="58" y1="94" x2="68" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
-          '<circle cx="50" cy="62" r="32" fill="#FFF7EE" stroke="#e7ddce" stroke-width="2"/>' +
-          '<circle cx="38" cy="52" r="2.6" fill="#e7ddce"/>' +
-          '<circle cx="63" cy="48" r="2.2" fill="#e7ddce"/>' +
-          '<circle cx="58" cy="72" r="2.4" fill="#e7ddce"/>' +
-          '<circle cx="34" cy="70" r="2" fill="#e7ddce"/>' +
-          '<circle cx="70" cy="62" r="2.2" fill="#e7ddce"/>' +
-          '<circle cx="46" cy="38" r="1.8" fill="#e7ddce"/>' +
-          '<circle cx="34" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
-          '<circle cx="66" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
-          '<circle cx="42" cy="56" r="2.6" fill="#0F2740"/>' +
-          '<circle cx="58" cy="56" r="2.6" fill="#0F2740"/>' +
-          '<path d="M41,68 Q50,76 59,68" stroke="#0F2740" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
-        "</g>" +
-      "</svg>";
+    mascot.tabIndex = -1;
+    mascot.innerHTML = mascotWalkerSVG();
     document.body.appendChild(mascot);
+
+    var activate = function () { assistantAPI.open(); };
+    mascot.addEventListener("click", activate);
+    mascot.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
+    });
 
     var raf = null;
     var update = function () {
@@ -299,6 +298,9 @@
       mascot.classList.toggle("is-walking", active);
       mascot.style.opacity = active ? "1" : "0";
       mascot.style.transform = "translateX(calc(" + progress + " * (100vw + 280px)))";
+      mascot.setAttribute("aria-hidden", active ? "false" : "true");
+      mascot.tabIndex = active ? 0 : -1;
+      if (assistantAPI.launcher) assistantAPI.launcher.classList.toggle("is-docked", active);
     };
     var onScroll = function () {
       if (raf) return;
@@ -327,7 +329,7 @@
     launcher.setAttribute("aria-expanded", "false");
     launcher.setAttribute("aria-controls", "assistant-panel");
     launcher.setAttribute("aria-label", "Chat with Puff, the Puffins assistant");
-    launcher.innerHTML = mascotAvatarSVG() + '<span class="assistant-ping" aria-hidden="true"></span>';
+    launcher.innerHTML = mascotBadgeSVG() + '<span class="assistant-ping" aria-hidden="true"></span>';
 
     var panel = document.createElement("div");
     panel.className = "assistant-panel";
@@ -337,7 +339,7 @@
     panel.hidden = true;
     panel.innerHTML =
       '<div class="assistant-head">' +
-        '<div class="assistant-avatar">' + mascotAvatarSVG() + '</div>' +
+        '<div class="assistant-avatar">' + mascotBadgeSVG() + '</div>' +
         '<div><strong>Puff</strong><span>Puffins snack assistant</span></div>' +
         '<button type="button" class="assistant-close" aria-label="Close chat">&times;</button>' +
       '</div>' +
@@ -446,6 +448,11 @@
       input.value = "";
       reply(null, value);
     });
+
+    // Let the walking mascot (homepage-only) open this same panel — it's the
+    // same character, so it drives the same chat instance, not a copy.
+    assistantAPI.launcher = launcher;
+    assistantAPI.open = open;
   }
 
   function buildAssistantTopics(kb) {
@@ -470,19 +477,40 @@
     return topics;
   }
 
-  function mascotAvatarSVG() {
-    return '<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">' +
-        '<circle cx="50" cy="50" r="34" fill="#FFF7EE" stroke="#e7ddce" stroke-width="2"/>' +
-        '<circle cx="38" cy="42" r="2.4" fill="#e7ddce"/>' +
-        '<circle cx="63" cy="38" r="2" fill="#e7ddce"/>' +
-        '<circle cx="58" cy="60" r="2.2" fill="#e7ddce"/>' +
-        '<circle cx="34" cy="58" r="1.8" fill="#e7ddce"/>' +
-        '<circle cx="34" cy="48" r="4" fill="#FF8A00" opacity=".35"/>' +
-        '<circle cx="66" cy="48" r="4" fill="#FF8A00" opacity=".35"/>' +
-        '<circle cx="42" cy="46" r="2.4" fill="#0F2740"/>' +
-        '<circle cx="58" cy="46" r="2.4" fill="#0F2740"/>' +
-        '<path d="M41,56 Q50,63 59,56" stroke="#0F2740" stroke-width="2.4" fill="none" stroke-linecap="round"/>' +
-      '</svg>';
+  /* One shared rig — the exact same stickman markup — behind every
+     appearance of Puff (walking on the homepage, docked as the site-wide
+     launcher, sitting in the chat header), so "integrating the bot into
+     the stickman" means there's really only one character, not a lookalike. */
+  function mascotRigMarkup() {
+    return '<g class="mascot-rig">' +
+        '<line class="mascot-arm-l" x1="35" y1="58" x2="16" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
+        '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
+        '<line class="mascot-leg-l" x1="42" y1="94" x2="32" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
+        '<line class="mascot-leg-r" x1="58" y1="94" x2="68" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
+        '<circle cx="50" cy="62" r="32" fill="#FFF7EE" stroke="#e7ddce" stroke-width="2"/>' +
+        '<circle cx="38" cy="52" r="2.6" fill="#e7ddce"/>' +
+        '<circle cx="63" cy="48" r="2.2" fill="#e7ddce"/>' +
+        '<circle cx="58" cy="72" r="2.4" fill="#e7ddce"/>' +
+        '<circle cx="34" cy="70" r="2" fill="#e7ddce"/>' +
+        '<circle cx="70" cy="62" r="2.2" fill="#e7ddce"/>' +
+        '<circle cx="46" cy="38" r="1.8" fill="#e7ddce"/>' +
+        '<circle cx="34" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
+        '<circle cx="66" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
+        '<circle cx="42" cy="56" r="2.6" fill="#0F2740"/>' +
+        '<circle cx="58" cy="56" r="2.6" fill="#0F2740"/>' +
+        '<path d="M41,68 Q50,76 59,68" stroke="#0F2740" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+      '</g>';
+  }
+
+  /* Full-body crop (arms + legs) — used for the homepage walking mascot. */
+  function mascotWalkerSVG() {
+    return '<svg viewBox="0 0 100 130" width="100%" height="100%">' + mascotRigMarkup() + '</svg>';
+  }
+
+  /* Bust crop (head + shoulders, legs trimmed) — sized for round badges:
+     the launcher button and the chat-panel header avatar. */
+  function mascotBadgeSVG() {
+    return '<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">' + mascotRigMarkup() + '</svg>';
   }
 
   /* ---------------- Header shadow on scroll ---------------- */
