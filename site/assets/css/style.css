@@ -7,7 +7,8 @@
   --navy:      #0F2740;
   --navy-80:   #24405e;
   --orange:    #FF8A00;
-  --orange-dk: #e07600;
+  --orange-dk: #a35000;
+  --orange-hover: #e67900;
   --yellow:    #FFC257;
   --cream:     #FFF7EE;
   --white:     #FFFFFF;
@@ -22,6 +23,11 @@
   --shadow-md: 0 10px 30px rgba(15,39,64,.12);
   --maxw: 1180px;
   --gradient-brand: linear-gradient(90deg,#17b3a3 0%, #6a4bd6 25%, #d6389a 55%, #ff8a00 80%, #ffc257 100%);
+  /* Accent tokens — from brand reference video (assets/video/puffins-showcase.mp4):
+     --rust/--olive echo its warm sunburst template slides; --ink is reused (previously
+     unused) as the editorial motif's hairline rule color from its cream/black slides. */
+  --rust:      #C1502E;
+  --olive:     #5B6B3A;
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
@@ -36,6 +42,9 @@ body{
 }
 img{ max-width:100%; display:block; }
 a{ color:inherit; text-decoration:none; }
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+  outline:3px solid var(--orange); outline-offset:2px; border-radius:4px;
+}
 ul{ margin:0; padding:0; list-style:none; }
 h1,h2,h3,h4{ margin:0 0 .5em; font-weight:700; line-height:1.15; letter-spacing:-.01em; }
 p{ margin:0 0 1em; }
@@ -68,9 +77,11 @@ section{ padding:64px 0; }
   border:2px solid transparent; transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
   white-space:nowrap;
 }
+.btn:hover{ transform:translateY(-2px); }
 .btn:active{ transform:scale(.97); }
-.btn-primary{ background:var(--orange); color:var(--white); box-shadow:0 8px 20px rgba(255,138,0,.35); }
-.btn-primary:hover{ background:var(--orange-dk); }
+@media (prefers-reduced-motion:reduce){ .btn{ transition:background .15s ease; } .btn:hover{ transform:none; } }
+.btn-primary{ background:var(--orange); color:var(--navy); box-shadow:0 8px 20px rgba(255,138,0,.35); }
+.btn-primary:hover{ background:var(--orange-hover); }
 .btn-outline{ border-color:var(--navy); color:var(--navy); background:transparent; }
 .btn-outline:hover{ background:var(--navy); color:var(--white); }
 .btn-light{ background:var(--white); color:var(--navy); }
@@ -90,14 +101,25 @@ section{ padding:64px 0; }
 }
 .brand{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.3rem; color:var(--navy); }
 .brand img{ height:36px; width:auto; }
+.brand-mark{ height:52px; width:auto; display:block; transition:height .25s ease; }
+.site-header.is-shrunk .brand-mark{ height:38px; }
+.header-inner{ transition:height .25s ease; }
+.site-header.is-shrunk .header-inner{ height:60px; }
+.site-header.is-shrunk ~ .nav-mobile{ inset:60px 0 0 0; }
 .brand .tag{ display:none; }
 @media (min-width:640px){
   .brand .tag{ display:inline-block; font-size:.6rem; font-weight:600; letter-spacing:.12em; color:var(--text-soft); text-transform:uppercase; margin-left:2px; }
 }
 
-.nav-link{ font-weight:600; font-size:.95rem; color:var(--text); padding:8px 0; position:relative; white-space:nowrap; }
+.nav-link{ font-weight:600; font-size:1.15rem; color:var(--text); padding:12px 0; position:relative; white-space:nowrap; }
 .nav-link.active,.nav-link:hover{ color:var(--orange-dk); }
-.nav-link.active::after{ content:""; position:absolute; left:0; right:0; bottom:-4px; height:3px; border-radius:3px; background:var(--gradient-brand); }
+.nav-link::after{
+  content:""; position:absolute; left:0; right:0; bottom:-4px; height:3px; border-radius:3px;
+  background:var(--gradient-brand); transform:scaleX(0); transform-origin:left; transition:transform .25s ease;
+}
+.nav-link:hover::after{ transform:scaleX(1); }
+.nav-link.active::after{ transform:scaleX(1); }
+@media (prefers-reduced-motion:reduce){ .nav-link::after{ transition:none; } }
 .nav-link-left{ justify-self:end; }
 .nav-link-right{ justify-self:start; }
 @media (max-width:479px){
@@ -115,10 +137,25 @@ section{ padding:64px 0; }
 .nav-toggle.is-open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
 
 .nav-mobile{
-  display:none; position:fixed; inset:74px 0 0 0; background:var(--white); z-index:99;
+  position:fixed; inset:74px 0 0 0; background:var(--white); z-index:99;
   overflow-y:auto; padding:20px 20px 40px;
+  opacity:0; visibility:hidden; transform:translateY(-10px);
+  transition:opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
 }
-.nav-mobile.is-open{ display:block; }
+.nav-mobile.is-open{
+  opacity:1; visibility:visible; transform:none;
+  transition:opacity .22s ease, transform .22s ease, visibility 0s linear 0s;
+}
+.nav-mobile li{ opacity:0; transform:translateY(8px); transition:opacity .3s ease, transform .3s ease; }
+.nav-mobile.is-open li{ opacity:1; transform:none; }
+.nav-mobile.is-open li:nth-child(1){ transition-delay:.04s; }
+.nav-mobile.is-open li:nth-child(2){ transition-delay:.08s; }
+.nav-mobile.is-open li:nth-child(3){ transition-delay:.12s; }
+.nav-mobile.is-open li:nth-child(4){ transition-delay:.16s; }
+.nav-mobile.is-open li:nth-child(5){ transition-delay:.2s; }
+@media (prefers-reduced-motion:reduce){
+  .nav-mobile,.nav-mobile li{ transition:none; }
+}
 .nav-mobile ul{ display:flex; flex-direction:column; gap:2px; }
 .nav-mobile a{ display:block; padding:16px 6px; font-weight:600; font-size:1.05rem; border-bottom:1px solid var(--line); }
 .nav-mobile .btn{ margin-top:20px; }
@@ -144,7 +181,33 @@ section{ padding:64px 0; }
   position:absolute; inset:-8% -18%; z-index:0; border-radius:50%;
   background:conic-gradient(from 180deg,#17b3a3,#6a4bd6,#d6389a,#ff8a00,#ffc257,#17b3a3);
   filter:blur(70px); opacity:.28;
+  animation:blob-spin 22s linear infinite;
 }
+@keyframes blob-spin{ 0%{ transform:rotate(0deg) scale(1); } 50%{ transform:rotate(180deg) scale(1.08); } 100%{ transform:rotate(360deg) scale(1); } }
+@media (prefers-reduced-motion:reduce){ .hero-blob{ animation:none; } }
+
+.hero-copy .eyebrow,.hero-copy .h1,.hero-copy .lead,.hero-copy .btnrow,.hero-copy .hero-stats{
+  animation:hero-fade-up .7s ease both;
+}
+.hero-copy .eyebrow{ animation-delay:.05s; }
+.hero-copy .h1{ animation-delay:.15s; }
+.hero-copy .lead{ animation-delay:.32s; }
+.hero-copy .btnrow{ animation-delay:.48s; }
+.hero-copy .hero-stats{ animation-delay:.62s; }
+@keyframes hero-fade-up{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion:reduce){
+  .hero-copy .eyebrow,.hero-copy .h1,.hero-copy .lead,.hero-copy .btnrow,.hero-copy .hero-stats{ animation:none; }
+}
+
+.hero-hl{ position:relative; color:var(--orange); display:inline-block; }
+.hero-hl::after{
+  content:""; position:absolute; left:-3px; right:-3px; bottom:.06em; height:.32em; z-index:-1;
+  background:var(--gradient-brand); opacity:.3; border-radius:4px;
+  transform-origin:left; transform:scaleX(0);
+  animation:hl-sweep .9s cubic-bezier(.4,0,.2,1) .85s forwards;
+}
+@keyframes hl-sweep{ to{ transform:scaleX(1); } }
+@media (prefers-reduced-motion:reduce){ .hero-hl::after{ animation:none; transform:scaleX(1); } }
 .hero-floatcard{
   position:absolute; z-index:2; left:-18px; bottom:14%; background:var(--white);
   border-radius:var(--radius-md); box-shadow:var(--shadow-md); padding:14px 18px;
@@ -176,6 +239,20 @@ section{ padding:64px 0; }
 .hero-photo .h1{ color:#fff; }
 .hero-photo .lead{ color:#dbe4ec; }
 @media (min-width:900px){ .hero-photo{ padding:140px 0 76px; } }
+
+.hero-accent{
+  position:absolute; z-index:2; border-radius:var(--radius-md);
+  box-shadow:var(--shadow-md); border:4px solid rgba(255,255,255,.92);
+  object-fit:cover; display:none;
+}
+@media (min-width:820px){
+  .hero-accent{ display:block; }
+  .hero-accent-tr{ top:26px; right:32px; width:130px; height:130px; transform:rotate(6deg); animation:accent-float-a 6s ease-in-out infinite; }
+  .hero-accent-bl{ bottom:26px; right:190px; width:150px; height:110px; transform:rotate(-5deg); animation:accent-float-b 7s ease-in-out infinite; }
+}
+@keyframes accent-float-a{ 0%,100%{ transform:rotate(6deg) translateY(0); } 50%{ transform:rotate(6deg) translateY(-10px); } }
+@keyframes accent-float-b{ 0%,100%{ transform:rotate(-5deg) translateY(0); } 50%{ transform:rotate(-5deg) translateY(8px); } }
+@media (prefers-reduced-motion:reduce){ .hero-accent-tr,.hero-accent-bl{ animation:none; } }
 
 /* ---------- Bold full-bleed statement section ---------- */
 .statement{
@@ -247,9 +324,11 @@ section{ padding:64px 0; }
 .flavor-row{ display:flex; gap:10px; flex-wrap:wrap; }
 .flavor-chip{
   padding:10px 16px; border-radius:999px; border:1.5px solid var(--line); font-weight:600; font-size:.88rem;
-  background:var(--white); color:var(--text);
+  background:var(--white); color:var(--text); transition:transform .15s ease, border-color .15s ease, background .15s ease;
 }
+.flavor-chip:not(.soon):hover{ border-color:var(--orange); transform:translateY(-2px); }
 .flavor-chip[aria-pressed="true"]{ border-color:var(--orange); background:#fff1de; color:var(--orange-dk); }
+@media (prefers-reduced-motion:reduce){ .flavor-chip:hover{ transform:none; } }
 .flavor-chip.soon{ opacity:.55; cursor:not-allowed; }
 
 /* Steps / timeline */
@@ -304,7 +383,7 @@ section{ padding:64px 0; }
   font-family:inherit; font-size:.96rem; background:var(--white); color:var(--text);
 }
 .form-field input:focus,.form-field select:focus,.form-field textarea:focus{
-  outline:none; border-color:var(--orange);
+  outline:none; border-color:var(--orange); box-shadow:0 0 0 3px rgba(255,138,0,.18);
 }
 .form-field .hint{ font-size:.78rem; color:var(--text-soft); margin-top:5px; }
 .form-row{ display:grid; gap:16px; grid-template-columns:1fr; }
@@ -377,7 +456,7 @@ section{ padding:64px 0; }
   width:38px; height:38px; border-radius:50%; border:1px solid #33475f; display:flex; align-items:center;
   justify-content:center; font-size:1rem;
 }
-.footer-social a:hover{ background:var(--orange); border-color:var(--orange); color:#fff; }
+.footer-social a:hover{ background:var(--orange); border-color:var(--orange); color:var(--navy); }
 .footer-bottom{
   border-top:1px solid #24405e; padding-top:24px; display:flex; flex-wrap:wrap; gap:14px;
   align-items:center; justify-content:space-between; font-size:.82rem; color:#93a3b3;
@@ -423,7 +502,9 @@ section{ padding:64px 0; }
   transition:opacity .25s ease, transform .25s ease, background .15s ease;
 }
 .back-to-top.is-visible{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-.back-to-top:hover{ background:var(--orange); }
+.back-to-top:hover{ background:var(--orange); color:var(--navy); }
+.back-to-top.is-visible:hover{ transform:translateY(0) scale(1.08); }
+@media (prefers-reduced-motion:reduce){ .back-to-top.is-visible:hover{ transform:translateY(0) scale(1); } }
 
 /* ---------- Cinemagraph (CSS crossfade slideshow, no video file) ---------- */
 .cinemagraph{
@@ -505,3 +586,291 @@ section{ padding:64px 0; }
 .marquee-track span::before{ content:"●"; color:var(--orange); font-size:.5rem; }
 @keyframes marquee-scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 @media (prefers-reduced-motion:reduce){ .marquee-track{ animation:none; } }
+
+/* ==========================================================================
+   POLISH PASS 2 — page-load fade, scroll progress, magnetic/tilt interactions,
+   torn-edge divider, flavour-chip burst, and small-screen refinements.
+   ========================================================================== */
+
+/* ---------- Page load fade-in ---------- */
+body{ animation:page-fade-in .5s ease both; }
+@keyframes page-fade-in{ from{ opacity:0; } to{ opacity:1; } }
+@media (prefers-reduced-motion:reduce){ body{ animation:none; } }
+
+/* ---------- Scroll progress bar ---------- */
+.scroll-progress{
+  position:fixed; top:0; left:0; height:3px; width:100%; z-index:200;
+  background:var(--gradient-brand); background-size:200% 100%;
+  transform:scaleX(0); transform-origin:left; pointer-events:none;
+}
+@media (prefers-reduced-motion:reduce){ .scroll-progress{ display:none; } }
+
+/* ---------- Magnetic buttons ---------- */
+.btn.is-magnetic{
+  --mx:0px; --my:0px;
+  transform:translate(var(--mx),var(--my));
+  transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .15s ease, background .15s ease;
+}
+.btn.is-magnetic:active{ transform:translate(var(--mx),var(--my)) scale(.97); transition:transform .1s ease; }
+
+/* ---------- Button shine sweep ---------- */
+.btn-primary,.btn-light{ position:relative; overflow:hidden; }
+.btn-primary::before,.btn-light::before{
+  content:""; position:absolute; top:0; left:-60%; width:35%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+  transform:skewX(-20deg); transition:left .55s ease; pointer-events:none;
+}
+.btn-primary:hover::before,.btn-light:hover::before{ left:130%; }
+@media (prefers-reduced-motion:reduce){ .btn-primary::before,.btn-light::before{ display:none; } }
+
+/* ---------- Tilt (3D hover) on cards + hero media ---------- */
+.tilt-target{ transition:transform .2s ease-out; will-change:transform; }
+
+/* ---------- Hero cursor-reactive glow ----------
+   Shifted via margin, not transform: .hero-blob already has a running
+   `blob-spin` transform animation, which would silently win over (and hide)
+   a second transform declared here. */
+@media (hover:hover) and (pointer:fine){
+  .hero.has-glow .hero-blob{
+    margin-left:calc((var(--mx, 50%) - 50%) * .3);
+    margin-top:calc((var(--my, 50%) - 50%) * .3);
+    transition:margin .6s ease;
+  }
+}
+
+/* ---------- Torn / kettle-cut edge under the home hero ---------- */
+.hero::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:14px; pointer-events:none;
+  background:
+    linear-gradient(-45deg, var(--cream) 7px, transparent 0) 0 bottom,
+    linear-gradient(45deg, var(--cream) 7px, transparent 0) 0 bottom;
+  background-repeat:repeat-x; background-size:14px 14px;
+}
+
+/* ---------- Flavour chip click burst ---------- */
+.flavor-chip{ position:relative; overflow:hidden; }
+.chip-burst{
+  position:absolute; border-radius:50%; background:var(--orange); opacity:.35;
+  transform:translate(-50%,-50%) scale(0); pointer-events:none;
+  animation:chip-burst-anim .5s ease-out forwards;
+}
+@keyframes chip-burst-anim{ to{ transform:translate(-50%,-50%) scale(3.2); opacity:0; } }
+@media (prefers-reduced-motion:reduce){ .chip-burst{ display:none; } }
+
+/* ---------- Small-screen refinements ---------- */
+@media (max-width:479px){
+  .container{ padding:0 16px; }
+  .grid-4{ grid-template-columns:1fr; }
+  .hero-stats{ gap:16px 22px; }
+  .team-card img{ width:76px; height:76px; }
+}
+.tab-panel{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+@media (max-width:560px){
+  .health-pulse{ height:auto; display:block; }
+  .health-pulse .pulse-line path{ animation:none; stroke-dashoffset:0; }
+  .health-pulse .pulse-badges{ position:static; display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:14px; }
+  .health-pulse .pulse-badge{ position:static; opacity:1; animation:none; transform:none; }
+}
+
+/* ==========================================================================
+   REDESIGN SPEC PASS — dynamic feel, 3D swipe carousels, product count/label,
+   showcase video stub, swipeable flavour row.
+   ========================================================================== */
+
+/* ---------- Smoother cross-page navigation where supported (no-op elsewhere) ---------- */
+@view-transition{ navigation:auto; }
+
+/* ---------- Product category label + live count badge ---------- */
+.category-head{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:center; }
+.product-count{
+  display:inline-flex; align-items:center; font-size:.78rem; font-weight:700; letter-spacing:.03em;
+  padding:5px 12px; border-radius:999px; background:var(--cream); color:var(--orange-dk); border:1px solid #ffdca8;
+}
+
+/* ---------- Homepage product-range video showcase ----------
+   Source is a square (1080x1080) brand video — aspect-ratio:1/1 with
+   object-fit:contain (not cover/16:9) so its baked-in text isn't cropped,
+   width-capped so it doesn't dominate the full container on wide screens. */
+.product-showcase{ position:relative; }
+.product-showcase [hidden]{ display:none; }
+.showcase-video{
+  width:100%; max-width:480px; margin:0 auto; display:block; aspect-ratio:1/1;
+  object-fit:contain; background:var(--navy-80);
+  border-radius:var(--radius-lg); box-shadow:var(--shadow-md);
+}
+
+/* ---------- Swipeable flavour row on narrow screens (keeps every option visible, no carousel hiding) ---------- */
+@media (max-width:480px){
+  .flavor-row{ flex-wrap:nowrap; overflow-x:auto; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; padding-bottom:6px; }
+  .flavor-row .flavor-chip{ scroll-snap-align:start; flex:none; }
+}
+
+/* ---------- 3D swipe carousel (product gallery, testimonials) ---------- */
+.carousel3d{ position:relative; --c3d-w:min(72%,380px); }
+.carousel3d-viewport{
+  position:relative; height:var(--c3d-h,320px); perspective:1100px; overflow:hidden;
+  touch-action:pan-y;
+}
+.carousel3d-item{
+  position:absolute; top:0; left:50%; width:var(--c3d-w); margin-left:calc(var(--c3d-w) / -2);
+  transition:transform .45s cubic-bezier(.22,1,.36,1), opacity .45s ease;
+  will-change:transform,opacity; cursor:grab; user-select:none; -webkit-user-select:none;
+}
+.carousel3d-viewport.is-dragging .carousel3d-item{ transition:none; cursor:grabbing; }
+.carousel3d-item img{
+  /* contain, not cover: the product gallery mixes a tall portrait packshot
+     with landscape lifestyle shots in the same carousel — cover cropped the
+     packshot's top (logo) and bottom off entirely at a fixed 4:3 box. A
+     square contain box with a cream backdrop shows every photo in full,
+     letterboxed instead of cropped. */
+  width:100%; display:block; aspect-ratio:1/1; object-fit:contain; background:var(--cream);
+  border-radius:var(--radius-lg); box-shadow:var(--shadow-md); pointer-events:none;
+}
+.carousel3d-nav{ display:flex; align-items:center; justify-content:center; gap:14px; margin-top:18px; }
+.carousel3d-btn{
+  width:40px; height:40px; border-radius:50%; border:1px solid var(--line); background:var(--white);
+  font-size:1.1rem; line-height:1; color:var(--navy); display:flex; align-items:center; justify-content:center;
+  transition:background .15s ease;
+}
+.carousel3d-btn:hover:not(:disabled){ background:var(--cream); }
+.carousel3d-btn:disabled{ opacity:.35; cursor:default; }
+.carousel3d-dots{ display:flex; align-items:center; gap:8px; }
+.carousel3d-dot{ width:8px; height:8px; padding:0; border:0; border-radius:50%; background:var(--line); transition:width .2s ease, background .2s ease; }
+.carousel3d-dot.is-active{ width:22px; border-radius:5px; background:var(--orange); }
+@media (prefers-reduced-motion:reduce){
+  .carousel3d-item{ transition:opacity .2s ease; }
+}
+
+/* ---------- Walking mascot (scroll-scrubbed, homepage only) ----------
+   Built by initWalkingMascot() in main.js — not hardcoded into any page's
+   HTML. It only attaches itself when a `.marquee` element exists (the home
+   hero's trust marquee), so it has zero footprint on every other page.
+   Horizontal position is a pure function of scroll progress through that
+   existing element (see main.js) — no extra empty wrapper or added page
+   height needed, and it reverses naturally if the visitor scrolls back up. */
+.mascot{
+  position:fixed; top:60%; left:-140px; width:92px; height:auto; z-index:80;
+  opacity:0; pointer-events:none; will-change:transform, opacity;
+  transition:opacity .25s ease;
+}
+.mascot-rig{ transform-origin:50% 50%; }
+.mascot.is-walking .mascot-rig{ animation:mascot-bob .5s ease-in-out infinite; }
+.mascot-leg-l,.mascot-leg-r,.mascot-arm-l,.mascot-arm-r{
+  transform-box:fill-box; transform-origin:top center;
+}
+.mascot.is-walking .mascot-leg-l,.mascot.is-walking .mascot-arm-r{ animation:mascot-swing-a .5s ease-in-out infinite; }
+.mascot.is-walking .mascot-leg-r,.mascot.is-walking .mascot-arm-l{ animation:mascot-swing-b .5s ease-in-out infinite; }
+@keyframes mascot-swing-a{ 0%,100%{ transform:rotate(24deg); } 50%{ transform:rotate(-24deg); } }
+@keyframes mascot-swing-b{ 0%,100%{ transform:rotate(-24deg); } 50%{ transform:rotate(24deg); } }
+@keyframes mascot-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+@media (max-width:640px){ .mascot{ width:68px; top:58%; } }
+@media (prefers-reduced-motion:reduce){ .mascot{ display:none; } }
+
+/* ---------- "Puff" chat assistant (site-wide) ----------
+   Built by initAssistant() in main.js — injected on every page, not
+   hardcoded per-page markup. Reuses the walking-mascot face/rig art as a
+   static avatar (the "stickman" becomes the assistant's identity) so the
+   two features read as one character. Rule-based Q&A over
+   assets/js/assistant-data.js + live product data — see that file's header
+   comment for why it never invents regulated figures. */
+.assistant-launcher{
+  position:fixed; right:20px; bottom:20px; z-index:150; width:60px; height:60px; border-radius:50%;
+  background:var(--navy); border:0; padding:8px; box-shadow:var(--shadow-md);
+  display:flex; align-items:center; justify-content:center; transition:transform .15s ease;
+}
+.assistant-launcher:hover{ transform:translateY(-2px) scale(1.05); }
+.assistant-launcher svg{ width:100%; height:100%; }
+.assistant-launcher .assistant-ping{
+  position:absolute; top:-2px; right:-2px; width:14px; height:14px; border-radius:50%;
+  background:var(--orange); border:2px solid var(--white);
+}
+.assistant-launcher[aria-expanded="true"] .assistant-ping{ display:none; }
+
+.assistant-panel{
+  position:fixed; right:20px; bottom:90px; z-index:150; width:340px; max-width:calc(100vw - 32px);
+  height:min(480px, calc(100vh - 130px)); background:var(--white); border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md); border:1px solid var(--line); display:flex; flex-direction:column;
+  overflow:hidden; opacity:0; transform:translateY(12px) scale(.97); pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+}
+.assistant-panel.is-open{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+
+.assistant-head{
+  background:var(--navy); color:var(--white); padding:14px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0;
+}
+.assistant-head .assistant-avatar{ width:34px; height:34px; flex-shrink:0; }
+.assistant-head strong{ display:block; font-size:.96rem; }
+.assistant-head span{ display:block; font-size:.76rem; color:#cfe0ee; }
+.assistant-close{
+  margin-left:auto; background:transparent; border:0; color:var(--white); font-size:1.3rem; line-height:1;
+  width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+}
+.assistant-close:hover{ background:rgba(255,255,255,.15); }
+
+.assistant-messages{ flex:1; overflow-y:auto; padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+.assistant-msg{ max-width:86%; padding:9px 13px; border-radius:var(--radius-md); font-size:.9rem; line-height:1.45; }
+.assistant-msg.bot{ align-self:flex-start; background:var(--cream); color:var(--text); border-bottom-left-radius:4px; }
+.assistant-msg.user{ align-self:flex-end; background:var(--navy); color:var(--white); border-bottom-right-radius:4px; }
+
+.assistant-quick-replies{ display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 12px; flex-shrink:0; }
+.assistant-chip{
+  background:var(--white); border:1px solid var(--line); color:var(--navy); border-radius:999px;
+  padding:6px 12px; font-size:.8rem; font-weight:600;
+}
+.assistant-chip:hover{ border-color:var(--orange); color:var(--orange-dk); }
+
+.assistant-form{ display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); flex-shrink:0; }
+.assistant-form input{
+  flex:1; border:1px solid var(--line); border-radius:999px; padding:10px 14px; font:inherit; font-size:.88rem; min-width:0;
+}
+.assistant-form input:focus-visible{ outline:2px solid var(--orange); outline-offset:1px; }
+.assistant-form button{
+  background:var(--orange); color:var(--navy); border:0; border-radius:50%; width:38px; height:38px;
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1rem;
+}
+.assistant-form button:hover{ background:var(--orange-hover); }
+
+@media (max-width:480px){
+  .assistant-panel{ right:16px; bottom:84px; width:calc(100vw - 32px); }
+  .assistant-launcher{ right:16px; bottom:16px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .assistant-launcher, .assistant-panel{ transition:none; }
+}
+
+/* ==========================================================================
+   Accent layer — sourced from the brand reference video (see :root comment).
+   Reusable utilities, applied selectively (homepage + Why Puffins), not a
+   site-wide repaint of the existing navy/orange/cream identity.
+   ========================================================================== */
+
+/* ---------- Editorial motif (cream/black minimalist slide style) ---------- */
+.editorial-rule{
+  display:flex; align-items:center; gap:16px; margin:0 0 18px;
+  color:var(--text-soft); font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+}
+.editorial-rule::before,.editorial-rule::after{ content:""; flex:1; height:1px; background:var(--ink); }
+.editorial-head{
+  font-weight:800; letter-spacing:-.02em; line-height:1.02; color:var(--text); margin:0 0 .4em;
+}
+.editorial-list{ border-top:1px solid var(--ink); margin-top:8px; }
+.editorial-item{
+  display:grid; grid-template-columns:1fr; gap:6px; padding:22px 0; border-bottom:1px solid var(--ink);
+}
+@media (min-width:700px){
+  .editorial-item{ grid-template-columns:220px 1fr; gap:24px; align-items:baseline; }
+}
+.editorial-label{ font-weight:800; font-size:.95rem; letter-spacing:.02em; text-transform:uppercase; color:var(--olive); }
+.editorial-item p{ margin:0; color:var(--text-soft); }
+
+/* ---------- Sunburst accent (rust-orange template style, CSS-only, no image asset) ----------
+   Restrained/low-opacity on purpose — this is a texture layer behind existing
+   content, not a repaint; kept off dark (.bg-navy/.statement) backgrounds where
+   rust-on-navy would lose contrast and barely read. */
+.sunburst-accent{ position:relative; isolation:isolate; overflow:hidden; }
+.sunburst-accent::before{
+  content:""; position:absolute; inset:-25% -10%; z-index:-1; pointer-events:none;
+  background:repeating-conic-gradient(from 0deg, var(--rust) 0deg 8deg, transparent 8deg 22deg);
+  opacity:.07;
+}
+@media (prefers-reduced-motion:reduce){ .sunburst-accent::before{ opacity:.05; } }

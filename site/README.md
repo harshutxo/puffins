@@ -16,6 +16,9 @@ static host (Netlify, Vercel, GitHub Pages, S3+CloudFront, or a simple Nginx/Apa
   (flavours, pricing, ingredients, nutrition, FAQs). Update this file, not the HTML,
   to change product content. Structured to drop into a real CMS/API later — see
   "Migrating to a CMS" below.
+- `assets/js/assistant-data.js` — editable Q&A content for the "Puff" chat assistant
+  (see below). General business/brand answers only; product facts are read live from
+  `products-data.js` so the two never drift out of sync.
 - `assets/img/brand/` — logo lockups, favicons, and `packshot-sea-salt.jpg` (a clean
   crop of just the product can, taken from the pitch-deck hero slide — used for the
   home hero, product cards and product-detail gallery instead of the full slide)
@@ -27,13 +30,33 @@ static host (Netlify, Vercel, GitHub Pages, S3+CloudFront, or a simple Nginx/Apa
 ## What's intentionally left as placeholders
 Per section 19 of the brief ("Content Developer Should NOT Finalize Alone"), the
 following are NOT invented and are marked `confirmed:false` in `products-data.js` or
-flagged with a `.pending` notice in the UI: pricing, final flavour names/SKUs, exact
-pack weights, ingredients, nutrition panel, allergen statement, shelf life, FSSAI
-details, company registered address/CIN, and legal-page effective dates. Real customer
-reviews are also withheld — no fake testimonials are published.
+flagged with a `.pending` notice in the UI: pricing, final flavour names/SKUs,
+nutrition panel, allergen statement, shelf life, FSSAI details, company registered
+address/CIN, and legal-page effective dates. Real customer reviews are also
+withheld — no fake testimonials are published.
 
-Fill these in `assets/js/products-data.js` and the legal pages, flip `confirmed: true`
-where applicable, and the pending notices disappear automatically.
+Rice Cakes' pack size (8 cakes/sleeve, 6 g each) and ingredients (rice only, pressed
+at 200°C — no syrup/oil/flour) are now marked `confirmed: true`, sourced from
+`specs.pdf` in the project root. Everything else in the list above is still pending
+real, SIF-approved figures — flip `confirmed: true` in `assets/js/products-data.js`
+(and mirror in `assets/data/products.json`) as each one is finalized, and the pending
+notices disappear automatically, in the tabs and in the chat assistant below.
+
+## "Puff" chat assistant
+A floating chat widget (bottom-right, on every page) built by `initAssistant()` in
+`main.js`, using the walking-mascot's face as its avatar. It's a **rule-based
+keyword matcher, not a hosted-LLM integration** — this is a static, no-build,
+no-backend site, so there's nowhere to hold an API key securely. It answers from:
+- `assets/js/assistant-data.js` — general business/brand Q&A (founder story, method,
+  location, contact routing, honest "not published yet" answers for anything
+  regulated that isn't confirmed).
+- Live fields on `window.PUFFINS_PRODUCTS` (ingredients, pack size) — so once you
+  flip a field to `confirmed: true` in `products-data.js`, the assistant picks it up
+  automatically, same as the product-page tabs.
+
+To wire in a real LLM-backed assistant later, add a serverless/backend endpoint
+(same pattern as `initForms()` below) and have the chat form POST to it instead of
+calling the local `matchTopic()` matcher — keep the same message-bubble markup.
 
 ## Migrating to a CMS / e-commerce
 The product/price/inventory shape in `products-data.js` is already SKU-ready (flavours,

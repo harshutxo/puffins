@@ -14,7 +14,476 @@
     initHeaderScroll();
     initBackToTop();
     initScrollReveal();
+    initScrollProgress();
+    initMagneticButtons();
+    initTiltEffect();
+    initHeroGlow();
+    initSwipeCarousels();
+    initProductShowcase();
+    initWalkingMascot();
+    initAssistant();
   });
+
+  var prefersReducedMotion = function () {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  };
+  var supportsHover = function () {
+    return window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  };
+
+  /* ---------------- Scroll progress bar ---------------- */
+  function initScrollProgress() {
+    if (prefersReducedMotion()) return;
+    var bar = document.createElement("div");
+    bar.className = "scroll-progress";
+    bar.setAttribute("aria-hidden", "true");
+    document.body.appendChild(bar);
+    var update = function () {
+      var doc = document.documentElement;
+      var scrollTop = doc.scrollTop || document.body.scrollTop;
+      var height = doc.scrollHeight - doc.clientHeight;
+      bar.style.transform = "scaleX(" + (height > 0 ? scrollTop / height : 0) + ")";
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+  }
+
+  /* ---------------- Magnetic buttons (desktop pointer only) ---------------- */
+  function initMagneticButtons() {
+    if (!supportsHover() || prefersReducedMotion()) return;
+    var strength = 16;
+    document.querySelectorAll(".btn:not(.btn-sm):not(.btn-block)").forEach(function (btn) {
+      btn.classList.add("is-magnetic");
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = ((e.clientX - r.left) / r.width - 0.5) * strength;
+        var y = ((e.clientY - r.top) / r.height - 0.5) * strength;
+        btn.style.setProperty("--mx", x + "px");
+        btn.style.setProperty("--my", y + "px");
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.setProperty("--mx", "0px");
+        btn.style.setProperty("--my", "0px");
+      });
+    });
+  }
+
+  /* ---------------- 3D tilt on cards + hero media (desktop pointer only) ---------------- */
+  function initTiltEffect() {
+    if (!supportsHover() || prefersReducedMotion()) return;
+    var selector = ".card, .product-card, .team-card, .hero-media";
+    document.addEventListener("mousemove", function (e) {
+      var el = e.target.closest && e.target.closest(selector);
+      if (!el) return;
+      if (!el.classList.contains("tilt-target")) el.classList.add("tilt-target");
+      var r = el.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width;
+      var py = (e.clientY - r.top) / r.height;
+      var isHero = el.classList.contains("hero-media");
+      var rx = (0.5 - py) * (isHero ? 6 : 8);
+      var ry = (px - 0.5) * (isHero ? 6 : 8);
+      el.style.transform = "perspective(700px) rotateX(" + rx + "deg) rotateY(" + ry + "deg)" +
+        (isHero ? "" : " translateY(-6px)");
+    }, { passive: true });
+
+    document.addEventListener("mouseout", function (e) {
+      var el = e.target.closest && e.target.closest(selector);
+      if (!el) return;
+      if (e.relatedTarget && el.contains(e.relatedTarget)) return;
+      el.style.transform = "";
+    });
+  }
+
+  /* ---------------- Hero cursor-reactive glow ---------------- */
+  function initHeroGlow() {
+    var hero = document.querySelector(".hero");
+    if (!hero || !supportsHover() || prefersReducedMotion()) return;
+    hero.classList.add("has-glow");
+    hero.addEventListener("mousemove", function (e) {
+      var r = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
+      hero.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
+    });
+  }
+
+  /* ---------------- 3D swipe carousel (product gallery, testimonials) ----------------
+     Two-phase so dynamically-rebuilt items (product gallery, filled in later by
+     renderProductDetail) don't need their drag/keyboard/nav listeners rebound —
+     setupCarouselInteraction() binds once per container (guarded by a data flag);
+     layoutCarouselItems() can be called again any time the item list changes. */
+  function setupCarouselInteraction(container) {
+    if (container.dataset.carouselBound === "1") return;
+    container.dataset.carouselBound = "1";
+
+    var viewport = container.querySelector("[data-carousel-viewport]");
+    var prevBtn = container.querySelector("[data-carousel-prev]");
+    var nextBtn = container.querySelector("[data-carousel-next]");
+    var dotsWrap = container.querySelector("[data-carousel-dots]");
+    if (!viewport) return;
+
+    var state = { index: 0, startX: 0, dx: 0, dragging: false };
+    container._carouselState = state;
+
+    var render = function () {
+      var items = viewport.querySelectorAll(".carousel3d-item");
+      items.forEach(function (item, i) {
+        var offset = i - state.index;
+        var abs = Math.abs(offset);
+        item.style.zIndex = String(10 - abs);
+        if (abs > 2) {
+          item.style.opacity = "0";
+          item.style.pointerEvents = "none";
+          item.style.transform = "translateX(" + (offset * 60) + "%) scale(.5)";
+        } else {
+          item.style.opacity = abs === 0 ? "1" : (abs === 1 ? ".6" : ".3");
+          item.style.pointerEvents = abs === 0 ? "auto" : "none";
+          var tx = offset * 58;
+          var scale = 1 - abs * 0.18;
+          var rot = offset * -18;
+          var tz = -abs * 110;
+          item.style.transform = "translateX(" + tx + "%) translateZ(" + tz + "px) rotateY(" + rot + "deg) scale(" + scale + ")";
+        }
+      });
+      if (prevBtn) prevBtn.disabled = state.index <= 0;
+      if (nextBtn) nextBtn.disabled = state.index >= items.length - 1;
+      if (dotsWrap) {
+        dotsWrap.querySelectorAll(".carousel3d-dot").forEach(function (d, i) {
+          d.classList.toggle("is-active", i === state.index);
+        });
+      }
+    };
+    container._carouselRender = render;
+
+    var go = function (delta) {
+      var count = viewport.querySelectorAll(".carousel3d-item").length;
+      if (!count) return;
+      state.index = Math.max(0, Math.min(count - 1, state.index + delta));
+      render();
+    };
+
+    if (prevBtn) prevBtn.addEventListener("click", function () { go(-1); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { go(1); });
+
+    container.setAttribute("tabindex", "0");
+    container.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { go(-1); e.preventDefault(); }
+      if (e.key === "ArrowRight") { go(1); e.preventDefault(); }
+    });
+
+    viewport.addEventListener("pointerdown", function (e) {
+      state.dragging = true;
+      state.startX = e.clientX;
+      state.dx = 0;
+      if (viewport.setPointerCapture) { try { viewport.setPointerCapture(e.pointerId); } catch (err) {} }
+      viewport.classList.add("is-dragging");
+    });
+    viewport.addEventListener("pointermove", function (e) {
+      if (!state.dragging) return;
+      state.dx = e.clientX - state.startX;
+    });
+    var endDrag = function () {
+      if (!state.dragging) return;
+      state.dragging = false;
+      viewport.classList.remove("is-dragging");
+      var threshold = 40;
+      if (state.dx > threshold) go(-1);
+      else if (state.dx < -threshold) go(1);
+      state.dx = 0;
+    };
+    viewport.addEventListener("pointerup", endDrag);
+    viewport.addEventListener("pointercancel", endDrag);
+    viewport.addEventListener("pointerleave", function () { if (state.dragging) endDrag(); });
+  }
+
+  function layoutCarouselItems(container) {
+    var viewport = container.querySelector("[data-carousel-viewport]");
+    var dotsWrap = container.querySelector("[data-carousel-dots]");
+    if (!viewport) return;
+    var items = viewport.querySelectorAll(".carousel3d-item");
+    if (container._carouselState) container._carouselState.index = 0;
+    if (dotsWrap) {
+      dotsWrap.innerHTML = "";
+      items.forEach(function (_, i) {
+        var dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "carousel3d-dot" + (i === 0 ? " is-active" : "");
+        dot.setAttribute("aria-label", "Go to slide " + (i + 1));
+        dot.addEventListener("click", function () {
+          if (container._carouselState) container._carouselState.index = i;
+          if (container._carouselRender) container._carouselRender();
+        });
+        dotsWrap.appendChild(dot);
+      });
+    }
+    if (container._carouselRender) container._carouselRender();
+  }
+
+  function initSwipeCarousels() {
+    document.querySelectorAll("[data-carousel]").forEach(function (c) {
+      setupCarouselInteraction(c);
+      layoutCarouselItems(c);
+    });
+  }
+
+  /* ---------------- Homepage product-range video showcase ----------------
+     Stub: no real showcase video file exists yet (redesign spec item 7).
+     Ships a <video> with no <source> so it's visibly inert, and always keeps
+     the existing product-card grid rendered-but-hidden behind it so the
+     homepage never ships broken or empty — reveal the grid automatically if
+     no playable source is present, or if the video fails to play. */
+  function initProductShowcase() {
+    var showcase = document.querySelector("[data-product-showcase]");
+    if (!showcase) return;
+    var video = showcase.querySelector("[data-showcase-video]");
+    var grid = showcase.querySelector("[data-product-grid]");
+    var hasSource = video && video.querySelector("source");
+    var fallbackToGrid = function () {
+      if (video) video.hidden = true;
+      if (grid) grid.hidden = false;
+    };
+    if (!hasSource) {
+      fallbackToGrid();
+    } else if (video) {
+      video.addEventListener("error", fallbackToGrid);
+    }
+  }
+
+  /* ---------------- Walking mascot (scroll-scrubbed, homepage only) ----------------
+     A puffed-rice-cake-bodied stickman: the circular body IS the rice cake (a
+     cream disc with a scatter of puffed-grain dots and a simple face drawn on
+     it), with thin stick arms/legs. Walks in from the left as the trust
+     marquee scrolls into view, crosses, and exits as it scrolls past — reads
+     as "a visitor walking into the site." Position is a pure function of
+     scroll progress through the existing `.marquee` element (no added page
+     height), so it reverses naturally on scroll-up rather than firing once. */
+  function initWalkingMascot() {
+    var anchor = document.querySelector(".marquee");
+    if (!anchor || prefersReducedMotion()) return;
+
+    var mascot = document.createElement("div");
+    mascot.className = "mascot";
+    mascot.setAttribute("aria-hidden", "true");
+    mascot.innerHTML =
+      '<svg viewBox="0 0 100 130" width="100%" height="100%">' +
+        '<g class="mascot-rig">' +
+          '<line class="mascot-arm-l" x1="35" y1="58" x2="16" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
+          '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
+          '<line class="mascot-leg-l" x1="42" y1="94" x2="32" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
+          '<line class="mascot-leg-r" x1="58" y1="94" x2="68" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
+          '<circle cx="50" cy="62" r="32" fill="#FFF7EE" stroke="#e7ddce" stroke-width="2"/>' +
+          '<circle cx="38" cy="52" r="2.6" fill="#e7ddce"/>' +
+          '<circle cx="63" cy="48" r="2.2" fill="#e7ddce"/>' +
+          '<circle cx="58" cy="72" r="2.4" fill="#e7ddce"/>' +
+          '<circle cx="34" cy="70" r="2" fill="#e7ddce"/>' +
+          '<circle cx="70" cy="62" r="2.2" fill="#e7ddce"/>' +
+          '<circle cx="46" cy="38" r="1.8" fill="#e7ddce"/>' +
+          '<circle cx="34" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
+          '<circle cx="66" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
+          '<circle cx="42" cy="56" r="2.6" fill="#0F2740"/>' +
+          '<circle cx="58" cy="56" r="2.6" fill="#0F2740"/>' +
+          '<path d="M41,68 Q50,76 59,68" stroke="#0F2740" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+        "</g>" +
+      "</svg>";
+    document.body.appendChild(mascot);
+
+    var raf = null;
+    var update = function () {
+      raf = null;
+      var r = anchor.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var total = r.height + vh;
+      var traveled = vh - r.top;
+      var progress = Math.max(0, Math.min(1, total > 0 ? traveled / total : 0));
+      var active = progress > 0 && progress < 1;
+      mascot.classList.toggle("is-walking", active);
+      mascot.style.opacity = active ? "1" : "0";
+      mascot.style.transform = "translateX(calc(" + progress + " * (100vw + 280px)))";
+    };
+    var onScroll = function () {
+      if (raf) return;
+      raf = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", update);
+  }
+
+  /* ---------------- "Puff" chat assistant (site-wide) ----------------
+     Rule-based (keyword-matched), not a hosted-LLM integration — this is a
+     static, no-backend site, so there's no server to hold an API key
+     safely. Answers come from assets/js/assistant-data.js (general
+     business Q&A) plus live product fields read from window.PUFFINS_PRODUCTS
+     (ingredients/pack size), so it never drifts out of sync with the
+     product tabs and never invents a regulated figure that isn't confirmed
+     there yet. Reuses the walking-mascot face as its avatar. */
+  function initAssistant() {
+    var kb = window.PUFFINS_ASSISTANT;
+    if (!kb) return;
+
+    var launcher = document.createElement("button");
+    launcher.type = "button";
+    launcher.className = "assistant-launcher";
+    launcher.setAttribute("aria-expanded", "false");
+    launcher.setAttribute("aria-controls", "assistant-panel");
+    launcher.setAttribute("aria-label", "Chat with Puff, the Puffins assistant");
+    launcher.innerHTML = mascotAvatarSVG() + '<span class="assistant-ping" aria-hidden="true"></span>';
+
+    var panel = document.createElement("div");
+    panel.className = "assistant-panel";
+    panel.id = "assistant-panel";
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-label", "Chat with Puff");
+    panel.hidden = true;
+    panel.innerHTML =
+      '<div class="assistant-head">' +
+        '<div class="assistant-avatar">' + mascotAvatarSVG() + '</div>' +
+        '<div><strong>Puff</strong><span>Puffins snack assistant</span></div>' +
+        '<button type="button" class="assistant-close" aria-label="Close chat">&times;</button>' +
+      '</div>' +
+      '<div class="assistant-messages" role="log" aria-live="polite"></div>' +
+      '<div class="assistant-quick-replies"></div>' +
+      '<form class="assistant-form">' +
+        '<input type="text" placeholder="Ask about ingredients, story…" aria-label="Type your question" autocomplete="off">' +
+        '<button type="submit" aria-label="Send">&#10148;</button>' +
+      '</form>';
+
+    document.body.appendChild(launcher);
+    document.body.appendChild(panel);
+
+    var messagesEl = panel.querySelector(".assistant-messages");
+    var chipsEl = panel.querySelector(".assistant-quick-replies");
+    var form = panel.querySelector(".assistant-form");
+    var input = form.querySelector("input");
+    var topics = buildAssistantTopics(kb);
+    var started = false;
+
+    var addMessage = function (text, who) {
+      var msg = document.createElement("div");
+      msg.className = "assistant-msg " + who;
+      msg.textContent = text;
+      messagesEl.appendChild(msg);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    };
+
+    var renderQuickReplies = function () {
+      chipsEl.innerHTML = "";
+      (kb.quickReplies || []).forEach(function (q) {
+        var chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "assistant-chip";
+        chip.textContent = q.label;
+        chip.addEventListener("click", function () {
+          addMessage(q.label, "user");
+          reply(q.topic);
+        });
+        chipsEl.appendChild(chip);
+      });
+    };
+
+    var findTopic = function (id) {
+      for (var i = 0; i < topics.length; i++) {
+        if (topics[i].id === id) return topics[i];
+      }
+      return null;
+    };
+
+    var matchTopic = function (query) {
+      var q = query.toLowerCase();
+      var best = null;
+      var bestScore = 0;
+      topics.forEach(function (t) {
+        var score = 0;
+        (t.keywords || []).forEach(function (k) {
+          if (q.indexOf(k) !== -1) score += k.length;
+        });
+        if (score > bestScore) { bestScore = score; best = t; }
+      });
+      return best;
+    };
+
+    var reply = function (topicId, query) {
+      var topic = topicId ? findTopic(topicId) : matchTopic(query || "");
+      window.setTimeout(function () {
+        addMessage(topic ? topic.answer : kb.fallback, "bot");
+      }, 250);
+    };
+
+    var start = function () {
+      if (started) return;
+      started = true;
+      addMessage(kb.greeting, "bot");
+      renderQuickReplies();
+    };
+
+    var open = function () {
+      panel.hidden = false;
+      window.requestAnimationFrame(function () { panel.classList.add("is-open"); });
+      launcher.setAttribute("aria-expanded", "true");
+      start();
+      window.setTimeout(function () { input.focus(); }, 200);
+    };
+
+    var close = function () {
+      panel.classList.remove("is-open");
+      launcher.setAttribute("aria-expanded", "false");
+      window.setTimeout(function () { panel.hidden = true; }, 200);
+    };
+
+    launcher.addEventListener("click", function () {
+      if (panel.classList.contains("is-open")) close(); else open();
+    });
+    panel.querySelector(".assistant-close").addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && panel.classList.contains("is-open")) close();
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var value = input.value.trim();
+      if (!value) return;
+      addMessage(value, "user");
+      input.value = "";
+      reply(null, value);
+    });
+  }
+
+  function buildAssistantTopics(kb) {
+    var topics = (kb.topics || []).slice();
+    var cakes = getProducts().filter(function (p) { return p.id === "rice-cakes"; })[0];
+    if (cakes) {
+      if (cakes.ingredients && cakes.ingredients.confirmed && cakes.ingredients.text) {
+        topics.push({
+          id: "ingredients",
+          keywords: ["ingredient", "what's in", "whats in", "made of", "made from", "what is puffins made"],
+          answer: cakes.ingredients.text
+        });
+      }
+      if (cakes.packSize && cakes.packSize.confirmed && cakes.packSize.value) {
+        topics.push({
+          id: "packsize",
+          keywords: ["pack size", "how many cakes", "sleeve", "net weight", "net wt", "how much does it weigh", "how many grams"],
+          answer: "Each sleeve has " + cakes.packSize.value + "."
+        });
+      }
+    }
+    return topics;
+  }
+
+  function mascotAvatarSVG() {
+    return '<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">' +
+        '<circle cx="50" cy="50" r="34" fill="#FFF7EE" stroke="#e7ddce" stroke-width="2"/>' +
+        '<circle cx="38" cy="42" r="2.4" fill="#e7ddce"/>' +
+        '<circle cx="63" cy="38" r="2" fill="#e7ddce"/>' +
+        '<circle cx="58" cy="60" r="2.2" fill="#e7ddce"/>' +
+        '<circle cx="34" cy="58" r="1.8" fill="#e7ddce"/>' +
+        '<circle cx="34" cy="48" r="4" fill="#FF8A00" opacity=".35"/>' +
+        '<circle cx="66" cy="48" r="4" fill="#FF8A00" opacity=".35"/>' +
+        '<circle cx="42" cy="46" r="2.4" fill="#0F2740"/>' +
+        '<circle cx="58" cy="46" r="2.4" fill="#0F2740"/>' +
+        '<path d="M41,56 Q50,63 59,56" stroke="#0F2740" stroke-width="2.4" fill="none" stroke-linecap="round"/>' +
+      '</svg>';
+  }
 
   /* ---------------- Header shadow on scroll ---------------- */
   function initHeaderScroll() {
@@ -22,6 +491,7 @@
     if (!header) return;
     var onScroll = function () {
       header.classList.toggle("is-scrolled", window.scrollY > 8);
+      header.classList.toggle("is-shrunk", window.scrollY > 80);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -48,7 +518,7 @@
     var selector = [
       "main section .section-head", "main .card", "main .product-card",
       "main .quote-card", "main .team-card", "main .step",
-      ".hero-copy", ".hero-media", "main .cta-band"
+      "main .cta-band"
     ].join(",");
     var targets = document.querySelectorAll(selector);
     if (!targets.length) return;
@@ -127,17 +597,32 @@
     });
   }
 
-  /* ---------------- Flavour chip selection (visual only, no live inventory yet) ---------------- */
+  /* ---------------- Flavour chip selection (visual only, no live inventory yet) ----------------
+     Delegated on document (not bound per-element) so chips rendered later by
+     renderProductDetail() — which runs after this init — still respond to clicks. */
   function initFlavorChips() {
-    document.querySelectorAll(".flavor-row").forEach(function (row) {
-      row.querySelectorAll(".flavor-chip").forEach(function (chip) {
-        if (chip.classList.contains("soon")) return;
-        chip.addEventListener("click", function () {
-          row.querySelectorAll(".flavor-chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
-          chip.setAttribute("aria-pressed", "true");
-        });
-      });
+    document.addEventListener("click", function (e) {
+      var chip = e.target.closest && e.target.closest(".flavor-chip");
+      if (!chip || chip.classList.contains("soon") || chip.disabled) return;
+      var row = chip.closest(".flavor-row");
+      if (!row) return;
+      row.querySelectorAll(".flavor-chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+      chip.setAttribute("aria-pressed", "true");
+      spawnChipBurst(chip, e);
     });
+  }
+
+  function spawnChipBurst(chip, e) {
+    if (prefersReducedMotion()) return;
+    var r = chip.getBoundingClientRect();
+    var burst = document.createElement("span");
+    burst.className = "chip-burst";
+    var size = Math.max(r.width, r.height);
+    burst.style.left = (e.clientX != null ? e.clientX - r.left : r.width / 2) + "px";
+    burst.style.top = (e.clientY != null ? e.clientY - r.top : r.height / 2) + "px";
+    burst.style.width = burst.style.height = size + "px";
+    chip.appendChild(burst);
+    burst.addEventListener("animationend", function () { burst.remove(); });
   }
 
   /* ---------------- Forms: client-side validation + honeypot spam guard ---------------- */
@@ -186,7 +671,18 @@
     return "Price coming soon";
   }
 
+  /* Redesign spec item 3: dynamically-computed "N Products" badge, kept in
+     sync with the catalogue instead of a hardcoded count. */
+  function renderProductCount() {
+    var count = getProducts().length;
+    var label = count + (count === 1 ? " Product" : " Products");
+    document.querySelectorAll("[data-product-count]").forEach(function (el) {
+      el.textContent = label;
+    });
+  }
+
   function renderProductCards() {
+    renderProductCount();
     var grid = document.querySelector("[data-product-grid]");
     if (!grid) return;
     var products = getProducts();
@@ -219,17 +715,20 @@
     var product = getProducts().filter(function (p) { return p.slug === slug; })[0];
     if (!product) return;
 
-    // Hero image + gallery thumbs
-    var heroImg = root.querySelector("[data-hero-img]");
-    if (heroImg) heroImg.src = product.heroImage;
-    var thumbs = root.querySelector("[data-gallery-thumbs]");
-    if (thumbs) {
-      thumbs.innerHTML = product.galleryImages.map(function (src, i) {
-        return '<button type="button" class="gallery-thumb" data-src="' + src + '" aria-label="Show image ' + (i + 1) + '"><img src="' + src + '" alt=""></button>';
-      }).join("");
-      thumbs.querySelectorAll("button").forEach(function (btn) {
-        btn.addEventListener("click", function () { if (heroImg) heroImg.src = btn.dataset.src; });
-      });
+    // Gallery — 3D swipe carousel (redesign spec item 1). setupCarouselInteraction()
+    // was already run once for this container by the DOMContentLoaded-time
+    // initSwipeCarousels() pass (on an empty viewport); only the item layout
+    // needs rebuilding here now that the real images are known.
+    var galleryCarousel = root.querySelector("[data-gallery-carousel]");
+    if (galleryCarousel) {
+      var galleryViewport = galleryCarousel.querySelector("[data-carousel-viewport]");
+      if (galleryViewport) {
+        galleryViewport.innerHTML = product.galleryImages.map(function (src, i) {
+          return '<div class="carousel3d-item"><img src="' + src + '" alt="' + product.name + ' — image ' + (i + 1) + '"' +
+            (i === 0 ? ' fetchpriority="high"' : ' loading="lazy"') + '></div>';
+        }).join("");
+      }
+      layoutCarouselItems(galleryCarousel);
     }
 
     // Flavours
