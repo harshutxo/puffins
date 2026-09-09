@@ -297,18 +297,14 @@ section{ padding:64px 0; }
 
 .card{
   background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
-  padding:28px; box-shadow:var(--shadow-sm); transition:transform .18s ease, box-shadow .18s ease;
+  padding:28px; box-shadow:var(--shadow-sm); transition:box-shadow .18s ease;
 }
-.card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-md); }
-.card:hover .icon{ transform:scale(1.12) rotate(-6deg); }
+.card:hover{ --hover-y:-4px; box-shadow:var(--shadow-md); }
+.card:hover .icon{ --hover-is:1.12; --hover-ir:-6deg; }
 .card .icon{
   width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center;
   font-size:1.5rem; margin-bottom:16px; background:var(--cream);
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
 }
-.reveal.is-visible .card .icon,.card.reveal.is-visible .icon{ animation:icon-pop .5s cubic-bezier(.34,1.56,.64,1) both; animation-delay:.15s; }
-@keyframes icon-pop{ from{ transform:scale(0.4); opacity:0; } to{ transform:scale(1); opacity:1; } }
-@media (prefers-reduced-motion:reduce){ .reveal.is-visible .card .icon,.card.reveal.is-visible .icon{ animation:none; } }
 .card h3{ font-size:1.1rem; }
 .card p{ color:var(--text-soft); font-size:.95rem; margin-bottom:0; }
 
