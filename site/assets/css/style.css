@@ -359,9 +359,9 @@ section{ padding:64px 0; }
 @media (min-width:1000px){ .team-grid{ grid-template-columns:repeat(5,1fr); } }
 .team-card{
   background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
-  padding:18px; text-align:center; box-shadow:var(--shadow-sm); transition:transform .18s ease, box-shadow .18s ease;
+  padding:18px; text-align:center; box-shadow:var(--shadow-sm); transition:box-shadow .18s ease;
 }
-.team-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-md); }
+.team-card:hover{ --hover-y:-4px; box-shadow:var(--shadow-md); }
 .team-card img{
   width:96px; height:96px; border-radius:50%; object-fit:cover; margin:0 auto 14px;
   border:3px solid var(--cream); box-shadow:var(--shadow-sm);
