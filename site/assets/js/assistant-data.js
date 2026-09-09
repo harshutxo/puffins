@@ -21,7 +21,7 @@ window.PUFFINS_ASSISTANT = {
   topics: [
     {
       id: "method",
-      keywords: ["method", "how is it made", "how are they made", "process", "how do you make", "baked or fried", "fried"],
+      keywords: ["method", "how is it made", "how are they made", "process", "how do you make", "puffed or fried", "fried"],
       answer: "Whole grains go into the press at 200°C. Pressure drops, the grain expands and binds to itself — no syrup, no oil, no flour. That's how we get the crunch without frying."
     },
     {

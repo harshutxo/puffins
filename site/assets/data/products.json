@@ -5,7 +5,7 @@
       "id": "rice-cakes",
       "name": "Puffins Rice Cakes",
       "slug": "rice-cakes",
-      "shortDescription": "Baked, not fried. Light, crunchy puffed-rice cakes made for anytime snacking.",
+      "shortDescription": "Puffed, not fried. Light, crunchy puffed-rice cakes made for anytime snacking.",
       "format": "Cylindrical tube pack",
       "heroImage": "assets/img/brand/packshot-sea-salt.jpg",
       "galleryImages": [
@@ -24,7 +24,7 @@
       ],
       "packSize": { "value": "8 cakes per sleeve, 6 g each (48 g net)", "confirmed": true },
       "price": { "amount": null, "currency": "INR", "confirmed": false, "note": "Pricing to be confirmed by SIF before checkout goes live." },
-      "attributes": ["Baked, not fried", "Gluten free", "100% vegetarian", "No added preservatives"],
+      "attributes": ["Puffed, not fried", "Gluten free", "100% vegetarian", "No added preservatives"],
       "attributesConfirmed": false,
       "ingredients": { "text": "Rice — that's it. Whole grains are pressed at 200°C; the pressure drop expands the grain and binds it to itself. No syrup, no oil, no flour, nothing else added.", "confirmed": true },
       "allergens": { "text": null, "confirmed": false },
@@ -32,7 +32,7 @@
       "shelfLife": { "text": null, "confirmed": false },
       "storage": { "text": "Store in a cool, dry place. Reseal after opening to keep the crunch.", "confirmed": false },
       "faqs": [
-        { "q": "Are Puffins Rice Cakes baked or fried?", "a": "Baked, not fried — that's how we keep them light without losing crunch." },
+        { "q": "Are Puffins Rice Cakes puffed or fried?", "a": "Puffed, not fried — that's how we keep them light without losing crunch." },
         { "q": "Are they gluten free?", "a": "Yes, made from puffed rice. Final allergen statement will be published once SIF confirms manufacturing details." },
         { "q": "How should I store them?", "a": "Keep the pack sealed in a cool, dry place, and reseal it after opening to keep every cake crunchy." }
       ]
@@ -56,7 +56,7 @@
       ],
       "packSize": { "value": null, "confirmed": false },
       "price": { "amount": null, "currency": "INR", "confirmed": false, "note": "Pricing to be confirmed by SIF." },
-      "attributes": ["Baked, not fried", "Gluten free", "100% vegetarian"],
+      "attributes": ["Puffed, not fried", "Gluten free", "100% vegetarian"],
       "attributesConfirmed": false,
       "ingredients": { "text": null, "confirmed": false },
       "allergens": { "text": null, "confirmed": false },

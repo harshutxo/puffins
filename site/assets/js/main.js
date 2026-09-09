@@ -19,6 +19,7 @@
     initTiltEffect();
     initHeroGlow();
     initSwipeCarousels();
+    initImageCarousel();
     initProductShowcase();
     initAssistant();
     initWalkingMascot();
@@ -229,6 +230,66 @@
     document.querySelectorAll("[data-carousel]").forEach(function (c) {
       setupCarouselInteraction(c);
       layoutCarouselItems(c);
+    });
+  }
+
+  /* ---------------- Auto-advancing image carousel (The Crunch section) ----------------
+     Slides one image at a time on a timer (real translateX shift, not a
+     crossfade) with dot navigation; pauses on hover/focus so it doesn't
+     fight someone inspecting a frame, and never auto-advances under
+     prefers-reduced-motion (dots still work). */
+  function initImageCarousel() {
+    document.querySelectorAll("[data-image-carousel]").forEach(function (container) {
+      var track = container.querySelector("[data-image-carousel-track]");
+      var dotsWrap = container.querySelector("[data-image-carousel-dots]");
+      if (!track) return;
+      var slides = track.querySelectorAll(".image-carousel-slide");
+      if (slides.length < 2) return;
+
+      var index = 0;
+      var timer = null;
+
+      var render = function () {
+        track.style.transform = "translateX(-" + (index * 100) + "%)";
+        if (dotsWrap) {
+          dotsWrap.querySelectorAll(".image-carousel-dot").forEach(function (d, i) {
+            d.classList.toggle("is-active", i === index);
+          });
+        }
+      };
+
+      var goTo = function (i) {
+        index = (i + slides.length) % slides.length;
+        render();
+      };
+
+      var stop = function () {
+        if (timer) { window.clearInterval(timer); timer = null; }
+      };
+      var start = function () {
+        if (prefersReducedMotion()) return;
+        stop();
+        timer = window.setInterval(function () { goTo(index + 1); }, 3200);
+      };
+
+      if (dotsWrap) {
+        slides.forEach(function (_, i) {
+          var dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "image-carousel-dot" + (i === 0 ? " is-active" : "");
+          dot.setAttribute("aria-label", "Show image " + (i + 1) + " of " + slides.length);
+          dot.addEventListener("click", function () { goTo(i); start(); });
+          dotsWrap.appendChild(dot);
+        });
+      }
+
+      container.addEventListener("mouseenter", stop);
+      container.addEventListener("mouseleave", start);
+      container.addEventListener("focusin", stop);
+      container.addEventListener("focusout", start);
+
+      render();
+      start();
     });
   }
 

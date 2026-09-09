@@ -97,7 +97,7 @@ dependencies, no build step):
 - A sticky-header shadow on scroll, a "back to top" button, and an infinite trust-badge
   marquee under the home hero
 - A soft animated gradient blob + gently floating product shot in the hero, plus a
-  floating "100% baked, not fried" callout card
+  floating "100% puffed, not fried" callout card
 - Icon pop-in and lift/zoom hover states on feature cards and product cards
 - The Home hero now uses `packshot-sea-salt.jpg` (a tight crop of the product can) instead
   of the full pitch-deck slide, which previously duplicated the header logo/tagline and
