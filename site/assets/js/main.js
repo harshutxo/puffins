@@ -623,9 +623,15 @@
         }
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    var storyIndex = 0;
     targets.forEach(function (el, i) {
       el.classList.add("reveal");
-      el.style.transitionDelay = (i % 4) * 70 + "ms";
+      if (el.closest(".story-reveal") || el.classList.contains("story-reveal-quote")) {
+        el.style.transitionDelay = Math.min(storyIndex * 90, 360) + "ms";
+        storyIndex++;
+      } else {
+        el.style.transitionDelay = (i % 4) * 70 + "ms";
+      }
       io.observe(el);
     });
   }
