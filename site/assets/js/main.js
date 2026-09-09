@@ -601,39 +601,9 @@
     }, { passive: true });
   }
 
-  /* ---------------- Scroll-reveal for section content ---------------- */
-  function initScrollReveal() {
-    var selector = [
-      "main section .section-head", "main .card", "main .product-card",
-      "main .quote-card", "main .team-card", "main .step",
-      "main .cta-band", "main .story-reveal > p", "main .story-reveal-quote"
-    ].join(",");
-    var targets = document.querySelectorAll(selector);
-    if (!targets.length) return;
-    if (!("IntersectionObserver" in window)) {
-      targets.forEach(function (el) { el.classList.add("reveal", "is-visible"); });
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-    var storyIndex = 0;
-    targets.forEach(function (el, i) {
-      el.classList.add("reveal");
-      if (el.closest(".story-reveal") || el.classList.contains("story-reveal-quote")) {
-        el.style.transitionDelay = Math.min(storyIndex * 90, 360) + "ms";
-        storyIndex++;
-      } else {
-        el.style.transitionDelay = (i % 4) * 70 + "ms";
-      }
-      io.observe(el);
-    });
-  }
+  /* Scroll-linked reveal animations (cards, Our Story, hero canister, etc.)
+     live in assets/js/scroll-motion.js — a continuous scroll-progress
+     system, not an enter-viewport-once trigger. See that file. */
 
   /* ---------------- Mobile nav ---------------- */
   function initNav() {
