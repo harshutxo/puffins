@@ -607,7 +607,7 @@
     var selector = [
       "main section .section-head", "main .card", "main .product-card",
       "main .quote-card", "main .team-card", "main .step",
-      "main .cta-band"
+      "main .cta-band", "main .story-reveal > p", "main .story-reveal-quote"
     ].join(",");
     var targets = document.querySelectorAll(selector);
     if (!targets.length) return;
