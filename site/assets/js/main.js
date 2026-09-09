@@ -13,7 +13,6 @@
     renderProductDetail();
     initHeaderScroll();
     initBackToTop();
-    initScrollReveal();
     initScrollProgress();
     initMagneticButtons();
     initTiltEffect();
