@@ -75,7 +75,12 @@
     });
   }
 
-  /* ---------------- 3D tilt on cards + hero media (desktop pointer only) ---------------- */
+  /* ---------------- 3D tilt on cards + hero media (desktop pointer only) ----------------
+     Writes --tilt-* custom properties rather than the `transform` shorthand
+     directly, so this composes with the scroll-progress reveal system
+     (assets/js/scroll-motion.js) on the same elements (.card etc.) instead
+     of one clobbering the other — see style.css for the rules that combine
+     both sources into the final transform. */
   function initTiltEffect() {
     if (!supportsHover() || prefersReducedMotion()) return;
     var selector = ".card, .product-card, .team-card, .hero-media";
@@ -89,15 +94,18 @@
       var isHero = el.classList.contains("hero-media");
       var rx = (0.5 - py) * (isHero ? 6 : 8);
       var ry = (px - 0.5) * (isHero ? 6 : 8);
-      el.style.transform = "perspective(700px) rotateX(" + rx + "deg) rotateY(" + ry + "deg)" +
-        (isHero ? "" : " translateY(-6px)");
+      el.style.setProperty("--tilt-rx", rx + "deg");
+      el.style.setProperty("--tilt-ry", ry + "deg");
+      el.style.setProperty("--tilt-ty", isHero ? "0px" : "-6px");
     }, { passive: true });
 
     document.addEventListener("mouseout", function (e) {
       var el = e.target.closest && e.target.closest(selector);
       if (!el) return;
       if (e.relatedTarget && el.contains(e.relatedTarget)) return;
-      el.style.transform = "";
+      el.style.removeProperty("--tilt-rx");
+      el.style.removeProperty("--tilt-ry");
+      el.style.removeProperty("--tilt-ty");
     });
   }
 
