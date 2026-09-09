@@ -501,49 +501,58 @@ section{ padding:64px 0; }
 .error-page{ text-align:center; padding:110px 0 90px; }
 .error-page .code{ font-size:clamp(4rem,14vw,7rem); font-weight:800; color:var(--orange); line-height:1; }
 
-/* ---------- Scroll-reveal ---------- */
-.reveal{ opacity:0; transform:translateY(22px); transition:opacity .6s ease, transform .6s ease; }
-.reveal.is-visible{ opacity:1; transform:translateY(0); }
-@media (prefers-reduced-motion:reduce){
-  .reveal{ opacity:1; transform:none; transition:none; }
+/* ---------- Scroll-progress motion ----------
+   Written by assets/js/scroll-motion.js as a continuous function of scroll
+   position (see that file's header comment) — every --rv-* custom property
+   below is recomputed every frame from live geometry, never toggled once
+   and left. Deliberately NO `transition` on any of these rules: a
+   transition would race the next scroll update and lag behind the
+   finger/wheel, which breaks "the animation should remain exactly at that
+   halfway point." Any "spring"/overshoot feel comes from easing PROGRESS
+   itself in JS (still a pure function of scroll position), not from a
+   CSS-timed transition. Custom properties default to their fully-resolved,
+   fully-visible values, so this degrades safely with JS disabled or under
+   prefers-reduced-motion (scroll-motion.js simply never registers anything
+   in that case, and these elements render at the defaults below). */
+.section-head, .quote-card, .step, .cta-band, .stmt-text{
+  opacity:var(--rv-o,1);
+  transform:perspective(1200px) rotateX(var(--rv-rx,0deg)) translateY(var(--rv-y,0px)) scale(var(--rv-s,1));
+  will-change:transform,opacity;
+}
+/* .card / .product-card / .team-card also carry pointer-driven hover tilt
+   (--tilt-*, initTiltEffect in main.js) and a CSS-only hover lift
+   (--hover-y, set by the :hover rules above) — all three sources compose
+   into one transform here instead of any of them overwriting another. */
+.card, .product-card, .team-card{
+  opacity:var(--rv-o,1);
+  transform:
+    perspective(1200px)
+    rotateX(calc(var(--rv-rx,0deg) + var(--tilt-rx,0deg)))
+    rotateY(var(--tilt-ry,0deg))
+    translateY(calc(var(--rv-y,0px) + var(--tilt-ty,0px) + var(--hover-y,0px)))
+    scale(var(--rv-s,1));
+  will-change:transform,opacity;
+}
+.card .icon{
+  opacity:var(--rv-io,1);
+  transform:scale(calc(var(--rv-is,1) * var(--hover-is,1))) rotate(var(--hover-ir,0deg));
 }
 
-/* ---------- Our Story: 3D cascade reveal ---------- */
+/* ---------- Our Story: 3D cascade ---------- */
 .story-reveal > p{
-  opacity:0;
-  transform:perspective(1400px) rotateX(-58deg) translateY(38px) scale(.94);
-  transform-origin:50% 100%;
-  filter:blur(5px);
-  transition:opacity .75s cubic-bezier(.22,1,.36,1),
-             transform .9s cubic-bezier(.22,1,.36,1),
-             filter .75s ease;
+  opacity:var(--rv-o,1);
+  filter:blur(var(--rv-b,0px));
+  transform:perspective(1400px) rotateX(var(--rv-rx,0deg)) translateY(var(--rv-y,0px)) scale(var(--rv-s,1));
   will-change:transform,opacity,filter;
 }
 .story-reveal > p:nth-child(odd){ transform-origin:0% 100%; }
 .story-reveal > p:nth-child(even){ transform-origin:100% 100%; }
-.story-reveal > p.is-visible{
-  opacity:1;
-  transform:perspective(1400px) rotateX(0deg) translateY(0) scale(1);
-  filter:blur(0);
-}
 .story-reveal-quote{
-  opacity:0;
-  transform:perspective(1400px) rotateX(-42deg) rotateZ(-1.5deg) translateY(32px) scale(.9);
+  opacity:var(--rv-o,1);
+  box-shadow:var(--rv-shadow,none);
+  transform:perspective(1400px) rotateX(var(--rv-rx,0deg)) rotateZ(var(--rv-rz,0deg)) translateY(var(--rv-y,0px)) scale(var(--rv-s,1));
   transform-origin:50% 100%;
-  transition:opacity .7s cubic-bezier(.34,1.56,.64,1),
-             transform 1s cubic-bezier(.34,1.56,.64,1),
-             box-shadow .8s ease .1s;
   will-change:transform,opacity,box-shadow;
-}
-.story-reveal-quote.is-visible{
-  opacity:1;
-  transform:perspective(1400px) rotateX(0deg) rotateZ(0deg) translateY(0) scale(1);
-  box-shadow:0 22px 44px -18px rgba(15,39,64,.4);
-}
-@media (prefers-reduced-motion:reduce){
-  .story-reveal > p, .story-reveal-quote{
-    opacity:1; transform:none; filter:none; box-shadow:none; transition:none;
-  }
 }
 
 /* ---------- Header scroll state ---------- */
