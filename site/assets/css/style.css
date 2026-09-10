@@ -470,6 +470,13 @@ section{ padding:64px 0; }
 .team-card img{
   width:96px; height:96px; border-radius:50%; object-fit:cover; margin:0 auto 14px;
   border:3px solid var(--cream); box-shadow:var(--shadow-sm);
+  /* Scroll-synced pop-and-spin, independent of the card's own fade/lift —
+     see initTeamPhotoReveal() in scroll-motion.js. No transition here for
+     the same reason as the rest of the scroll-progress system: this must
+     stay locked exactly to scroll position, not animate on a timer. */
+  opacity:var(--photo-o,1);
+  transform:scale(var(--photo-s,1)) rotate(var(--photo-r,0deg)) translateY(var(--photo-y,0px));
+  will-change:transform,opacity;
 }
 .team-card h3{ font-size:1rem; margin-bottom:2px; }
 .team-card .role{ font-size:.78rem; font-weight:700; color:var(--orange-dk); margin-bottom:8px; }
