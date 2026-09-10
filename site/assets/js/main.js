@@ -323,19 +323,20 @@
     }
   }
 
-  /* ---------------- Treadmill mascot = the assistant, running in place (homepage only) ----------------
+  /* ---------------- Treadmill mascot = the assistant, running on the bar (homepage only) ----------------
      A puffed-rice-cake-bodied stickman: the circular body IS the rice cake (a
      cream disc with a scatter of puffed-grain dots and a simple face drawn on
-     it), with thin stick arms/legs. Pinned centred on top of the trust
-     marquee band (appended inside `.marquee`, which is its positioned
-     ancestor — see style.css) rather than walking across the screen: the
-     ticker's own continuous auto-scroll is the "treadmill belt," and the
-     mascot just runs in place on it, visible whenever the marquee is on
-     screen. This IS Puff, the chat assistant — not a lookalike prop — so
-     while it's visible it's the clickable way to open the chat, and the
-     fixed launcher (see initAssistant) steps aside to avoid showing the same
-     character twice at once, docking back in once the marquee scrolls out
-     of view. */
+     it), with thin stick arms/legs. Appended inside `.marquee` (its
+     positioned ancestor — see style.css), so it never leaves the trust
+     marquee band: it runs left-to-right along the TOP OF THAT BAR as the
+     visitor scrolls down, and — because position is a pure function of
+     scroll progress through `.marquee`, recomputed every frame rather than
+     stored — reverses to run right-to-left exactly in step if they scroll
+     back up, with no "replay from the start." This IS Puff, the chat
+     assistant — not a lookalike prop — so while it's visible it's the
+     clickable way to open the chat, and the fixed launcher (see
+     initAssistant) steps aside to avoid showing the same character twice at
+     once, docking back in once the mascot exits. */
   function initTreadmillMascot() {
     var anchor = document.querySelector(".marquee");
     if (!anchor || prefersReducedMotion()) return;
@@ -355,22 +356,30 @@
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
     });
 
-    var setActive = function (active) {
+    var raf = null;
+    var update = function () {
+      raf = null;
+      var r = anchor.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var total = r.height + vh;
+      var traveled = vh - r.top;
+      var progress = Math.max(0, Math.min(1, total > 0 ? traveled / total : 0));
+      var active = progress > 0 && progress < 1;
+      var travel = Math.max(0, r.width - mascot.offsetWidth); // stays within the bar's own width
       mascot.classList.toggle("is-running", active);
       mascot.style.opacity = active ? "1" : "0";
+      mascot.style.transform = "translateX(" + (progress * travel) + "px)";
       mascot.setAttribute("aria-hidden", active ? "false" : "true");
       mascot.tabIndex = active ? 0 : -1;
       if (assistantAPI.launcher) assistantAPI.launcher.classList.toggle("is-docked", active);
     };
-
-    if ("IntersectionObserver" in window) {
-      var io = new IntersectionObserver(function (entries) {
-        setActive(entries[0].isIntersecting);
-      }, { threshold: 0.01 });
-      io.observe(anchor);
-    } else {
-      setActive(true);
-    }
+    var onScroll = function () {
+      if (raf) return;
+      raf = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", update);
   }
 
   /* ---------------- "Puff" chat assistant (site-wide) ----------------
