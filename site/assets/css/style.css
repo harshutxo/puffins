@@ -882,8 +882,8 @@ body{ animation:page-fade-in .5s ease both; }
 }
 .carousel3d-item{
   position:absolute; top:0; left:50%; width:var(--c3d-w); margin-left:calc(var(--c3d-w) / -2);
-  transition:transform .45s cubic-bezier(.22,1,.36,1), opacity .45s ease;
-  will-change:transform,opacity; cursor:grab; user-select:none; -webkit-user-select:none;
+  transition:transform .45s cubic-bezier(.22,1,.36,1), opacity .45s ease, filter .45s ease;
+  will-change:transform,opacity,filter; cursor:grab; user-select:none; -webkit-user-select:none;
 }
 .carousel3d-viewport.is-dragging .carousel3d-item{ transition:none; cursor:grabbing; }
 .carousel3d-item img{
