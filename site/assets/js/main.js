@@ -698,6 +698,18 @@
     burst.addEventListener("animationend", function () { burst.remove(); });
   }
 
+  /* Small centred orange "pop" on the hamburger toggle — same burst
+     language as spawnChipBurst above, but sized to the button itself
+     (not the click point) since the toggle is small and the whole thing
+     should flash, not just wherever the pointer landed. */
+  function spawnToggleBurst(el) {
+    if (prefersReducedMotion()) return;
+    var burst = document.createElement("span");
+    burst.className = "toggle-burst";
+    el.appendChild(burst);
+    burst.addEventListener("animationend", function () { burst.remove(); });
+  }
+
   /* ---------------- Forms: client-side validation + honeypot spam guard ---------------- */
   function initForms() {
     document.querySelectorAll("form[data-form]").forEach(function (form) {
