@@ -558,13 +558,13 @@
         '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
         '<line class="mascot-leg-l" x1="42" y1="94" x2="32" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
         '<line class="mascot-leg-r" x1="58" y1="94" x2="68" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
-        '<circle cx="50" cy="62" r="32" fill="#FFF7EE" stroke="#e7ddce" stroke-width="2"/>' +
-        '<circle cx="38" cy="52" r="2.6" fill="#e7ddce"/>' +
-        '<circle cx="63" cy="48" r="2.2" fill="#e7ddce"/>' +
-        '<circle cx="58" cy="72" r="2.4" fill="#e7ddce"/>' +
-        '<circle cx="34" cy="70" r="2" fill="#e7ddce"/>' +
-        '<circle cx="70" cy="62" r="2.2" fill="#e7ddce"/>' +
-        '<circle cx="46" cy="38" r="1.8" fill="#e7ddce"/>' +
+        '<circle cx="50" cy="62" r="32" fill="#FFF7EE" stroke="#0F2740" stroke-width="2.5"/>' +
+        '<circle cx="38" cy="52" r="2.6" fill="#c9b696"/>' +
+        '<circle cx="63" cy="48" r="2.2" fill="#c9b696"/>' +
+        '<circle cx="58" cy="72" r="2.4" fill="#c9b696"/>' +
+        '<circle cx="34" cy="70" r="2" fill="#c9b696"/>' +
+        '<circle cx="70" cy="62" r="2.2" fill="#c9b696"/>' +
+        '<circle cx="46" cy="38" r="1.8" fill="#c9b696"/>' +
         '<circle cx="34" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
         '<circle cx="66" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
         '<circle cx="42" cy="56" r="2.6" fill="#0F2740"/>' +
