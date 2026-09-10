@@ -34,7 +34,7 @@
   /* Shared handle so the walking mascot (homepage-only) and the site-wide
      launcher can both drive the one assistant panel — the stickman itself
      is the chat entry point, not a separate icon. Populated by
-     initAssistant(); read by initWalkingMascot(), whichever order they run. */
+     initAssistant(); read by initTreadmillMascot(), whichever order they run. */
   var assistantAPI = { launcher: null, open: function () {} };
 
   /* ---------------- Scroll progress bar ---------------- */
