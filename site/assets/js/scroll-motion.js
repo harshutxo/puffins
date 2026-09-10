@@ -198,35 +198,40 @@
     });
   }
 
-  /* ---------------- Team photos: scroll-synced pop-and-spin ----------------
-     Replaces the generic cascade reveal for just the circular headshots
-     (the surrounding .team-card box still gets the standard fade/lift from
-     initCascadeReveal — this adds a second, independent transform on the
-     photo itself, so the card rises while the photo pops and spins into
-     place inside it). Inspired by react-bits' BounceCards — an elastic,
-     alternating-direction fan-in — but rebuilt on this site's own
-     scroll-progress model instead of a timer: the spring overshoot plays
-     out as you scroll past each photo's entry window, and reverses the
-     same way scrolling back up. */
-  function initTeamPhotoReveal() {
-    var photos = document.querySelectorAll(".team-card img");
-    photos.forEach(function (img, i) {
-      // All 5 photos sit in the same row (near-identical rect.top), so the
-      // only thing that makes them read as a left-to-right wave instead of
-      // popping in together is this per-index delay on the threshold —
-      // it needs to be a meaningful fraction of the viewport, not a token
-      // amount, or a normal-speed scroll blows straight past the gap.
+  /* ---------------- Team cards: box + photo, one synchronized wave ----------------
+     The card box and its circular photo are driven from a SINGLE progress
+     value per team member — computed once from the card's own geometry,
+     then reused for both — so they can never drift out of sync with each
+     other, and the left-to-right order is guaranteed to match visual
+     (DOM) order: this queries .team-card directly rather than going
+     through the shared multi-selector cascade reveal, so it can't be
+     thrown off by unrelated elements elsewhere on the page shifting a
+     global index (that was the bug behind cards revealing in a seemingly
+     random order — see initCascadeReveal's comment). The photo's extra
+     pop-and-spin (inspired by react-bits' BounceCards) rides on top of the
+     same p, using a spring curve where the box uses a plain ease-out. */
+  function initTeamReveal() {
+    var cards = document.querySelectorAll(".team-card");
+    cards.forEach(function (card, i) {
+      var img = card.querySelector("img");
       var stagger = i * 0.1;
       var dir = i % 2 === 0 ? -1 : 1; // alternates left/right spin, like a dealt fan of photos
-      watch(img, function (vh, rect) {
+      watch(card, function (vh, rect) {
         var narrow = isNarrow();
         var p = entryProgress(rect, vh, 0.94 - stagger, 0.6 - stagger);
-        var tSpring = easeOutBack(p); // scale/rotation/lift — plays the overshoot
-        var tLinear = clamp01(p);     // opacity — no flicker on the overshoot
-        img.style.setProperty("--photo-o", tLinear);
-        img.style.setProperty("--photo-s", lerp(0.35, 1, tSpring));
-        img.style.setProperty("--photo-r", (dir * lerp(narrow ? 35 : 55, 0, tSpring)) + "deg");
-        img.style.setProperty("--photo-y", lerp(22, 0, tSpring) + "px");
+        var t = easeOutCubic(p);
+        card.style.setProperty("--rv-o", t);
+        card.style.setProperty("--rv-rx", (narrow ? lerp(-5, 0, t) : lerp(-11, 0, t)) + "deg");
+        card.style.setProperty("--rv-y", lerp(26, 0, t) + "px");
+        card.style.setProperty("--rv-s", lerp(0.96, 1, t));
+        if (img) {
+          var tSpring = easeOutBack(p); // scale/rotation/lift — plays the overshoot
+          var tLinear = clamp01(p);     // opacity — no flicker on the overshoot
+          img.style.setProperty("--photo-o", tLinear);
+          img.style.setProperty("--photo-s", lerp(0.35, 1, tSpring));
+          img.style.setProperty("--photo-r", (dir * lerp(narrow ? 35 : 55, 0, tSpring)) + "deg");
+          img.style.setProperty("--photo-y", lerp(22, 0, tSpring) + "px");
+        }
       });
     });
   }
