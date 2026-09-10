@@ -362,6 +362,45 @@ section{ padding:64px 0; }
 .card h3{ font-size:1.1rem; }
 .card p{ color:var(--text-soft); font-size:.95rem; margin-bottom:0; }
 
+/* ---------- Claymorphism treatment: "What is Puffins?" feature cards ----------
+   Scoped to .grid-4 .card only — this exact 4-card layout on index.html and
+   why-puffins.html — so the plain .card elsewhere (Contact, Create Your Own)
+   is untouched. Soft, puffy, single-tone depth via paired light/dark shadows
+   instead of a hard border. Only surface treatment changes here: --rv-*/
+   --tilt-*/--hover-y stay exactly as defined earlier, so the scroll-reveal
+   and pointer-tilt system keeps driving position/opacity unchanged — this
+   just adds a bigger box-shadow on hover and an inset "pressed" shadow on
+   :active on top of that, for a tactile, squishy feel. */
+.grid-4 .card{
+  background:var(--cream); border:none; border-radius:28px; padding:32px 28px;
+  box-shadow:
+    9px 9px 18px rgba(196,163,112,.28),
+    -9px -9px 18px rgba(255,255,255,.95),
+    inset 1px 1px 2px rgba(255,255,255,.6),
+    inset -2px -2px 4px rgba(196,163,112,.12);
+  transition:box-shadow .25s ease;
+}
+.grid-4 .card:hover{
+  box-shadow:
+    13px 13px 26px rgba(196,163,112,.32),
+    -13px -13px 26px rgba(255,255,255,1),
+    inset 1px 1px 2px rgba(255,255,255,.7),
+    inset -2px -2px 4px rgba(196,163,112,.1);
+}
+.grid-4 .card:active{
+  --hover-y:1px;
+  box-shadow:
+    inset 7px 7px 14px rgba(196,163,112,.3),
+    inset -7px -7px 14px rgba(255,255,255,.85);
+}
+.grid-4 .card .icon{
+  border-radius:20px;
+  box-shadow:
+    5px 5px 10px rgba(196,163,112,.25),
+    -5px -5px 10px rgba(255,255,255,.9);
+}
+@media (prefers-reduced-motion:reduce){ .grid-4 .card{ transition:none; } }
+
 .bg-navy{ background:var(--navy); color:var(--white); }
 .bg-navy .text-soft{ color:#c7d3de; }
 .bg-cream{ background:var(--cream); }
