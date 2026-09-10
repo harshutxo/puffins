@@ -141,14 +141,37 @@ section{ padding:64px 0; }
 }
 
 .nav-toggle{
-  position:absolute; top:50%; right:0; transform:translateY(-50%);
+  position:absolute; top:50%; right:0; transform:translateY(-50%) scale(1);
   display:flex; flex-direction:column; justify-content:center; gap:5px;
   width:46px; height:46px; border-radius:10px; border:1px solid var(--line); background:var(--white);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
 }
-.nav-toggle span{ width:20px; height:2px; background:var(--navy); margin:0 auto; border-radius:2px; transition:transform .2s ease, opacity .2s ease; }
+.nav-toggle:hover{ transform:translateY(-50%) scale(1.08); box-shadow:var(--shadow-sm); border-color:var(--orange); }
+.nav-toggle:active{ transform:translateY(-50%) scale(0.92); }
+.nav-toggle span{
+  height:2px; background:var(--navy); margin:0 auto; border-radius:2px;
+  transition:width .3s cubic-bezier(.34,1.56,.64,1), transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;
+}
+/* Tapered stack, widest at top to narrowest at bottom. */
+.nav-toggle span:nth-child(1){ width:22px; }
+.nav-toggle span:nth-child(2){ width:16px; }
+.nav-toggle span:nth-child(3){ width:10px; }
+/* Bars widen on hover for a livelier, less static resting state — skipped
+   while open so they don't fight the uniform width the X-morph needs. */
+.nav-toggle:hover:not(.is-open) span:nth-child(1){ width:26px; }
+.nav-toggle:hover:not(.is-open) span:nth-child(2){ width:20px; }
+.nav-toggle:hover:not(.is-open) span:nth-child(3){ width:14px; }
+/* Open state: bars morph to equal length as they rotate into a clean X. */
+.nav-toggle.is-open span{ width:20px; }
 .nav-toggle.is-open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
 .nav-toggle.is-open span:nth-child(2){ opacity:0; }
 .nav-toggle.is-open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+@media (prefers-reduced-motion:reduce){
+  .nav-toggle{ transition:border-color .2s ease; }
+  .nav-toggle:hover{ transform:translateY(-50%); box-shadow:none; }
+  .nav-toggle:active{ transform:translateY(-50%); }
+  .nav-toggle span{ transition:opacity .2s ease; }
+}
 
 .nav-mobile{
   position:fixed; inset:96px 0 0 0; background:var(--white); z-index:99;
