@@ -881,7 +881,7 @@ body{ animation:page-fade-in .5s ease both; }
    reads as the character carrying its own patch of "clear track" as it
    runs. Fades out at the edges instead of a hard-edged disc. */
 .mascot::before{
-  content:""; position:absolute; left:50%; top:38%; width:190%; height:150%;
+  content:""; position:absolute; left:50%; top:38%; width:190%; height:150%; z-index:-1;
   transform:translate(-50%,-50%); border-radius:50%;
   background:radial-gradient(circle, var(--cream) 0%, var(--cream) 48%, rgba(255,247,238,0) 74%);
   pointer-events:none;
