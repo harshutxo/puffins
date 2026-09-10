@@ -21,7 +21,7 @@
     initImageCarousel();
     initProductShowcase();
     initAssistant();
-    initWalkingMascot();
+    initTreadmillMascot();
   });
 
   var prefersReducedMotion = function () {
