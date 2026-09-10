@@ -146,6 +146,11 @@
         var offset = i - state.index;
         var abs = Math.abs(offset);
         item.style.zIndex = String(10 - abs);
+        // Depth-of-field falloff (borrowed from react-bits' DepthCarousel):
+        // the active card stays perfectly sharp, cards further from it blur
+        // progressively, reinforcing the 3D depth the transform already
+        // implies instead of relying on scale/opacity alone.
+        item.style.filter = abs === 0 ? "none" : "blur(" + Math.min(abs * 2.5, 6) + "px)";
         if (abs > 2) {
           item.style.opacity = "0";
           item.style.pointerEvents = "none";
