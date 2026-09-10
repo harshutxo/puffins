@@ -141,42 +141,61 @@ section{ padding:64px 0; }
 }
 
 .nav-toggle{
-  position:absolute; top:50%; right:0; transform:translateY(-50%) scale(1);
+  position:absolute; top:50%; right:0; transform:translateY(-50%) scale(1) rotate(0deg);
   display:flex; flex-direction:column; justify-content:center; gap:5px;
-  width:46px; height:46px; border-radius:10px; border:1px solid var(--line); background:var(--white);
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
+  width:46px; height:46px; border-radius:14px; border:1px solid var(--line); background:var(--white);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease, border-color .2s ease;
 }
-.nav-toggle:hover{ transform:translateY(-50%) scale(1.08); box-shadow:var(--shadow-sm); border-color:var(--orange); }
-.nav-toggle:active{ transform:translateY(-50%) scale(0.92); }
+.nav-toggle:hover{ transform:translateY(-50%) scale(1.1) rotate(-4deg); box-shadow:var(--shadow-sm); border-color:var(--orange); }
+.nav-toggle:active{ transform:translateY(-50%) scale(0.88) rotate(2deg); }
 .nav-toggle span{
-  /* Square (not rounded) caps: a 2px border-radius on a 2px-tall bar gets
+  /* Square (not rounded) caps: a border-radius on a 2px-tall bar gets
      clamped to a full pill shape either way, and that rounding eats a much
-     bigger share of the short 10px bottom bar's length than the 22px top
-     bar's — which is what was reading as "different thickness" even though
-     the height is identical (2px) on all three. Flat ends read as equal
-     weight regardless of length. */
+     bigger share of a short bar's length than a long bar's — reading as
+     "different thickness" even when the height is identical. Flat ends
+     read as equal weight regardless of length. */
   height:2px; background:var(--navy); margin:0 auto; border-radius:0;
-  transition:width .3s cubic-bezier(.34,1.56,.64,1), transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;
+  transition:width .3s cubic-bezier(.34,1.56,.64,1), transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s ease, background .2s ease;
 }
-/* Tapered stack, widest at top to narrowest at bottom. */
+/* Tapered stack, widest at top to narrowest at bottom — the middle bar
+   carries the brand orange as a small, playful accent rather than three
+   identical navy lines. */
 .nav-toggle span:nth-child(1){ width:22px; }
-.nav-toggle span:nth-child(2){ width:16px; }
+.nav-toggle span:nth-child(2){ width:16px; background:var(--orange); }
 .nav-toggle span:nth-child(3){ width:10px; }
-/* Bars widen on hover for a livelier, less static resting state — skipped
-   while open so they don't fight the uniform width the X-morph needs. */
-.nav-toggle:hover:not(.is-open) span:nth-child(1){ width:26px; }
-.nav-toggle:hover:not(.is-open) span:nth-child(2){ width:20px; }
-.nav-toggle:hover:not(.is-open) span:nth-child(3){ width:14px; }
-/* Open state: bars morph to equal length as they rotate into a clean X. */
-.nav-toggle.is-open span{ width:20px; }
+/* Hover: a staggered little bounce — each bar hops in sequence, top to
+   bottom, like a tiny wave — rather than a static icon waiting to be
+   clicked. Skipped while open so it doesn't fight the X-morph below. */
+@keyframes bar-hop{
+  0%,100%{ transform:translateY(0) scaleX(1); }
+  35%{ transform:translateY(-3px) scaleX(1.12); }
+  65%{ transform:translateY(1px) scaleX(0.94); }
+}
+.nav-toggle:hover:not(.is-open) span{ animation:bar-hop .7s cubic-bezier(.34,1.56,.64,1) infinite; }
+.nav-toggle:hover:not(.is-open) span:nth-child(1){ animation-delay:0s; }
+.nav-toggle:hover:not(.is-open) span:nth-child(2){ animation-delay:.09s; }
+.nav-toggle:hover:not(.is-open) span:nth-child(3){ animation-delay:.18s; }
+/* Open state: bars morph to equal length and colour as they spring into a
+   clean X, with a little overshoot rather than a flat linear rotation. */
+.nav-toggle.is-open span{ width:20px; background:var(--navy); }
 .nav-toggle.is-open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
-.nav-toggle.is-open span:nth-child(2){ opacity:0; }
+.nav-toggle.is-open span:nth-child(2){ opacity:0; transform:scaleX(0); }
 .nav-toggle.is-open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+/* A small orange "pop" flash on every toggle click (JS: spawnToggleBurst
+   in main.js), reusing the same burst language as the flavour chips. */
+.toggle-burst{
+  position:absolute; left:50%; top:50%; width:100%; height:100%; border-radius:14px;
+  background:var(--orange); opacity:.3; transform:translate(-50%,-50%) scale(.3);
+  pointer-events:none; animation:toggle-burst-anim .45s ease-out forwards;
+}
+@keyframes toggle-burst-anim{ to{ transform:translate(-50%,-50%) scale(1.7); opacity:0; } }
 @media (prefers-reduced-motion:reduce){
   .nav-toggle{ transition:border-color .2s ease; }
   .nav-toggle:hover{ transform:translateY(-50%); box-shadow:none; }
   .nav-toggle:active{ transform:translateY(-50%); }
   .nav-toggle span{ transition:opacity .2s ease; }
+  .nav-toggle:hover:not(.is-open) span{ animation:none; }
+  .toggle-burst{ display:none; }
 }
 
 .nav-mobile{
