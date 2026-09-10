@@ -383,6 +383,29 @@
     window.addEventListener("resize", update);
   }
 
+  /* ---------------- Word-flip: word <-> emoji boomerang loop ----------------
+     Any element with class="word-flip" (and a data-alt emoji) continuously
+     swaps between its text and that emoji, forever, on a timer — "love"
+     blinks to a heart and back, indefinitely. This is a small perpetual
+     decorative flourish, not something scroll should control, so it's a
+     plain interval rather than the site's scroll-progress system. */
+  function initWordFlip() {
+    if (prefersReducedMotion()) return;
+    document.querySelectorAll(".word-flip").forEach(function (el) {
+      var word = el.textContent;
+      var alt = el.getAttribute("data-alt") || "❤️";
+      var showingAlt = false;
+      window.setInterval(function () {
+        el.classList.add("is-flipping");
+        window.setTimeout(function () {
+          showingAlt = !showingAlt;
+          el.textContent = showingAlt ? alt : word;
+          el.classList.remove("is-flipping");
+        }, 220);
+      }, 1800);
+    });
+  }
+
   /* ---------------- "Puff" chat assistant (site-wide) ----------------
      Rule-based (keyword-matched), not a hosted-LLM integration — this is a
      static, no-backend site, so there's no server to hold an API key
