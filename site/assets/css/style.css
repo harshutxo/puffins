@@ -149,7 +149,13 @@ section{ padding:64px 0; }
 .nav-toggle:hover{ transform:translateY(-50%) scale(1.08); box-shadow:var(--shadow-sm); border-color:var(--orange); }
 .nav-toggle:active{ transform:translateY(-50%) scale(0.92); }
 .nav-toggle span{
-  height:2px; background:var(--navy); margin:0 auto; border-radius:2px;
+  /* Square (not rounded) caps: a 2px border-radius on a 2px-tall bar gets
+     clamped to a full pill shape either way, and that rounding eats a much
+     bigger share of the short 10px bottom bar's length than the 22px top
+     bar's — which is what was reading as "different thickness" even though
+     the height is identical (2px) on all three. Flat ends read as equal
+     weight regardless of length. */
+  height:2px; background:var(--navy); margin:0 auto; border-radius:0;
   transition:width .3s cubic-bezier(.34,1.56,.64,1), transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;
 }
 /* Tapered stack, widest at top to narrowest at bottom. */
