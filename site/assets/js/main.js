@@ -22,6 +22,7 @@
     initProductShowcase();
     initAssistant();
     initTreadmillMascot();
+    initWordFlip();
   });
 
   var prefersReducedMotion = function () {
