@@ -402,7 +402,7 @@
           el.textContent = showingAlt ? alt : word;
           el.classList.remove("is-flipping");
         }, 220);
-      }, 1800);
+      }, 1000);
     });
   }
 
