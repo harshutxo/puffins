@@ -886,7 +886,6 @@ body{ animation:page-fade-in .5s ease both; }
   background:radial-gradient(circle, var(--cream) 0%, var(--cream) 48%, rgba(255,247,238,0) 74%);
   pointer-events:none;
 }
-.mascot-rig{ filter:drop-shadow(0 2px 3px rgba(15,39,64,.22)); }
 /* A short dark seam at the mascot's feet, on the belt line, so it visibly
    "stands on" the ticker rather than floating above it. */
 .mascot::after{
@@ -895,7 +894,7 @@ body{ animation:page-fade-in .5s ease both; }
 }
 /* Only clickable while actually visible/running — see initTreadmillMascot(). */
 .mascot.is-running{ pointer-events:auto; cursor:pointer; }
-.mascot-rig{ transform-origin:50% 50%; }
+.mascot-rig{ transform-origin:50% 50%; filter:drop-shadow(0 2px 3px rgba(15,39,64,.22)); }
 .mascot.is-running .mascot-rig{ animation:mascot-bob .32s ease-in-out infinite; }
 .mascot-leg-l,.mascot-leg-r,.mascot-arm-l,.mascot-arm-r{
   transform-box:fill-box; transform-origin:top center;
