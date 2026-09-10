@@ -201,11 +201,16 @@
   function initTeamPhotoReveal() {
     var photos = document.querySelectorAll(".team-card img");
     photos.forEach(function (img, i) {
-      var stagger = i * 0.03;
+      // All 5 photos sit in the same row (near-identical rect.top), so the
+      // only thing that makes them read as a left-to-right wave instead of
+      // popping in together is this per-index delay on the threshold —
+      // it needs to be a meaningful fraction of the viewport, not a token
+      // amount, or a normal-speed scroll blows straight past the gap.
+      var stagger = i * 0.1;
       var dir = i % 2 === 0 ? -1 : 1; // alternates left/right spin, like a dealt fan of photos
       watch(img, function (vh, rect) {
         var narrow = isNarrow();
-        var p = entryProgress(rect, vh, 0.9 - stagger, 0.52 - stagger);
+        var p = entryProgress(rect, vh, 0.94 - stagger, 0.6 - stagger);
         var tSpring = easeOutBack(p); // scale/rotation/lift — plays the overshoot
         var tLinear = clamp01(p);     // opacity — no flicker on the overshoot
         img.style.setProperty("--photo-o", tLinear);
