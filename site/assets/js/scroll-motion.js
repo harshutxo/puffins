@@ -87,18 +87,28 @@
   });
 
   /* ---------------- Generic cascade reveal ----------------
-     Section heads, feature cards, product cards, quote cards, team cards,
-     process steps, CTA bands. A small geometric (not time-based) stagger
-     comes from nudging each sibling's own entry window slightly later. */
+     Section heads, feature cards, product cards, quote cards, process
+     steps, CTA bands (team cards are handled separately by initTeamReveal,
+     synchronized with their photos). A small geometric (not time-based)
+     stagger comes from nudging each sibling's own entry window slightly
+     later — indexed PER PARENT, not globally across the whole page: a
+     global index here previously made a card's reveal order depend on how
+     many unrelated .card/.step/etc. elements happened to precede its own
+     group elsewhere in the DOM, instead of its actual left-to-right
+     position among its own siblings. */
   function initCascadeReveal() {
     var selector = [
       "main section .section-head", "main .card", "main .product-card",
-      "main .quote-card", "main .team-card", "main .step", "main .cta-band"
+      "main .quote-card", "main .step", "main .cta-band"
     ].join(",");
     var els = document.querySelectorAll(selector);
-    els.forEach(function (el, i) {
+    var siblingIndex = new Map();
+    els.forEach(function (el) {
+      var parent = el.parentElement;
+      var idx = siblingIndex.get(parent) || 0;
+      siblingIndex.set(parent, idx + 1);
       var icon = el.querySelector(".icon");
-      var stagger = (i % 5) * 0.025;
+      var stagger = (idx % 5) * 0.025;
       watch(el, function (vh, rect) {
         var narrow = isNarrow();
         var p = entryProgress(rect, vh, 0.92 - stagger, 0.55 - stagger);
