@@ -698,7 +698,7 @@ section{ padding:64px 0; }
 }
 .marquee:hover .marquee-track{ animation-play-state:paused; }
 .marquee-track span{
-  display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:.85rem; color:var(--navy);
+  display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:.95rem; color:var(--navy);
   white-space:nowrap; letter-spacing:.02em;
 }
 .marquee-track span::before{ content:"●"; color:var(--orange); font-size:.5rem; }
