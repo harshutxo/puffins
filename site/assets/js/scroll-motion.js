@@ -188,6 +188,34 @@
     });
   }
 
+  /* ---------------- Team photos: scroll-synced pop-and-spin ----------------
+     Replaces the generic cascade reveal for just the circular headshots
+     (the surrounding .team-card box still gets the standard fade/lift from
+     initCascadeReveal — this adds a second, independent transform on the
+     photo itself, so the card rises while the photo pops and spins into
+     place inside it). Inspired by react-bits' BounceCards — an elastic,
+     alternating-direction fan-in — but rebuilt on this site's own
+     scroll-progress model instead of a timer: the spring overshoot plays
+     out as you scroll past each photo's entry window, and reverses the
+     same way scrolling back up. */
+  function initTeamPhotoReveal() {
+    var photos = document.querySelectorAll(".team-card img");
+    photos.forEach(function (img, i) {
+      var stagger = i * 0.03;
+      var dir = i % 2 === 0 ? -1 : 1; // alternates left/right spin, like a dealt fan of photos
+      watch(img, function (vh, rect) {
+        var narrow = isNarrow();
+        var p = entryProgress(rect, vh, 0.9 - stagger, 0.52 - stagger);
+        var tSpring = easeOutBack(p); // scale/rotation/lift — plays the overshoot
+        var tLinear = clamp01(p);     // opacity — no flicker on the overshoot
+        img.style.setProperty("--photo-o", tLinear);
+        img.style.setProperty("--photo-s", lerp(0.35, 1, tSpring));
+        img.style.setProperty("--photo-r", (dir * lerp(narrow ? 35 : 55, 0, tSpring)) + "deg");
+        img.style.setProperty("--photo-y", lerp(22, 0, tSpring) + "px");
+      });
+    });
+  }
+
   /* ---------------- Statement / big typographic moment ---------------- */
   function initStatementReveal() {
     var el = document.querySelector(".statement .stmt-text");
