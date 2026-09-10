@@ -623,6 +623,7 @@
       menu.classList.toggle("is-open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       document.body.style.overflow = open ? "hidden" : "";
+      spawnToggleBurst(toggle);
     });
     menu.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function () {
