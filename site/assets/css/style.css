@@ -366,11 +366,11 @@ section{ padding:64px 0; }
    Scoped to .grid-4 .card only — this exact 4-card layout on index.html and
    why-puffins.html — so the plain .card elsewhere (Contact, Create Your Own)
    is untouched. Soft, puffy, single-tone depth via paired light/dark shadows
-   instead of a hard border. Only surface treatment changes here: --rv-*/
-   --tilt-*/--hover-y stay exactly as defined earlier, so the scroll-reveal
-   and pointer-tilt system keeps driving position/opacity unchanged — this
-   just adds a bigger box-shadow on hover and an inset "pressed" shadow on
-   :active on top of that, for a tactile, squishy feel. */
+   instead of a hard border. Only surface treatment changes here: the custom
+   properties driving the scroll-reveal and pointer-tilt system (defined
+   earlier in this file) are left completely alone, so that keeps working
+   unchanged — this just adds a bigger box-shadow on hover and an inset
+   "pressed" shadow on active on top of that, for a tactile, squishy feel. */
 .grid-4 .card{
   background:var(--cream); border:none; border-radius:28px; padding:32px 28px;
   box-shadow:
