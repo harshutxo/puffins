@@ -687,7 +687,7 @@ section{ padding:64px 0; }
 }
 
 /* ---------- Trust marquee ---------- */
-.marquee{ overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
+.marquee{ position:relative; overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
 .marquee-track{
   display:flex; width:max-content; gap:48px; padding:16px 0; animation:marquee-scroll 26s linear infinite;
 }
