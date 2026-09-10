@@ -893,7 +893,7 @@ body{ animation:page-fade-in .5s ease both; }
 @keyframes mascot-swing-a{ 0%,100%{ transform:rotate(32deg); } 50%{ transform:rotate(-32deg); } }
 @keyframes mascot-swing-b{ 0%,100%{ transform:rotate(-32deg); } 50%{ transform:rotate(32deg); } }
 @keyframes mascot-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
-@media (max-width:640px){ .mascot{ width:56px; } .mascot::after{ width:28px; bottom:4px; } }
+@media (max-width:640px){ .mascot{ width:44px; } .mascot::after{ width:22px; bottom:3px; } }
 @media (prefers-reduced-motion:reduce){ .mascot{ display:none; } }
 
 /* ---------- "Puff" chat assistant (site-wide) ----------
