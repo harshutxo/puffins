@@ -79,6 +79,18 @@ section{ padding:64px 0; }
 @media (prefers-reduced-motion:reduce){ .h2-cheerful{ animation:none; } }
 .lead{ font-size:1.15rem; color:var(--text-soft); max-width:640px; }
 
+/* ---------- Word-flip: a word that boomerangs between text and an emoji ----------
+   Continuous cycle (word -> emoji -> word -> emoji...) driven by
+   initWordFlip() in main.js on a timer, not scroll — this is a small,
+   perpetual decorative flourish on a single word, not content people need
+   to read reliably, so a plain setInterval loop is the right tool (unlike
+   the scroll-progress system used for entrance/position animation
+   elsewhere on the site). The CSS here just provides the "blink": scale
+   and fade out, swap the text node in JS, scale and fade back in. */
+.word-flip{ display:inline-block; transition:transform .22s cubic-bezier(.34,1.56,.64,1), opacity .18s ease; }
+.word-flip.is-flipping{ transform:scale(.35) rotate(6deg); opacity:0; }
+@media (prefers-reduced-motion:reduce){ .word-flip{ transition:none; } }
+
 /* Buttons */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
