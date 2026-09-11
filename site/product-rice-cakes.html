@@ -77,17 +77,22 @@
     <div class="container">
       <div class="grid grid-2" style="align-items:start;gap:48px;">
         <div>
-          <!-- Coloured per-flavour, updated by updateFlavorPreview() in main.js when a
-               flavour chip is clicked — same packshots for every flavour for now. -->
-          <div class="flavor-accent-bar" data-flavor-accent aria-hidden="true"></div>
-          <!-- Swipeable 3D gallery carousel (redesign spec item 1) — items filled in by
-               renderProductDetail() in main.js from product.galleryImages. -->
-          <div class="carousel3d" data-carousel data-gallery-carousel style="--c3d-h:400px;--c3d-w:min(84%,400px);">
-            <div class="carousel3d-viewport" data-carousel-viewport></div>
-            <div class="carousel3d-nav">
-              <button type="button" class="carousel3d-btn" data-carousel-prev aria-label="Previous image">‹</button>
-              <div class="carousel3d-dots" data-carousel-dots></div>
-              <button type="button" class="carousel3d-btn" data-carousel-next aria-label="Next image">›</button>
+          <!-- "World swap": .flavor-world is a colour-blob backdrop that warps to the
+               clicked flavour's swatch, and .flavor-accent-bar wipes in over it — both
+               driven by updateFlavorPreview() in main.js. Same packshots for every
+               flavour for now. -->
+          <div class="flavor-stage" data-flavor-stage>
+            <div class="flavor-world" data-flavor-world aria-hidden="true"></div>
+            <div class="flavor-accent-bar" data-flavor-accent aria-hidden="true"></div>
+            <!-- Swipeable 3D gallery carousel (redesign spec item 1) — items filled in by
+                 renderProductDetail() in main.js from product.galleryImages. -->
+            <div class="carousel3d" data-carousel data-gallery-carousel style="--c3d-h:400px;--c3d-w:min(84%,400px);">
+              <div class="carousel3d-viewport" data-carousel-viewport></div>
+              <div class="carousel3d-nav">
+                <button type="button" class="carousel3d-btn" data-carousel-prev aria-label="Previous image">‹</button>
+                <div class="carousel3d-dots" data-carousel-dots></div>
+                <button type="button" class="carousel3d-btn" data-carousel-next aria-label="Next image">›</button>
+              </div>
             </div>
           </div>
         </div>
@@ -100,11 +105,13 @@
             <div style="font-weight:700;font-size:.85rem;margin-bottom:8px;">Flavour</div>
             <div class="flavor-row" data-flavor-row></div>
             <div class="flavor-preview" data-flavor-preview>
-              <span class="flavor-preview-dot" data-flavor-preview-dot aria-hidden="true"></span>
-              <span>
-                <strong data-flavor-preview-name></strong>
-                <span class="flavor-preview-tagline" data-flavor-preview-tagline></span>
-              </span>
+              <div class="flavor-preview-inner" data-flavor-preview-inner>
+                <span class="flavor-preview-dot" data-flavor-preview-dot aria-hidden="true"></span>
+                <span>
+                  <strong data-flavor-preview-name></strong>
+                  <span class="flavor-preview-tagline" data-flavor-preview-tagline></span>
+                </span>
+              </div>
             </div>
           </div>
 
