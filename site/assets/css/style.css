@@ -898,11 +898,7 @@ section{ padding:64px 0; }
 }
 
 /* ---------- Trust marquee ---------- */
-/* overflow-x only (not the `overflow:hidden` shorthand): the ticker text
-   still needs horizontal clipping so its infinite scroll doesn't show past
-   the edges, but the treadmill mascot standing on top of this bar is taller
-   than the band itself and needs to be allowed to extend above it, not get
-   vertically cropped. */
+/* overflow-x only: clips the ticker text's infinite horizontal scroll. */
 .marquee{ position:relative; overflow-x:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--cream); }
 .marquee-track{
   display:flex; width:max-content; gap:48px; padding:22px 0; animation:marquee-scroll 26s linear infinite;
