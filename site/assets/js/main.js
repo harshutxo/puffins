@@ -764,16 +764,19 @@
     var card = root.querySelector("[data-flavor-preview]");
 
     function applyContent() {
-      var dot = root.querySelector("[data-flavor-preview-dot]");
       var name = root.querySelector("[data-flavor-preview-name]");
       var tagline = root.querySelector("[data-flavor-preview-tagline]");
-      if (dot) dot.style.background = flavor.swatch || "";
       if (name) name.textContent = flavor.name;
       if (tagline) tagline.textContent = flavor.tagline || "";
     }
 
     if (stage) stage.style.setProperty("--flavor-color", flavor.swatch || "");
     if (accent) accent.style.background = flavor.swatch || "";
+    // The dot and the card's whole clay background/shadow read --flavor-color
+    // via CSS color-mix() (inherited from this one custom property), so
+    // setting it here on the card is enough to recolour both — no separate
+    // dot.style.background needed.
+    if (card) card.style.setProperty("--flavor-color", flavor.swatch || "");
 
     if (!animate) { applyContent(); return; }
 
