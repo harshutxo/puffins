@@ -83,6 +83,7 @@
     initHeroCanister();
     initHeroStatsReveal();
     initStatementReveal();
+    initStoryTaglinePuff();
     initTeamReveal();
     render(); // resolve the correct in-between state immediately (e.g. a mid-page reload), no flash of the wrong frame.
   });
