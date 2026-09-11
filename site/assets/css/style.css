@@ -81,18 +81,22 @@ section{ padding:64px 0; }
 
 /* ---------- Story tagline: "simple grain" settles in, then "crunch" puffs
    up out of it ---------- driven by initStoryTaglinePuff() in
-   scroll-motion.js (--rv-o/--rv-s on the plain half, --rv-po/--rv-ps/--rv-pr
-   on the pop half — separate vars so the pop half can overshoot past 1 while
-   the plain half settles normally). Not a plain fade/slide: the two halves
-   arrive on a stagger and the crunchy half visibly overshoots then springs
-   back, echoing what the sentence itself describes. */
+   scroll-motion.js. Deliberately namespaced as --tag-* rather than reusing
+   the ambient --rv-* names: this element sits inside .section-head, which
+   already drives its OWN --rv-o/--rv-s/--rv-rx via initCascadeReveal(), and
+   those inherit down to children by default — reusing the same names here
+   would have this element's opacity/scale silently double up with its
+   ancestor's. Two halves, two independent curves: the plain half settles
+   with a normal ease-out; the crunchy half arrives on a delayed window and
+   visibly overshoots past full size before springing back — not a plain
+   fade/slide, and it echoes what the sentence itself describes. */
 .story-tagline{
   display:flex; flex-wrap:wrap; justify-content:center; align-items:baseline;
   gap:.35em; margin:8px 0 20px; font-size:clamp(1.25rem,3vw,1.8rem);
 }
 .story-tagline-plain{
   color:var(--text-soft); font-weight:600;
-  opacity:var(--rv-o,1); transform:scale(var(--rv-s,1));
+  opacity:var(--tag-po,1); transform:scale(var(--tag-ps,1));
   transform-origin:center;
 }
 .story-tagline-pop{
@@ -100,7 +104,7 @@ section{ padding:64px 0; }
   letter-spacing:.01em; text-transform:uppercase; display:inline-block;
   background:var(--gradient-brand); background-size:220% 100%;
   -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent;
-  opacity:var(--rv-po,1); transform:scale(var(--rv-ps,1)) rotate(var(--rv-pr,0deg));
+  opacity:var(--tag-co,1); transform:scale(var(--tag-cs,1)) rotate(var(--tag-cr,0deg));
   transform-origin:center; animation:cheerful-shimmer 5s ease-in-out infinite;
 }
 @media (prefers-reduced-motion:reduce){ .story-tagline-pop{ animation:none; } }
