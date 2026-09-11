@@ -708,7 +708,9 @@
      "Coming soon" chips are clickable too (no live inventory either way yet) —
      picking one previews that flavour's colour + one-line identity below the
      chip row and on the image accent bar, using the same pack photography for
-     every flavour until real packshots exist. */
+     every flavour until real packshots exist. A click plays the full "world
+     swap" (see updateFlavorPreview); the initial render in renderProductDetail
+     does not, so the page doesn't animate itself on load. */
   function initFlavorChips() {
     document.addEventListener("click", function (e) {
       var chip = e.target.closest && e.target.closest(".flavor-chip");
@@ -717,31 +719,66 @@
       if (!row) return;
       row.querySelectorAll(".flavor-chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
       chip.setAttribute("aria-pressed", "true");
-      spawnChipBurst(chip, e);
+      var swatch = chip.getAttribute("data-swatch");
+      spawnChipBurst(chip, e, swatch);
+      spawnFlavorConfetti(chip, e, swatch);
       var root = chip.closest("[data-product-detail]");
       if (root) {
         updateFlavorPreview(root, {
           name: chip.getAttribute("data-name"),
-          swatch: chip.getAttribute("data-swatch"),
+          swatch: swatch,
           tagline: chip.getAttribute("data-tagline")
-        });
+        }, { animate: true });
       }
     });
   }
 
-  function updateFlavorPreview(root, flavor) {
+  /* ---------------- Flavour preview: the "world swap" ----------------
+     Three things play together on a real click (animate:true) to sell
+     "you've stepped into a different flavour's world," not just "a colour
+     changed": the soft blurred blob behind the packshot (.flavor-world)
+     shrinks away and blooms back in the new colour; the accent bar wipes in
+     like a fresh coat of paint; and the name/tagline do a flip-clock style
+     rotation (react-bits' SplitFlapText was the reference) with the text
+     swapped at the moment the card is edge-on and invisible, so the reveal
+     reads as a flip rather than a jump-cut. Initial page load (animate
+     false/omitted) just sets the end state directly — no animation to skip
+     for reduced-motion users there since none plays. */
+  function updateFlavorPreview(root, flavor, opts) {
     if (!flavor || !flavor.name) return;
-    var dot = root.querySelector("[data-flavor-preview-dot]");
-    var name = root.querySelector("[data-flavor-preview-name]");
-    var tagline = root.querySelector("[data-flavor-preview-tagline]");
+    var animate = !!(opts && opts.animate) && !prefersReducedMotion();
+    var stage = root.querySelector("[data-flavor-stage]");
+    var world = root.querySelector("[data-flavor-world]");
     var accent = root.querySelector("[data-flavor-accent]");
-    if (dot) dot.style.background = flavor.swatch || "";
-    if (name) name.textContent = flavor.name;
-    if (tagline) tagline.textContent = flavor.tagline || "";
+    var inner = root.querySelector("[data-flavor-preview-inner]");
+
+    function applyContent() {
+      var dot = root.querySelector("[data-flavor-preview-dot]");
+      var name = root.querySelector("[data-flavor-preview-name]");
+      var tagline = root.querySelector("[data-flavor-preview-tagline]");
+      if (dot) dot.style.background = flavor.swatch || "";
+      if (name) name.textContent = flavor.name;
+      if (tagline) tagline.textContent = flavor.tagline || "";
+    }
+
+    if (stage) stage.style.setProperty("--flavor-color", flavor.swatch || "");
     if (accent) accent.style.background = flavor.swatch || "";
+
+    if (!animate) { applyContent(); return; }
+
+    if (world) { world.classList.remove("warp"); void world.offsetWidth; world.classList.add("warp"); }
+    if (accent) { accent.classList.remove("wipe"); void accent.offsetWidth; accent.classList.add("wipe"); }
+    if (inner) {
+      inner.classList.remove("flip-out");
+      void inner.offsetWidth;
+      inner.classList.add("flip-out");
+      window.setTimeout(applyContent, 190); // card is edge-on/invisible here — swap it now, not at the end
+    } else {
+      applyContent();
+    }
   }
 
-  function spawnChipBurst(chip, e) {
+  function spawnChipBurst(chip, e, color) {
     if (prefersReducedMotion()) return;
     var r = chip.getBoundingClientRect();
     var burst = document.createElement("span");
@@ -750,8 +787,35 @@
     burst.style.left = (e.clientX != null ? e.clientX - r.left : r.width / 2) + "px";
     burst.style.top = (e.clientY != null ? e.clientY - r.top : r.height / 2) + "px";
     burst.style.width = burst.style.height = size + "px";
+    if (color) burst.style.background = color;
     chip.appendChild(burst);
     burst.addEventListener("animationend", function () { burst.remove(); });
+  }
+
+  /* A handful of flavour-coloured puffs scatter from the click point — a
+     playful nod to "puffed" rice, and a second, louder signal (alongside the
+     chip ripple) that something just changed. Appended to <body> with
+     position:fixed so they aren't clipped by the chip's overflow:hidden and
+     can fly past its bounds; each removes itself on animationend. */
+  function spawnFlavorConfetti(chip, e, color) {
+    if (prefersReducedMotion()) return;
+    var r = chip.getBoundingClientRect();
+    var originX = e.clientX != null ? e.clientX : r.left + r.width / 2;
+    var originY = e.clientY != null ? e.clientY : r.top + r.height / 2;
+    var count = 6;
+    for (var i = 0; i < count; i++) {
+      var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.5 - 0.25);
+      var dist = 34 + Math.random() * 28;
+      var puff = document.createElement("span");
+      puff.className = "flavor-confetti";
+      puff.style.left = originX + "px";
+      puff.style.top = originY + "px";
+      puff.style.background = color || "var(--orange)";
+      puff.style.setProperty("--dx", (Math.cos(angle) * dist) + "px");
+      puff.style.setProperty("--dy", (Math.sin(angle) * dist - 8) + "px");
+      document.body.appendChild(puff);
+      puff.addEventListener("animationend", function () { this.remove(); });
+    }
   }
 
   /* Small centred orange "pop" on the hamburger toggle — same burst
