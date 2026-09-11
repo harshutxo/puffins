@@ -50,9 +50,11 @@
       ],
       "status": "coming-soon",
       "flavors": [
-        { "name": "Flavour 1", "status": "coming-soon", "swatch": "#FF8A00" },
-        { "name": "Flavour 2", "status": "coming-soon", "swatch": "#FFC257" },
-        { "name": "Flavour 3", "status": "coming-soon", "swatch": "#17b3a3" }
+        { "name": "Classic Salted", "status": "coming-soon", "swatch": "#c9b98c" },
+        { "name": "Masala Tadka", "status": "coming-soon", "swatch": "#FF8A00" },
+        { "name": "Cream & Onion", "status": "coming-soon", "swatch": "#E8D9B5" },
+        { "name": "Tangy Tomato", "status": "coming-soon", "swatch": "#D6472E" },
+        { "name": "Peri Peri", "status": "coming-soon", "swatch": "#B33A2E" }
       ],
       "packSize": { "value": null, "confirmed": false },
       "price": { "amount": null, "currency": "INR", "confirmed": false, "note": "Pricing to be confirmed by SIF." },
