@@ -624,8 +624,8 @@
         '<circle cx="43.2" cy="54.7" r="1" fill="#fff"/>' +
         '<circle cx="59.2" cy="54.7" r="1" fill="#fff"/>' +
         '<path d="M41,68 Q50,76 59,68" stroke="#0F2740" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
-        '<ellipse cx="50" cy="20" rx="30" ry="16" fill="#16274a"/>' +
-        '<ellipse cx="74" cy="30" rx="12" ry="5" fill="#16274a" transform="rotate(-15 74 30)"/>' +
+        '<ellipse cx="50" cy="20" rx="30" ry="16" fill="#16274a" stroke="#FFF7EE" stroke-width="2"/>' +
+        '<ellipse cx="74" cy="30" rx="12" ry="5" fill="#16274a" stroke="#FFF7EE" stroke-width="1.6" transform="rotate(-15 74 30)"/>' +
         '<circle cx="50" cy="18" r="3.5" fill="url(#puffCapLogo)"/>' +
       '</g>';
   }
