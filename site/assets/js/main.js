@@ -363,7 +363,7 @@
     launcher.setAttribute("aria-expanded", "false");
     launcher.setAttribute("aria-controls", "assistant-panel");
     launcher.setAttribute("aria-label", "Chat with Puff, the Puffins assistant");
-    launcher.innerHTML = mascotBadgeSVG() + '<span class="assistant-ping" aria-hidden="true"></span>';
+    launcher.innerHTML = chatIconSVG() + '<span class="assistant-ping" aria-hidden="true"></span>';
 
     var panel = document.createElement("div");
     panel.className = "assistant-panel";
@@ -373,7 +373,7 @@
     panel.hidden = true;
     panel.innerHTML =
       '<div class="assistant-head">' +
-        '<div class="assistant-avatar">' + mascotBadgeSVG() + '</div>' +
+        '<div class="assistant-avatar">' + chatIconSVG() + '</div>' +
         '<div><strong>Puff</strong><span>Puffins snack assistant</span></div>' +
         '<button type="button" class="assistant-close" aria-label="Close chat">&times;</button>' +
       '</div>' +
