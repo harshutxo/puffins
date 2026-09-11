@@ -640,6 +640,50 @@ section{ padding:64px 0; }
 }
 .step .num::before{ content:counter(step); }
 
+/* ---------- Believe/Blend/Build/Belong/Bloom — neo-brutalist treatment ----
+   Deliberately raw, not the soft cream/shadow language the rest of the site
+   uses: flat un-gradiented colour per card (cycled from the same five
+   --gradient-brand stops, just solid instead of blended), thick hairline-
+   free borders, a hard offset shadow with zero blur instead of --shadow-md's
+   soft one, blocky square number tags instead of circles, and a slight
+   per-card rotation (alternating left/right) so the row reads as pasted-on
+   rather than machine-aligned. Straightens and "lifts" on hover — the
+   shadow grows instead of softening. Still rides the existing .step
+   scroll-reveal from initCascadeReveal() in scroll-motion.js; only the
+   surface changed, not the entrance mechanics. */
+.steps-brutalist{ gap:26px 22px; }
+.steps-brutalist .step{
+  text-align:left; background:var(--white); border:3px solid var(--navy);
+  padding:22px 20px 24px; box-shadow:7px 7px 0 var(--navy);
+  transform:rotate(var(--step-rot,0deg));
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.steps-brutalist .step:nth-child(odd){ --step-rot:-1.4deg; }
+.steps-brutalist .step:nth-child(even){ --step-rot:1.4deg; }
+.steps-brutalist .step:hover{
+  transform:rotate(0deg) translate(-3px,-3px); box-shadow:11px 11px 0 var(--navy);
+}
+.steps-brutalist .step:nth-child(1) .num{ background:#17b3a3; }
+.steps-brutalist .step:nth-child(2) .num{ background:#6a4bd6; color:#fff; }
+.steps-brutalist .step:nth-child(3) .num{ background:#d6389a; color:#fff; }
+.steps-brutalist .step:nth-child(4) .num{ background:var(--orange); }
+.steps-brutalist .step:nth-child(5) .num{ background:var(--yellow); }
+.steps-brutalist .step .num{
+  width:40px; height:40px; border-radius:0; border:3px solid var(--navy);
+  color:var(--navy); font-weight:900; font-size:1.05rem;
+  box-shadow:3px 3px 0 var(--navy); margin:0 0 16px;
+}
+.steps-brutalist .step h3{
+  font-family:'Baloo 2','Poppins',system-ui,sans-serif; text-transform:uppercase;
+  font-weight:800; letter-spacing:.02em; font-size:1.2rem!important;
+  color:var(--navy); margin-bottom:8px;
+}
+.steps-brutalist .step p{
+  font-size:.92rem!important; color:var(--text)!important; font-weight:500; line-height:1.5;
+}
+@media (prefers-reduced-motion:reduce){ .steps-brutalist .step{ transition:none; } }
+@media (max-width:479px){ .steps-brutalist .step{ transform:none; } }
+
 /* Team grid */
 .team-grid{ display:grid; gap:22px; grid-template-columns:repeat(2,1fr); }
 @media (min-width:700px){ .team-grid{ grid-template-columns:repeat(3,1fr); } }
