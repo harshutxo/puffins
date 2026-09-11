@@ -458,10 +458,31 @@ section{ padding:64px 0; }
   padding:10px 16px; border-radius:999px; border:1.5px solid var(--line); font-weight:600; font-size:.88rem;
   background:var(--white); color:var(--text); transition:transform .15s ease, border-color .15s ease, background .15s ease;
 }
-.flavor-chip:not(.soon):hover{ border-color:var(--orange); transform:translateY(-2px); }
+.flavor-chip:hover{ border-color:var(--orange); transform:translateY(-2px); }
 .flavor-chip[aria-pressed="true"]{ border-color:var(--orange); background:#fff1de; color:var(--orange-dk); }
 @media (prefers-reduced-motion:reduce){ .flavor-chip:hover{ transform:none; } }
-.flavor-chip.soon{ opacity:.55; cursor:not-allowed; }
+.flavor-chip.soon{ opacity:.7; }
+.flavor-chip.soon[aria-pressed="true"]{ opacity:1; }
+
+/* Flavour preview — swatch + one-liner that updates when a chip (available or
+   "coming soon") is clicked, plus a matching accent bar over the packshot.
+   Same product photography for every flavour for now; colour + copy are each
+   flavour's only visual identity until real packshots exist. */
+.flavor-accent-bar{
+  height:5px; border-radius:999px; margin-bottom:14px;
+  background:var(--orange); transition:background-color .35s ease;
+}
+.flavor-preview{
+  display:flex; align-items:center; gap:10px; margin-top:14px;
+  padding:10px 14px; background:var(--cream); border-radius:12px;
+}
+.flavor-preview-dot{
+  width:14px; height:14px; border-radius:50%; flex:none;
+  background:var(--orange); box-shadow:0 0 0 3px rgba(15,39,64,.06);
+  transition:background-color .35s ease;
+}
+.flavor-preview strong{ display:block; color:var(--navy); font-size:.92rem; }
+.flavor-preview-tagline{ display:block; color:var(--text-soft); font-size:.82rem; }
 
 /* Steps / timeline */
 .steps{ display:grid; gap:22px; grid-template-columns:1fr; counter-reset:step; }
