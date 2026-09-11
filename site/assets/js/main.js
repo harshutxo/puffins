@@ -734,23 +734,34 @@
   }
 
   /* ---------------- Flavour preview: the "world swap" ----------------
-     Three things play together on a real click (animate:true) to sell
-     "you've stepped into a different flavour's world," not just "a colour
-     changed": the soft blurred blob behind the packshot (.flavor-world)
-     shrinks away and blooms back in the new colour; the accent bar wipes in
-     like a fresh coat of paint; and the name/tagline do a flip-clock style
-     rotation (react-bits' SplitFlapText was the reference) with the text
-     swapped at the moment the card is edge-on and invisible, so the reveal
-     reads as a flip rather than a jump-cut. Initial page load (animate
-     false/omitted) just sets the end state directly — no animation to skip
-     for reduced-motion users there since none plays. */
+     Deliberately over-the-top — the brief was "it should look like your
+     world is being switched," not a subtle colour fade. Five things fire
+     together on a real click (animate:true):
+       1. .flavor-flash — a fast white camera-flash over the whole stage
+       2. .flavor-world — the blurred colour blob behind the packshot
+          collapses to almost nothing and blooms back oversized in the new
+          colour, with a hard rotation, so it reads as a portal/warp
+       3. .flavor-stage shakes — a short multi-axis jolt, classic "impact
+          frame" game-juice
+       4. the packshot itself squashes/stretches and springs back
+          (easeOutBack-style overshoot) like it just landed in a new world
+       5. the name/tagline flip-clock (react-bits' SplitFlapText was the
+          reference), now with a bigger rotation and a scale punch, text
+          swapped at the edge-on/invisible moment so it reads as a flip
+     Initial page load (animate false/omitted) skips all of it and just sets
+     the end state — nothing to play, so nothing to skip for reduced-motion
+     there either. A real click with reduced-motion active also skips
+     straight to the end state. */
   function updateFlavorPreview(root, flavor, opts) {
     if (!flavor || !flavor.name) return;
     var animate = !!(opts && opts.animate) && !prefersReducedMotion();
     var stage = root.querySelector("[data-flavor-stage]");
     var world = root.querySelector("[data-flavor-world]");
+    var flash = root.querySelector("[data-flavor-flash]");
     var accent = root.querySelector("[data-flavor-accent]");
+    var carousel = root.querySelector("[data-gallery-carousel]");
     var inner = root.querySelector("[data-flavor-preview-inner]");
+    var card = root.querySelector("[data-flavor-preview]");
 
     function applyContent() {
       var dot = root.querySelector("[data-flavor-preview-dot]");
@@ -766,13 +777,21 @@
 
     if (!animate) { applyContent(); return; }
 
-    if (world) { world.classList.remove("warp"); void world.offsetWidth; world.classList.add("warp"); }
-    if (accent) { accent.classList.remove("wipe"); void accent.offsetWidth; accent.classList.add("wipe"); }
+    function retrigger(el, cls) {
+      if (!el) return;
+      el.classList.remove(cls);
+      void el.offsetWidth;
+      el.classList.add(cls);
+    }
+
+    retrigger(flash, "flash");
+    retrigger(world, "warp");
+    retrigger(stage, "shake");
+    retrigger(carousel, "punch");
+    retrigger(card, "glow");
     if (inner) {
-      inner.classList.remove("flip-out");
-      void inner.offsetWidth;
-      inner.classList.add("flip-out");
-      window.setTimeout(applyContent, 190); // card is edge-on/invisible here — swap it now, not at the end
+      retrigger(inner, "flip-out");
+      window.setTimeout(applyContent, 220); // card is edge-on/invisible here — swap it now, not at the end
     } else {
       applyContent();
     }
@@ -792,27 +811,32 @@
     burst.addEventListener("animationend", function () { burst.remove(); });
   }
 
-  /* A handful of flavour-coloured puffs scatter from the click point — a
-     playful nod to "puffed" rice, and a second, louder signal (alongside the
-     chip ripple) that something just changed. Appended to <body> with
-     position:fixed so they aren't clipped by the chip's overflow:hidden and
-     can fly past its bounds; each removes itself on animationend. */
+  /* A confetti burst of flavour-coloured (plus a few white/cream) puffs
+     scatters and tumbles from the click point — a playful nod to "puffed"
+     rice, and the loudest single signal that something just changed.
+     Appended to <body> with position:fixed so they aren't clipped by the
+     chip's own overflow:hidden and can fly well past its bounds; each
+     removes itself on animationend. */
   function spawnFlavorConfetti(chip, e, color) {
     if (prefersReducedMotion()) return;
     var r = chip.getBoundingClientRect();
     var originX = e.clientX != null ? e.clientX : r.left + r.width / 2;
     var originY = e.clientY != null ? e.clientY : r.top + r.height / 2;
-    var count = 6;
+    var palette = [color || "var(--orange)", color || "var(--orange)", "#ffffff", "var(--yellow)"];
+    var count = 16;
     for (var i = 0; i < count; i++) {
-      var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.5 - 0.25);
-      var dist = 34 + Math.random() * 28;
+      var angle = (Math.PI * 2 * i) / count + (Math.random() * 0.6 - 0.3);
+      var dist = 55 + Math.random() * 85;
+      var size = 6 + Math.random() * 7;
       var puff = document.createElement("span");
       puff.className = "flavor-confetti";
       puff.style.left = originX + "px";
       puff.style.top = originY + "px";
-      puff.style.background = color || "var(--orange)";
+      puff.style.width = puff.style.height = size + "px";
+      puff.style.background = palette[i % palette.length];
       puff.style.setProperty("--dx", (Math.cos(angle) * dist) + "px");
-      puff.style.setProperty("--dy", (Math.sin(angle) * dist - 8) + "px");
+      puff.style.setProperty("--dy", (Math.sin(angle) * dist - 20) + "px");
+      puff.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
       document.body.appendChild(puff);
       puff.addEventListener("animationend", function () { this.remove(); });
     }
