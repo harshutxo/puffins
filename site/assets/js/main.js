@@ -510,8 +510,8 @@
 
   /* Plain speech-bubble icon (with a typing-dots motif) for the chat
      launcher and the chat-panel header avatar — Puff the character isn't
-     drawn here any more; see assets/img/brand/logo-mark-2026.svg for
-     where Puff now lives (the nav logo/home button). */
+     drawn here any more; see assets/img/brand/puff-mascot.png for
+     where Puff now lives (the nav logo/home button, .brand-mark img). */
   function chatIconSVG() {
     return '<svg viewBox="0 0 24 24" width="60%" height="60%" aria-hidden="true">' +
         '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8A2.5 2.5 0 0 1 17.5 16H10l-5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5z" fill="#FFF7EE"/>' +
