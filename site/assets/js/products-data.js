@@ -21,11 +21,11 @@ window.PUFFINS_PRODUCTS = {
       ],
       "status": "available",
       "flavors": [
-        { "name": "Sea Salt", "status": "available", "swatch": "#0F2740" },
-        { "name": "Peri Peri", "status": "coming-soon", "swatch": "#E2472B" },
-        { "name": "Herb & Garlic", "status": "coming-soon", "swatch": "#4F8A3D" },
-        { "name": "Tomato Basil", "status": "coming-soon", "swatch": "#C0392B" },
-        { "name": "Chaat Masala", "status": "coming-soon", "swatch": "#C77C1E" }
+        { "name": "Sea Salt", "status": "available", "swatch": "#0F2740", "tagline": "Our signature crunch, kept simple." },
+        { "name": "Peri Peri", "status": "coming-soon", "swatch": "#E2472B", "tagline": "Bold, smoky heat in every bite." },
+        { "name": "Herb & Garlic", "status": "coming-soon", "swatch": "#4F8A3D", "tagline": "Garden-fresh and savoury." },
+        { "name": "Tomato Basil", "status": "coming-soon", "swatch": "#C0392B", "tagline": "Sun-ripened tang, Italian twist." },
+        { "name": "Chaat Masala", "status": "coming-soon", "swatch": "#C77C1E", "tagline": "Tangy, spiced, unmistakably Indian." }
       ],
       "packSize": { "value": "8 cakes per sleeve, 6 g each (48 g net)", "confirmed": true },
       "price": { "amount": null, "currency": "INR", "confirmed": false, "note": "Pricing to be confirmed by SIF before checkout goes live." },
