@@ -735,7 +735,7 @@
 
   /* ---------------- Flavour preview: the "world swap" ----------------
      Deliberately over-the-top — the brief was "it should look like your
-     world is being switched," not a subtle colour fade. Five things fire
+     world is being switched," not a subtle colour fade. Six things fire
      together on a real click (animate:true):
        1. .flavor-flash — a fast white camera-flash over the whole stage
        2. .flavor-world — the blurred colour blob behind the packshot
@@ -745,7 +745,10 @@
           frame" game-juice
        4. the packshot itself squashes/stretches and springs back
           (easeOutBack-style overshoot) like it just landed in a new world
-       5. the name/tagline flip-clock (react-bits' SplitFlapText was the
+       5. the claymorphic identity card gives a squish-and-settle "glow" pop
+          as its clay colour (background + shadow, both color-mix()'d from
+          --flavor-color) shifts to match
+       6. the name/tagline flip-clock (react-bits' SplitFlapText was the
           reference), now with a bigger rotation and a scale punch, text
           swapped at the edge-on/invisible moment so it reads as a flip
      Initial page load (animate false/omitted) skips all of it and just sets
