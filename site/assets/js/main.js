@@ -484,10 +484,6 @@
       reply(null, value);
     });
 
-    // Let the walking mascot (homepage-only) open this same panel — it's the
-    // same character, so it drives the same chat instance, not a copy.
-    assistantAPI.launcher = launcher;
-    assistantAPI.open = open;
   }
 
   function buildAssistantTopics(kb) {
