@@ -243,11 +243,10 @@
     var cards = document.querySelectorAll(".team-card");
     cards.forEach(function (card, i) {
       var img = card.querySelector("img");
-      var stagger = i * 0.1;
       var dir = i % 2 === 0 ? -1 : 1; // alternates left/right spin, like a dealt fan of photos
       watch(card, function (vh, rect) {
         var narrow = isNarrow();
-        var p = entryProgress(rect, vh, 0.94 - stagger, 0.6 - stagger);
+        var p = entryProgress(rect, vh, 0.94, 0.6);
         var t = easeOutCubic(p);
         card.style.setProperty("--rv-o", t);
         card.style.setProperty("--rv-rx", (narrow ? lerp(-5, 0, t) : lerp(-11, 0, t)) + "deg");
