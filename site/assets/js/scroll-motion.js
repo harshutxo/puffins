@@ -199,6 +199,33 @@
     });
   }
 
+  /* ---------------- Hero stat pointers: puffed / gluten free / zero ----------------
+     "Puffed", "Gluten free" and "Zero" sit right at the top of the page, so
+     on a wide viewport they're already inside the first frame and this
+     resolves straight to its fully-popped end state (no motion to play) —
+     same reasoning as initHeroCanister above. On a narrow/stacked layout the
+     eyebrow + big h1 + lead + buttons push this row down past the first
+     screenful, so scrolling (swiping) down is what actually plays the
+     entrance: each pointer pops in with a spring overshoot (react-bits'
+     GradientText inspired this row's shimmer; the pop-in here borrows the
+     same BounceCards-style spring used for team photos), staggered
+     left-to-right, and reverses cleanly on scroll-up like every other
+     reveal in this file. */
+  function initHeroStatsReveal() {
+    var items = document.querySelectorAll(".hero-stats > div");
+    items.forEach(function (el, i) {
+      var stagger = i * 0.08;
+      watch(el, function (vh, rect) {
+        var p = entryProgress(rect, vh, 0.95 - stagger, 0.62 - stagger);
+        var tSpring = easeOutBack(p);
+        var tLinear = clamp01(p);
+        el.style.setProperty("--rv-o", tLinear);
+        el.style.setProperty("--rv-y", lerp(24, 0, tSpring) + "px");
+        el.style.setProperty("--rv-s", lerp(0.55, 1, tSpring));
+      });
+    });
+  }
+
   /* ---------------- Team cards: box + photo, one synchronized wave ----------------
      The card box and its circular photo are driven from a SINGLE progress
      value per team member — computed once from the card's own geometry,
