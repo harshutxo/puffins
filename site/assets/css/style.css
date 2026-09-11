@@ -1084,17 +1084,13 @@ body{ animation:page-fade-in .5s ease both; }
   transition:transform .15s ease, opacity .2s ease;
 }
 .assistant-launcher:hover{ transform:translateY(-2px) scale(1.05); }
-.assistant-launcher svg{ width:100%; height:100%; }
-.assistant-launcher .mascot-rig{ animation:mascot-idle-bob 2.6s ease-in-out infinite; }
-@keyframes mascot-idle-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2px); } }
+.assistant-launcher svg{ width:100%; height:100%; animation:chat-icon-bob 2.6s ease-in-out infinite; }
+@keyframes chat-icon-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2px); } }
 .assistant-launcher .assistant-ping{
   position:absolute; top:-2px; right:-2px; width:14px; height:14px; border-radius:50%;
   background:var(--orange); border:2px solid var(--white);
 }
 .assistant-launcher[aria-expanded="true"] .assistant-ping{ display:none; }
-/* Steps aside while the homepage walking mascot (the same character) is
-   on screen, so Puff never appears twice at once. */
-.assistant-launcher.is-docked{ opacity:0; transform:translateY(10px) scale(.85); pointer-events:none; }
 
 .assistant-panel{
   position:fixed; right:20px; bottom:90px; z-index:150; width:340px; max-width:calc(100vw - 32px);
