@@ -577,16 +577,33 @@
     return topics;
   }
 
-  /* One shared rig — the exact same stickman markup — behind every
+  /* One shared rig — the exact same "clothed kid" markup — behind every
      appearance of Puff (walking on the homepage, docked as the site-wide
      launcher, sitting in the chat header), so "integrating the bot into
-     the stickman" means there's really only one character, not a lookalike. */
+     the stickman" means there's really only one character, not a lookalike.
+     Redesigned to match the brand's reference art (puffed-rice head worn
+     as a face, navy cap with a gradient logo dot, navy hoodie collar,
+     dark trousers) rather than the earlier bare "rice-ball" look — see
+     P:\Games\puffins-main\Puff for the source images. Draw order matters:
+     legs, then the hoodie torso (so it tucks their tops in), then arms (so
+     sleeves sit over the hoodie sides), then the head/face, then the cap
+     last so it sits on top of the head. Limb <line>s keep their original
+     tag/class/coordinates untouched — only stroke colour changed — so the
+     existing swing-pivot CSS (transform-box:fill-box on each line) keeps
+     working exactly as before. */
   function mascotRigMarkup() {
     return '<g class="mascot-rig">' +
-        '<line class="mascot-arm-l" x1="35" y1="58" x2="16" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
-        '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#0F2740" stroke-width="5" stroke-linecap="round"/>' +
-        '<line class="mascot-leg-l" x1="42" y1="94" x2="32" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
-        '<line class="mascot-leg-r" x1="58" y1="94" x2="68" y2="126" stroke="#0F2740" stroke-width="6" stroke-linecap="round"/>' +
+        '<defs><linearGradient id="puffCapLogo" x1="0" y1="0" x2="1" y2="1">' +
+          '<stop offset="0%" stop-color="#17b3a3"/><stop offset="35%" stop-color="#6a4bd6"/>' +
+          '<stop offset="65%" stop-color="#d6389a"/><stop offset="100%" stop-color="#FF8A00"/>' +
+        '</linearGradient></defs>' +
+        '<line class="mascot-leg-l" x1="42" y1="94" x2="32" y2="126" stroke="#0F2740" stroke-width="7" stroke-linecap="round"/>' +
+        '<line class="mascot-leg-r" x1="58" y1="94" x2="68" y2="126" stroke="#0F2740" stroke-width="7" stroke-linecap="round"/>' +
+        '<rect x="30" y="82" width="40" height="34" rx="14" fill="#16274a"/>' +
+        '<line x1="45" y1="90" x2="44" y2="98" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>' +
+        '<line x1="55" y1="90" x2="56" y2="98" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>' +
+        '<line class="mascot-arm-l" x1="35" y1="58" x2="16" y2="74" stroke="#16274a" stroke-width="6" stroke-linecap="round"/>' +
+        '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#16274a" stroke-width="6" stroke-linecap="round"/>' +
         '<circle cx="50" cy="62" r="32" fill="#FFF7EE" stroke="#0F2740" stroke-width="2.5"/>' +
         '<circle cx="38" cy="52" r="2.6" fill="#c9b696"/>' +
         '<circle cx="63" cy="48" r="2.2" fill="#c9b696"/>' +
@@ -596,9 +613,16 @@
         '<circle cx="46" cy="38" r="1.8" fill="#c9b696"/>' +
         '<circle cx="34" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
         '<circle cx="66" cy="60" r="4" fill="#FF8A00" opacity=".35"/>' +
-        '<circle cx="42" cy="56" r="2.6" fill="#0F2740"/>' +
-        '<circle cx="58" cy="56" r="2.6" fill="#0F2740"/>' +
+        '<path d="M37,49 Q42,45 47,48" stroke="#0F2740" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
+        '<path d="M53,47 Q58,44 63,47" stroke="#0F2740" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
+        '<circle cx="42" cy="56" r="3" fill="#0F2740"/>' +
+        '<circle cx="58" cy="56" r="3" fill="#0F2740"/>' +
+        '<circle cx="43.2" cy="54.7" r="1" fill="#fff"/>' +
+        '<circle cx="59.2" cy="54.7" r="1" fill="#fff"/>' +
         '<path d="M41,68 Q50,76 59,68" stroke="#0F2740" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+        '<ellipse cx="50" cy="20" rx="30" ry="16" fill="#16274a"/>' +
+        '<ellipse cx="74" cy="30" rx="12" ry="5" fill="#16274a" transform="rotate(-15 74 30)"/>' +
+        '<circle cx="50" cy="18" r="3.5" fill="url(#puffCapLogo)"/>' +
       '</g>';
   }
 
