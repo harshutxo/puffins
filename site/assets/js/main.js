@@ -601,10 +601,12 @@
         '</linearGradient></defs>' +
         '<line class="mascot-leg-l" x1="42" y1="94" x2="32" y2="126" stroke="#0F2740" stroke-width="7" stroke-linecap="round"/>' +
         '<line class="mascot-leg-r" x1="58" y1="94" x2="68" y2="126" stroke="#0F2740" stroke-width="7" stroke-linecap="round"/>' +
-        '<rect x="30" y="82" width="40" height="34" rx="14" fill="#16274a"/>' +
+        '<rect x="30" y="82" width="40" height="34" rx="14" fill="#16274a" stroke="#FFF7EE" stroke-width="2"/>' +
         '<line x1="45" y1="90" x2="44" y2="98" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>' +
         '<line x1="55" y1="90" x2="56" y2="98" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>' +
+        '<line class="mascot-arm-l" x1="35" y1="58" x2="16" y2="74" stroke="#FFF7EE" stroke-width="8" stroke-linecap="round"/>' +
         '<line class="mascot-arm-l" x1="35" y1="58" x2="16" y2="74" stroke="#16274a" stroke-width="6" stroke-linecap="round"/>' +
+        '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#FFF7EE" stroke-width="8" stroke-linecap="round"/>' +
         '<line class="mascot-arm-r" x1="65" y1="58" x2="84" y2="74" stroke="#16274a" stroke-width="6" stroke-linecap="round"/>' +
         '<circle cx="50" cy="62" r="32" fill="#FFF7EE" stroke="#0F2740" stroke-width="2.5"/>' +
         '<circle cx="38" cy="52" r="2.6" fill="#c9b696"/>' +
