@@ -479,7 +479,7 @@ section{ padding:64px 0; }
 }
 .flavor-stage .flavor-accent-bar, .flavor-stage .carousel3d{ position:relative; z-index:1; }
 .flavor-flash{
-  position:absolute; inset:0; z-index:2; border-radius:var(--radius-lg,18px);
+  position:absolute; inset:0; z-index:2; border-radius:var(--radius-lg);
   background:#fff; opacity:0; pointer-events:none;
 }
 .flavor-flash.flash{ animation:flavor-flash .35s ease-out; }
