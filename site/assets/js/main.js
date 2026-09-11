@@ -872,15 +872,20 @@
       layoutCarouselItems(galleryCarousel);
     }
 
-    // Flavours
+    // Flavours — chips stay clickable even when "coming soon" so visitors can
+    // preview each flavour's colour + one-liner (see updateFlavorPreview);
+    // only the CTA/price below reflects real availability, not the chips.
     var flavorRow = root.querySelector("[data-flavor-row]");
     if (flavorRow) {
       flavorRow.innerHTML = product.flavors.map(function (f, i) {
         var soon = f.status === "coming-soon";
         return '<button type="button" class="flavor-chip' + (soon ? ' soon' : '') + '" ' +
-          (soon ? 'disabled title="Coming soon"' : 'aria-pressed="' + (i === 0 ? "true" : "false") + '"') +
-          '>' + f.name + (soon ? ' · soon' : '') + '</button>';
+          'data-name="' + f.name + '" data-swatch="' + f.swatch + '" data-tagline="' + (f.tagline || "") + '" ' +
+          (soon ? 'title="Coming soon" ' : '') +
+          'aria-pressed="' + (i === 0 ? "true" : "false") + '">' +
+          f.name + (soon ? ' · soon' : '') + '</button>';
       }).join("");
+      updateFlavorPreview(root, product.flavors[0]);
     }
 
     // Price + pack size
