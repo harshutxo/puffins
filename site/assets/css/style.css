@@ -367,14 +367,21 @@ section{ padding:64px 0; }
 .section-head{ max-width:680px; margin:0 auto 44px; text-align:center; }
 .section-head.left{ margin:0 0 44px; text-align:left; }
 
+/* minmax(0, ...) everywhere below, not bare 1fr: a plain `1fr` track's
+   minimum size defaults to its content's min-content width, so a single
+   long word/badge or a fixed-width child (the product carousel, at
+   --c3d-w) can force the whole grid — and the page — wider than the
+   viewport on narrow screens. minmax(0,1fr) lets the track actually shrink
+   to fit; found while checking the flavour-preview feature on mobile,
+   fixed at the source since every .grid-2/3/4 on the site shared it. */
 .grid{ display:grid; gap:24px; }
-.grid-2{ grid-template-columns:1fr; }
-.grid-3{ grid-template-columns:1fr; }
-.grid-4{ grid-template-columns:repeat(2,1fr); }
+.grid-2{ grid-template-columns:minmax(0,1fr); }
+.grid-3{ grid-template-columns:minmax(0,1fr); }
+.grid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 @media (min-width:700px){
-  .grid-2{ grid-template-columns:1fr 1fr; }
-  .grid-3{ grid-template-columns:repeat(3,1fr); }
-  .grid-4{ grid-template-columns:repeat(4,1fr); }
+  .grid-2{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .grid-3{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .grid-4{ grid-template-columns:repeat(4,minmax(0,1fr)); }
 }
 
 .card{
