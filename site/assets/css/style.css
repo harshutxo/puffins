@@ -298,6 +298,15 @@ section{ padding:64px 0; }
 @media (max-width:899px){ .hero-floatcard{ left:auto; right:8px; } }
 @keyframes float-y{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
 .hero-stats{ display:flex; gap:22px; margin-top:32px; flex-wrap:wrap; }
+/* Scroll-progress entrance (initHeroStatsReveal in scroll-motion.js) — pops
+   in with a spring overshoot as each stat scrolls into view, reversible on
+   scroll-up like every other reveal in that system. Defaults render fully
+   visible, so this degrades safely with JS disabled or prefers-reduced-motion. */
+.hero-stats > div{
+  opacity:var(--rv-o,1);
+  transform:translateY(var(--rv-y,0px)) scale(var(--rv-s,1));
+  will-change:transform,opacity;
+}
 .hero-stats div strong{
   display:block; font-size:1.55rem;
   font-family:'Baloo 2','Poppins',system-ui,sans-serif;
