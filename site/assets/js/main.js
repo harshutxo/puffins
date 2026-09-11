@@ -352,7 +352,8 @@
      business Q&A) plus live product fields read from window.PUFFINS_PRODUCTS
      (ingredients/pack size), so it never drifts out of sync with the
      product tabs and never invents a regulated figure that isn't confirmed
-     there yet. Reuses the walking-mascot face as its avatar. */
+     there yet. Uses a plain chat-bubble icon (chatIconSVG) — Puff the
+     character now lives only in the nav logo, see assets/img/brand/logo-mark-2026.svg. */
   function initAssistant() {
     var kb = window.PUFFINS_ASSISTANT;
     if (!kb) return;
