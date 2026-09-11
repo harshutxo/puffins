@@ -963,11 +963,11 @@ body{ animation:page-fade-in .5s ease both; }
 /* ---------- Flavour chip click burst ---------- */
 .flavor-chip{ position:relative; overflow:hidden; }
 .chip-burst{
-  position:absolute; border-radius:50%; background:var(--orange); opacity:.35;
+  position:absolute; border-radius:50%; background:var(--orange); opacity:.45;
   transform:translate(-50%,-50%) scale(0); pointer-events:none;
-  animation:chip-burst-anim .5s ease-out forwards;
+  animation:chip-burst-anim .55s ease-out forwards;
 }
-@keyframes chip-burst-anim{ to{ transform:translate(-50%,-50%) scale(3.2); opacity:0; } }
+@keyframes chip-burst-anim{ to{ transform:translate(-50%,-50%) scale(5.5); opacity:0; } }
 @media (prefers-reduced-motion:reduce){ .chip-burst{ display:none; } }
 
 /* ---------- Small-screen refinements ---------- */
