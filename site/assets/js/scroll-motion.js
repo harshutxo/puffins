@@ -280,12 +280,14 @@
 
   /* ---------------- Story tagline: "grain" settles, then "crunch" puffs up ----
      "From a simple rice grain to EVERYDAY CRUNCH" — the two halves read off
-     the same element's scroll position but on offset windows, so the plain
-     half settles in first and the gradient half arrives a beat later and
-     visibly overshoots past full size before springing back, rather than
-     both halves doing the same fade/slide the rest of the section-head
-     cascade uses. The motion illustrates the sentence: plain settles, then
-     the crunchy half puffs up out of it. */
+     the same element's scroll position but on offset windows (--tag-* custom
+     properties, namespaced away from the ambient --rv-* ones this element's
+     .section-head ancestor already drives — see style.css comment), so the
+     plain half settles in first and the gradient half arrives a beat later
+     and visibly overshoots past full size before springing back, rather
+     than both halves doing the same fade/slide the rest of the
+     section-head cascade uses. The motion illustrates the sentence: plain
+     settles, then the crunchy half puffs up out of it. */
   function initStoryTaglinePuff() {
     var el = document.querySelector("[data-story-tagline]");
     if (!el) return;
@@ -295,16 +297,16 @@
       var pPlain = entryProgress(rect, vh, 0.88, 0.58);
       var tPlain = easeOutCubic(pPlain);
       if (plain) {
-        plain.style.setProperty("--rv-o", tPlain);
-        plain.style.setProperty("--rv-s", lerp(0.88, 1, tPlain));
+        plain.style.setProperty("--tag-po", tPlain);
+        plain.style.setProperty("--tag-ps", lerp(0.88, 1, tPlain));
       }
       var pPop = entryProgress(rect, vh, 0.78, 0.42);
       var tPopSpring = easeOutBack(pPop);
       var tPopLinear = clamp01(pPop);
       if (pop) {
-        pop.style.setProperty("--rv-po", tPopLinear);
-        pop.style.setProperty("--rv-ps", lerp(0.32, 1, tPopSpring));
-        pop.style.setProperty("--rv-pr", lerp(-9, 0, tPopSpring) + "deg");
+        pop.style.setProperty("--tag-co", tPopLinear);
+        pop.style.setProperty("--tag-cs", lerp(0.32, 1, tPopSpring));
+        pop.style.setProperty("--tag-cr", lerp(-9, 0, tPopSpring) + "deg");
       }
     });
   }
