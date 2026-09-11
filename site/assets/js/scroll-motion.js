@@ -231,14 +231,18 @@
      The card box and its circular photo are driven from a SINGLE progress
      value per team member — computed once from the card's own geometry,
      then reused for both — so they can never drift out of sync with each
-     other, and the left-to-right order is guaranteed to match visual
-     (DOM) order: this queries .team-card directly rather than going
-     through the shared multi-selector cascade reveal, so it can't be
-     thrown off by unrelated elements elsewhere on the page shifting a
-     global index (that was the bug behind cards revealing in a seemingly
-     random order — see initCascadeReveal's comment). The photo's extra
-     pop-and-spin (inspired by react-bits' BounceCards) rides on top of the
-     same p, using a spring curve where the box uses a plain ease-out. */
+     other. All five cards share the exact same entry window (no per-index
+     stagger), so they pop in together rather than cascading left-to-right;
+     this queries .team-card directly rather than going through the shared
+     multi-selector cascade reveal, so it can't be thrown off by unrelated
+     elements elsewhere on the page shifting a global index (that was the
+     bug behind cards revealing in a seemingly random order — see
+     initCascadeReveal's comment). The photo's extra pop-and-spin (inspired
+     by react-bits' BounceCards) rides on top of the same p, using a spring
+     curve where the box uses a plain ease-out; the alternating spin
+     direction per card (dir) is still index-based purely for visual
+     variety, not timing — every card starts and finishes at the same
+     scroll position. */
   function initTeamReveal() {
     var cards = document.querySelectorAll(".team-card");
     cards.forEach(function (card, i) {
