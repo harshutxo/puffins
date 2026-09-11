@@ -1143,7 +1143,7 @@ body{ animation:page-fade-in .5s ease both; }
 }
 @media (prefers-reduced-motion:reduce){
   .assistant-launcher, .assistant-panel{ transition:none; }
-  .assistant-launcher .mascot-rig, .assistant-head .assistant-avatar .mascot-rig{ animation:none; }
+  .assistant-launcher svg, .assistant-head .assistant-avatar svg{ animation:none; }
 }
 
 /* ==========================================================================
