@@ -353,7 +353,7 @@
      (ingredients/pack size), so it never drifts out of sync with the
      product tabs and never invents a regulated figure that isn't confirmed
      there yet. Uses a plain chat-bubble icon (chatIconSVG) — Puff the
-     character now lives only in the nav logo, see assets/img/brand/logo-mark-2026.svg. */
+     character now lives only in the nav logo, see assets/img/brand/puff-mascot.png. */
   function initAssistant() {
     var kb = window.PUFFINS_ASSISTANT;
     if (!kb) return;
