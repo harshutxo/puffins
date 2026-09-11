@@ -78,11 +78,13 @@
       <div class="grid grid-2" style="align-items:start;gap:48px;">
         <div>
           <!-- "World swap": .flavor-world is a colour-blob backdrop that warps to the
-               clicked flavour's swatch, and .flavor-accent-bar wipes in over it — both
-               driven by updateFlavorPreview() in main.js. Same packshots for every
-               flavour for now. -->
+               clicked flavour's swatch, .flavor-flash is a quick white camera-flash,
+               and .flavor-accent-bar wipes in over it — all driven by
+               updateFlavorPreview() in main.js. Same packshots for every flavour
+               for now. -->
           <div class="flavor-stage" data-flavor-stage>
             <div class="flavor-world" data-flavor-world aria-hidden="true"></div>
+            <div class="flavor-flash" data-flavor-flash aria-hidden="true"></div>
             <div class="flavor-accent-bar" data-flavor-accent aria-hidden="true"></div>
             <!-- Swipeable 3D gallery carousel (redesign spec item 1) — items filled in by
                  renderProductDetail() in main.js from product.galleryImages. -->
