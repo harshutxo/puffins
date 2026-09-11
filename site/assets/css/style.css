@@ -470,7 +470,16 @@ section{ padding:64px 0; }
    updateFlavorPreview() in main.js for how .flash/.warp/.shake/.punch/.glow/
    .flip-out are all triggered together on a real click; page load just sets
    the end state, no animation to skip for reduced-motion there. */
-.flavor-stage{ position:relative; --flavor-color:var(--orange); }
+/* overflow:hidden is load-bearing, not decorative: .flavor-world deliberately
+   extends past the stage on every side (see below) to sell a big blurred
+   "world," and without clipping here that pokes past the viewport edge and
+   forces real page-level horizontal scroll on narrow screens — it did,
+   until this was added. The blur (58px) means the clip edge itself is never
+   a hard line, so cropping it costs nothing visually. */
+.flavor-stage{
+  position:relative; overflow:hidden; border-radius:var(--radius-lg);
+  --flavor-color:var(--orange);
+}
 .flavor-world{
   position:absolute; left:-32%; right:-32%; top:-34%; bottom:-6%; z-index:0;
   border-radius:50%; filter:blur(58px); opacity:.4; pointer-events:none;
