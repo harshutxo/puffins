@@ -1070,7 +1070,8 @@ body{ animation:page-fade-in .5s ease both; }
    Built by initAssistant() in main.js — injected on every page, not
    hardcoded per-page markup. Uses a plain chat-bubble icon (chatIconSVG in
    main.js), not a character — Puff now lives only in the nav logo (see
-   assets/img/brand/logo-mark-2026.svg). Rule-based Q&A over
+   assets/img/brand/puff-mascot.png, the .brand-mark img in every header).
+   Rule-based Q&A over
    assets/js/assistant-data.js + live product data — see that file's header
    comment for why it never invents regulated figures. */
 .assistant-launcher{
