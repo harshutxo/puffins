@@ -464,70 +464,122 @@ section{ padding:64px 0; }
 .flavor-chip.soon{ opacity:.7; }
 .flavor-chip.soon[aria-pressed="true"]{ opacity:1; }
 
-/* Flavour preview — swatch + one-liner that updates when a chip (available or
-   "coming soon") is clicked, plus a matching accent bar and a soft colour-blob
-   "world" behind the packshot. Same product photography for every flavour for
-   now; colour + copy + motion are each flavour's identity until real
-   packshots exist. Clicking a chip plays the "world swap" — see
-   updateFlavorPreview() in main.js for how .warp/.wipe/.flip-out are timed
-   together; page load just sets the end state with no animation. */
+/* Flavour preview — deliberately loud "world swap" behind the packshot, plus
+   a claymorphic identity card. The brief: it should look like the customer's
+   world got switched, not like a colour quietly faded. See
+   updateFlavorPreview() in main.js for how .flash/.warp/.shake/.punch/.glow/
+   .flip-out are all triggered together on a real click; page load just sets
+   the end state, no animation to skip for reduced-motion there. */
 .flavor-stage{ position:relative; --flavor-color:var(--orange); }
 .flavor-world{
-  position:absolute; left:-16%; right:-16%; top:-18%; bottom:8%; z-index:0;
-  border-radius:50%; filter:blur(64px); opacity:.32; pointer-events:none;
-  background:radial-gradient(circle at 42% 38%, var(--flavor-color) 0%, transparent 72%);
-  transform:scale(.88) rotate(0deg);
+  position:absolute; left:-32%; right:-32%; top:-34%; bottom:-6%; z-index:0;
+  border-radius:50%; filter:blur(58px); opacity:.4; pointer-events:none;
+  background:radial-gradient(circle at 42% 38%, var(--flavor-color) 0%, transparent 68%);
+  transform:scale(.8) rotate(0deg);
 }
 .flavor-stage .flavor-accent-bar, .flavor-stage .carousel3d{ position:relative; z-index:1; }
-.flavor-world.warp{ animation:world-warp .75s cubic-bezier(.34,1.56,.64,1); }
-@keyframes world-warp{
-  0%{ transform:scale(.88) rotate(0deg); opacity:.32; }
-  38%{ transform:scale(.32) rotate(-11deg); opacity:.08; }
-  65%{ transform:scale(1.2) rotate(7deg); opacity:.5; }
-  100%{ transform:scale(.88) rotate(0deg); opacity:.32; }
+.flavor-flash{
+  position:absolute; inset:0; z-index:2; border-radius:var(--radius-lg,18px);
+  background:#fff; opacity:0; pointer-events:none;
 }
-@media (prefers-reduced-motion:reduce){ .flavor-world.warp{ animation:none; } }
+.flavor-flash.flash{ animation:flavor-flash .35s ease-out; }
+@keyframes flavor-flash{ 0%{ opacity:0; } 12%{ opacity:.85; } 100%{ opacity:0; } }
+.flavor-world.warp{ animation:world-warp 1s cubic-bezier(.34,1.56,.64,1); }
+@keyframes world-warp{
+  0%{ transform:scale(.8) rotate(0deg); opacity:.4; }
+  30%{ transform:scale(.15) rotate(-22deg); opacity:.06; }
+  55%{ transform:scale(1.55) rotate(14deg); opacity:.65; }
+  75%{ transform:scale(1.05) rotate(-5deg); opacity:.45; }
+  100%{ transform:scale(.8) rotate(0deg); opacity:.4; }
+}
+.flavor-stage.shake{ animation:flavor-shake .5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes flavor-shake{
+  0%, 100%{ transform:translate(0,0) rotate(0deg); }
+  15%{ transform:translate(-6px,3px) rotate(-1.2deg); }
+  30%{ transform:translate(6px,-3px) rotate(1.2deg); }
+  45%{ transform:translate(-5px,2px) rotate(-.8deg); }
+  60%{ transform:translate(4px,-2px) rotate(.8deg); }
+  75%{ transform:translate(-2px,1px) rotate(-.4deg); }
+}
+.carousel3d.punch{ animation:flavor-punch .55s cubic-bezier(.34,1.56,.64,1); }
+@keyframes flavor-punch{
+  0%{ transform:scale(1,1); }
+  30%{ transform:scale(1.1,.9); }
+  55%{ transform:scale(.94,1.08); }
+  100%{ transform:scale(1,1); }
+}
+@media (prefers-reduced-motion:reduce){
+  .flavor-flash.flash, .flavor-world.warp, .flavor-stage.shake, .carousel3d.punch{ animation:none; }
+}
 
 .flavor-accent-bar{
-  height:5px; border-radius:999px; margin-bottom:14px;
+  height:7px; border-radius:999px; margin-bottom:14px;
   background:var(--orange); transform-origin:left;
 }
 .flavor-accent-bar.wipe{ animation:accent-wipe .5s cubic-bezier(.4,0,.2,1); }
-@keyframes accent-wipe{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+@keyframes accent-wipe{
+  0%{ transform:scaleX(0); box-shadow:0 0 0 0 var(--flavor-color); }
+  60%{ box-shadow:0 0 18px 3px var(--flavor-color); }
+  100%{ transform:scaleX(1); box-shadow:0 0 0 0 transparent; }
+}
 @media (prefers-reduced-motion:reduce){ .flavor-accent-bar.wipe{ animation:none; } }
 
+/* Claymorphic identity card — soft, puffy, coloured to match the flavour via
+   the inherited --flavor-color custom property and color-mix(), so every
+   flavour gets its own "clay" without per-flavour CSS. */
 .flavor-preview{
-  margin-top:14px; padding:10px 14px; background:var(--cream); border-radius:12px;
+  --flavor-color:var(--orange);
+  margin-top:16px; padding:16px 18px; border-radius:24px;
+  background:color-mix(in srgb, var(--flavor-color) 16%, #fbf7f1);
+  box-shadow:
+    9px 9px 20px color-mix(in srgb, var(--flavor-color) 38%, transparent),
+    -8px -8px 18px rgba(255,255,255,.85),
+    inset 1px 1px 2px rgba(255,255,255,.6),
+    inset -6px -6px 14px color-mix(in srgb, var(--flavor-color) 20%, transparent);
   overflow:hidden; perspective:700px;
+  transition:background .45s ease, box-shadow .45s ease;
 }
-.flavor-preview-inner{ display:flex; align-items:center; gap:10px; transform-style:preserve-3d; }
-.flavor-preview-inner.flip-out{ animation:preview-flip .42s cubic-bezier(.4,0,.2,1); }
+.flavor-preview.glow{ animation:clay-squish .55s cubic-bezier(.34,1.56,.64,1); }
+@keyframes clay-squish{
+  0%{ transform:scale(1,1); }
+  35%{ transform:scale(1.05,.93); }
+  65%{ transform:scale(.96,1.05); }
+  100%{ transform:scale(1,1); }
+}
+@media (prefers-reduced-motion:reduce){ .flavor-preview.glow{ animation:none; } }
+.flavor-preview-inner{ display:flex; align-items:center; gap:12px; transform-style:preserve-3d; }
+.flavor-preview-inner.flip-out{ animation:preview-flip .55s cubic-bezier(.4,0,.2,1); }
 @keyframes preview-flip{
-  0%{ transform:rotateX(0deg); }
-  50%{ transform:rotateX(-100deg); }
-  100%{ transform:rotateX(0deg); }
+  0%{ transform:rotateX(0deg) scale(1); }
+  50%{ transform:rotateX(-150deg) scale(.82); }
+  100%{ transform:rotateX(-360deg) scale(1); }
 }
 @media (prefers-reduced-motion:reduce){ .flavor-preview-inner.flip-out{ animation:none; } }
 .flavor-preview-dot{
-  width:14px; height:14px; border-radius:50%; flex:none;
-  background:var(--orange); box-shadow:0 0 0 3px rgba(15,39,64,.06);
+  width:28px; height:28px; border-radius:50%; flex:none;
+  background:color-mix(in srgb, var(--flavor-color) 88%, #fff 4%);
+  box-shadow:
+    3px 3px 7px color-mix(in srgb, var(--flavor-color) 55%, transparent),
+    -3px -3px 7px rgba(255,255,255,.85),
+    inset -3px -3px 5px color-mix(in srgb, var(--flavor-color) 45%, #000 12%),
+    inset 2px 2px 4px rgba(255,255,255,.7);
 }
-.flavor-preview strong{ display:block; color:var(--navy); font-size:.92rem; }
+.flavor-preview strong{ display:block; color:var(--navy); font-size:.94rem; }
 .flavor-preview-tagline{ display:block; color:var(--text-soft); font-size:.82rem; }
 
-/* Flavour-coloured puffs that scatter from a clicked chip — see
-   spawnFlavorConfetti() in main.js. position:fixed so they escape the chip's
-   own overflow:hidden (used for the ripple burst below) and the page's
-   layout entirely; each is removed on animationend. */
+/* Flavour-coloured (plus white/yellow) puffs that scatter and tumble from a
+   clicked chip — see spawnFlavorConfetti() in main.js. position:fixed so
+   they escape the chip's own overflow:hidden (used for the ripple burst
+   below) and the page's layout entirely; each is removed on animationend. */
 .flavor-confetti{
-  position:fixed; width:7px; height:7px; border-radius:50%;
-  transform:translate(-50%,-50%); pointer-events:none; z-index:80;
-  animation:confetti-puff .6s cubic-bezier(.2,.7,.3,1) forwards;
+  position:fixed; border-radius:50%;
+  transform:translate(-50%,-50%) rotate(0deg); pointer-events:none; z-index:80;
+  animation:confetti-puff .75s cubic-bezier(.2,.7,.3,1) forwards;
 }
 @keyframes confetti-puff{
-  0%{ transform:translate(-50%,-50%) scale(0); opacity:1; }
-  30%{ transform:translate(calc(-50% + var(--dx) * .4), calc(-50% + var(--dy) * .4)) scale(1.1); opacity:1; }
-  100%{ transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.35); opacity:0; }
+  0%{ transform:translate(-50%,-50%) scale(0) rotate(0deg); opacity:1; }
+  25%{ transform:translate(calc(-50% + var(--dx) * .35), calc(-50% + var(--dy) * .35)) scale(1.25) rotate(calc(var(--rot) * .3)); opacity:1; }
+  100%{ transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy) + 40px)) scale(.3) rotate(var(--rot)); opacity:0; }
 }
 @media (prefers-reduced-motion:reduce){ .flavor-confetti{ display:none; } }
 
