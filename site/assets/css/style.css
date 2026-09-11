@@ -1070,62 +1070,13 @@ body{ animation:page-fade-in .5s ease both; }
   .carousel3d-item{ transition:opacity .2s ease; }
 }
 
-/* ---------- Treadmill mascot (homepage only) ----------
-   Built by initTreadmillMascot() in main.js — not hardcoded into any page's
-   HTML. It only attaches itself when a `.marquee` element exists (the home
-   hero's trust marquee), so it has zero footprint on every other page.
-   Runs left-to-right ON TOP of the marquee band itself (marquee is its
-   containing block — see `position:relative` above), never leaving the
-   bar's own width. Horizontal position is a pure function of scroll
-   progress through that existing element (see main.js) — no added page
-   height needed, and it reverses (runs right-to-left) exactly in step if
-   the visitor scrolls back up, the same scroll-progress-driven model used
-   elsewhere on the site (assets/js/scroll-motion.js). */
-.mascot{
-  position:absolute; left:0; bottom:0px; width:64px; height:auto; z-index:5;
-  opacity:0; pointer-events:none; will-change:transform, opacity;
-  transition:opacity .25s ease;
-}
-/* A soft halo in the bar's own background colour, behind the character —
-   clears a bit of visual space from the ticker text running underneath it
-   (rather than letting words collide straight through the figure), and
-   reads as the character carrying its own patch of "clear track" as it
-   runs. Fades out at the edges instead of a hard-edged disc. */
-.mascot::before{
-  content:""; position:absolute; left:50%; top:38%; width:190%; height:150%; z-index:-1;
-  transform:translate(-50%,-50%); border-radius:50%;
-  background:radial-gradient(circle, var(--cream) 0%, var(--cream) 48%, rgba(255,247,238,0) 74%);
-  pointer-events:none;
-}
-/* A short dark seam at the mascot's feet, on the belt line, so it visibly
-   "stands on" the ticker rather than floating above it. */
-.mascot::after{
-  content:""; position:absolute; left:50%; bottom:4px; width:30px; height:3px;
-  background:var(--navy); opacity:.18; border-radius:2px; transform:translateX(-50%);
-}
-/* Only clickable while actually visible/running — see initTreadmillMascot(). */
-.mascot.is-running{ pointer-events:auto; cursor:pointer; }
-.mascot-rig{ transform-origin:50% 50%; filter:drop-shadow(0 2px 3px rgba(15,39,64,.22)); }
-.mascot.is-running .mascot-rig{ animation:mascot-bob .32s ease-in-out infinite; }
-.mascot-leg-l,.mascot-leg-r,.mascot-arm-l,.mascot-arm-r{
-  transform-box:fill-box; transform-origin:top center;
-}
-.mascot.is-running .mascot-leg-l,.mascot.is-running .mascot-arm-r{ animation:mascot-swing-a .32s ease-in-out infinite; }
-.mascot.is-running .mascot-leg-r,.mascot.is-running .mascot-arm-l{ animation:mascot-swing-b .32s ease-in-out infinite; }
-@keyframes mascot-swing-a{ 0%,100%{ transform:rotate(32deg); } 50%{ transform:rotate(-32deg); } }
-@keyframes mascot-swing-b{ 0%,100%{ transform:rotate(-32deg); } 50%{ transform:rotate(32deg); } }
-@keyframes mascot-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
-@media (max-width:640px){ .mascot{ width:50px; } .mascot::after{ width:24px; bottom:3px; } }
-@media (prefers-reduced-motion:reduce){ .mascot{ display:none; } }
-
 /* ---------- "Puff" chat assistant (site-wide) ----------
    Built by initAssistant() in main.js — injected on every page, not
-   hardcoded per-page markup. Launcher/header avatar and the homepage walking
-   mascot render the exact same SVG rig (see mascotRigMarkup() in main.js) —
-   one character, not a lookalike — so clicking either one opens the same
-   chat panel. Rule-based Q&A over assets/js/assistant-data.js + live product
-   data — see that file's header comment for why it never invents regulated
-   figures. */
+   hardcoded per-page markup. Uses a plain chat-bubble icon (chatIconSVG in
+   main.js), not a character — Puff now lives only in the nav logo (see
+   assets/img/brand/logo-mark-2026.svg). Rule-based Q&A over
+   assets/js/assistant-data.js + live product data — see that file's header
+   comment for why it never invents regulated figures. */
 .assistant-launcher{
   position:fixed; right:20px; bottom:20px; z-index:150; width:60px; height:60px; border-radius:50%;
   background:var(--navy); border:0; padding:8px; box-shadow:var(--shadow-md);
