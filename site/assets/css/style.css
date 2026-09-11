@@ -694,14 +694,53 @@ section{ padding:64px 0; }
 .team-grid{ display:grid; gap:22px; grid-template-columns:repeat(2,1fr); }
 @media (min-width:700px){ .team-grid{ grid-template-columns:repeat(3,1fr); } }
 @media (min-width:1000px){ .team-grid{ grid-template-columns:repeat(5,1fr); } }
+/* ---------- Team cards: skeuomorphic ID badges ----------
+   Reads as a physical laminated badge clipped to a lanyard, not a flat
+   web card: a warm paper-toned gradient (not a flat fill) with an inset
+   highlight along the top edge and an inset shadow along the bottom
+   (::before is the metal clip, ::after the rivet) simulate a raised,
+   slightly domed surface lit from above; the outer shadow is the badge
+   casting light onto the page behind it. transform/opacity are still
+   owned by the shared .card,.product-card,.team-card rule further down
+   (scroll-reveal + pointer-tilt + hover-lift all compose there) — only
+   the surface treatment changes here. */
 .team-card{
-  background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
-  padding:18px; text-align:center; box-shadow:var(--shadow-sm); transition:box-shadow .18s ease;
+  position:relative; margin-top:10px;
+  background:linear-gradient(160deg, #fffdf9 0%, #f7efdd 55%, #eedfc0 100%);
+  border:1px solid #e4d4ac; border-radius:16px;
+  padding:28px 18px 20px; text-align:center;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 -10px 16px -12px rgba(120,90,40,.35),
+    0 14px 24px -10px rgba(120,90,40,.28),
+    0 2px 5px rgba(120,90,40,.14);
+  transition:box-shadow .18s ease;
 }
-.team-card:hover{ --hover-y:-4px; box-shadow:var(--shadow-md); }
+/* lanyard clip + rivet, centred above the badge */
+.team-card::before{
+  content:""; position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+  width:30px; height:13px; border-radius:6px 6px 2px 2px;
+  background:linear-gradient(180deg,#e4e9ed,#9aa4b0);
+  box-shadow:0 2px 3px rgba(15,39,64,.3), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.team-card::after{
+  content:""; position:absolute; top:-2px; left:50%; transform:translateX(-50%);
+  width:5px; height:5px; border-radius:50%;
+  background:#69727d; box-shadow:inset 0 1px 1px rgba(0,0,0,.5);
+}
+.team-card:hover{
+  --hover-y:-4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    inset 0 -10px 16px -12px rgba(120,90,40,.35),
+    0 20px 30px -10px rgba(120,90,40,.34),
+    0 3px 6px rgba(120,90,40,.16);
+}
 .team-card img{
-  width:96px; height:96px; border-radius:50%; object-fit:cover; margin:0 auto 14px;
-  border:3px solid var(--cream); box-shadow:var(--shadow-sm);
+  width:88px; height:88px; border-radius:50%; object-fit:cover; margin:0 auto 14px;
+  padding:4px; box-sizing:content-box;
+  background:conic-gradient(from 180deg,#fff2d2,#d9b466,#fff2d2 50%,#b9873a,#fff2d2);
+  box-shadow:0 4px 9px -2px rgba(120,90,40,.4), inset 0 0 0 3px #fffdf9;
   /* Scroll-synced pop-and-spin, driven by the same progress value as the
      card's own fade/lift — see initTeamReveal() in scroll-motion.js. No
      transition here for the same reason as the rest of the scroll-progress
@@ -711,7 +750,7 @@ section{ padding:64px 0; }
   transform:scale(var(--photo-s,1)) rotate(var(--photo-r,0deg)) translateY(var(--photo-y,0px));
   will-change:transform,opacity;
 }
-.team-card h3{ font-size:1rem; margin-bottom:2px; }
+.team-card h3{ font-size:1rem; margin-bottom:2px; text-shadow:0 1px 0 rgba(255,255,255,.7); }
 .team-card .role{ font-size:.78rem; font-weight:700; color:var(--orange-dk); margin-bottom:8px; }
 .team-card .bio{ font-size:.85rem; color:var(--text-soft); margin-bottom:0; }
 
