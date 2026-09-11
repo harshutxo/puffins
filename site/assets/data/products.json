@@ -50,11 +50,11 @@
       ],
       "status": "coming-soon",
       "flavors": [
-        { "name": "Classic Salted", "status": "coming-soon", "swatch": "#c9b98c" },
-        { "name": "Masala Tadka", "status": "coming-soon", "swatch": "#FF8A00" },
-        { "name": "Cream & Onion", "status": "coming-soon", "swatch": "#E8D9B5" },
-        { "name": "Tangy Tomato", "status": "coming-soon", "swatch": "#D6472E" },
-        { "name": "Peri Peri", "status": "coming-soon", "swatch": "#B33A2E" }
+        { "name": "Classic Salted", "status": "coming-soon", "swatch": "#c9b98c", "tagline": "Light, simple, endlessly snackable." },
+        { "name": "Masala Tadka", "status": "coming-soon", "swatch": "#FF8A00", "tagline": "A spice-box tempering in every chip." },
+        { "name": "Cream & Onion", "status": "coming-soon", "swatch": "#E8D9B5", "tagline": "Cool, creamy, classic crowd favourite." },
+        { "name": "Tangy Tomato", "status": "coming-soon", "swatch": "#D6472E", "tagline": "Zesty tomato with a tangy kick." },
+        { "name": "Peri Peri", "status": "coming-soon", "swatch": "#B33A2E", "tagline": "Fiery peri-peri heat, puffed light." }
       ],
       "packSize": { "value": null, "confirmed": false },
       "price": { "amount": null, "currency": "INR", "confirmed": false, "note": "Pricing to be confirmed by SIF." },
