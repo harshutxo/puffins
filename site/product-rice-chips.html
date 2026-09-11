@@ -77,6 +77,9 @@
     <div class="container">
       <div class="grid grid-2" style="align-items:start;gap:48px;">
         <div>
+          <!-- Coloured per-flavour, updated by updateFlavorPreview() in main.js when a
+               flavour chip is clicked — same packshots for every flavour for now. -->
+          <div class="flavor-accent-bar" data-flavor-accent aria-hidden="true"></div>
           <!-- Swipeable 3D gallery carousel (redesign spec item 1) — items filled in by
                renderProductDetail() in main.js from product.galleryImages. -->
           <div class="carousel3d" data-carousel data-gallery-carousel style="--c3d-h:400px;--c3d-w:min(84%,400px);">
