@@ -127,8 +127,8 @@ section{ padding:64px 0; }
 }
 @media (min-width:900px){ .header-inner{ height:128px; } }
 .brand{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.3rem; color:var(--navy); }
-.brand-mark{ height:60px; width:auto; display:block; transition:height .25s ease; }
-@media (min-width:900px){ .brand-mark{ height:70px; } }
+.brand-mark{ height:70px; width:auto; display:block; transition:height .25s ease; }
+@media (min-width:900px){ .brand-mark{ height:80px; } }
 .site-header.is-shrunk .brand-mark{ height:44px; }
 .site-header.is-shrunk .header-inner{ height:68px; }
 .site-header.is-shrunk ~ .nav-mobile{ inset:68px 0 0 0; }
