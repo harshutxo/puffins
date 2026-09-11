@@ -652,16 +652,22 @@ section{ padding:64px 0; }
    scroll-reveal from initCascadeReveal() in scroll-motion.js; only the
    surface changed, not the entrance mechanics. */
 .steps-brutalist{ gap:26px 22px; }
+/* transform composes with the .step entry reveal from initCascadeReveal()
+   (perspective/rotateX/translateY/scale via --rv-*), not replaces it — this
+   is one shared `transform` property, so the static brutalist tilt (rotate)
+   is appended onto the same chain rather than overwriting the scroll-in
+   animation. */
 .steps-brutalist .step{
   text-align:left; background:var(--white); border:3px solid var(--navy);
   padding:22px 20px 24px; box-shadow:7px 7px 0 var(--navy);
-  transform:rotate(var(--step-rot,0deg));
+  transform:perspective(1200px) rotateX(var(--rv-rx,0deg)) translateY(var(--rv-y,0px)) scale(var(--rv-s,1)) rotate(var(--step-rot,0deg));
   transition:transform .18s ease, box-shadow .18s ease;
 }
 .steps-brutalist .step:nth-child(odd){ --step-rot:-1.4deg; }
 .steps-brutalist .step:nth-child(even){ --step-rot:1.4deg; }
 .steps-brutalist .step:hover{
-  transform:rotate(0deg) translate(-3px,-3px); box-shadow:11px 11px 0 var(--navy);
+  transform:perspective(1200px) rotateX(var(--rv-rx,0deg)) translateY(calc(var(--rv-y,0px) - 3px)) scale(var(--rv-s,1)) rotate(0deg) translateX(-3px);
+  box-shadow:11px 11px 0 var(--navy);
 }
 .steps-brutalist .step:nth-child(1) .num{ background:#17b3a3; }
 .steps-brutalist .step:nth-child(2) .num{ background:#6a4bd6; color:#fff; }
