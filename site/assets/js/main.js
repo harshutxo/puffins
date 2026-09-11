@@ -702,19 +702,43 @@
     });
   }
 
-  /* ---------------- Flavour chip selection (visual only, no live inventory yet) ----------------
+  /* ---------------- Flavour chip selection ----------------
      Delegated on document (not bound per-element) so chips rendered later by
-     renderProductDetail() — which runs after this init — still respond to clicks. */
+     renderProductDetail() — which runs after this init — still respond to clicks.
+     "Coming soon" chips are clickable too (no live inventory either way yet) —
+     picking one previews that flavour's colour + one-line identity below the
+     chip row and on the image accent bar, using the same pack photography for
+     every flavour until real packshots exist. */
   function initFlavorChips() {
     document.addEventListener("click", function (e) {
       var chip = e.target.closest && e.target.closest(".flavor-chip");
-      if (!chip || chip.classList.contains("soon") || chip.disabled) return;
+      if (!chip) return;
       var row = chip.closest(".flavor-row");
       if (!row) return;
       row.querySelectorAll(".flavor-chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
       chip.setAttribute("aria-pressed", "true");
       spawnChipBurst(chip, e);
+      var root = chip.closest("[data-product-detail]");
+      if (root) {
+        updateFlavorPreview(root, {
+          name: chip.getAttribute("data-name"),
+          swatch: chip.getAttribute("data-swatch"),
+          tagline: chip.getAttribute("data-tagline")
+        });
+      }
     });
+  }
+
+  function updateFlavorPreview(root, flavor) {
+    if (!flavor || !flavor.name) return;
+    var dot = root.querySelector("[data-flavor-preview-dot]");
+    var name = root.querySelector("[data-flavor-preview-name]");
+    var tagline = root.querySelector("[data-flavor-preview-tagline]");
+    var accent = root.querySelector("[data-flavor-accent]");
+    if (dot) dot.style.background = flavor.swatch || "";
+    if (name) name.textContent = flavor.name;
+    if (tagline) tagline.textContent = flavor.tagline || "";
+    if (accent) accent.style.background = flavor.swatch || "";
   }
 
   function spawnChipBurst(chip, e) {
