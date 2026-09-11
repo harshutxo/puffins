@@ -79,6 +79,32 @@ section{ padding:64px 0; }
 @media (prefers-reduced-motion:reduce){ .h2-cheerful{ animation:none; } }
 .lead{ font-size:1.15rem; color:var(--text-soft); max-width:640px; }
 
+/* ---------- Story tagline: "simple grain" settles in, then "crunch" puffs
+   up out of it ---------- driven by initStoryTaglinePuff() in
+   scroll-motion.js (--rv-o/--rv-s on the plain half, --rv-po/--rv-ps/--rv-pr
+   on the pop half — separate vars so the pop half can overshoot past 1 while
+   the plain half settles normally). Not a plain fade/slide: the two halves
+   arrive on a stagger and the crunchy half visibly overshoots then springs
+   back, echoing what the sentence itself describes. */
+.story-tagline{
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:baseline;
+  gap:.35em; margin:8px 0 20px; font-size:clamp(1.25rem,3vw,1.8rem);
+}
+.story-tagline-plain{
+  color:var(--text-soft); font-weight:600;
+  opacity:var(--rv-o,1); transform:scale(var(--rv-s,1));
+  transform-origin:center;
+}
+.story-tagline-pop{
+  font-family:'Baloo 2','Poppins',system-ui,sans-serif; font-weight:800; font-size:1.2em;
+  letter-spacing:.01em; text-transform:uppercase; display:inline-block;
+  background:var(--gradient-brand); background-size:220% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent;
+  opacity:var(--rv-po,1); transform:scale(var(--rv-ps,1)) rotate(var(--rv-pr,0deg));
+  transform-origin:center; animation:cheerful-shimmer 5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion:reduce){ .story-tagline-pop{ animation:none; } }
+
 /* ---------- Word-flip: a word that boomerangs between text and an emoji ----------
    Continuous cycle (word -> emoji -> word -> emoji...) driven by
    initWordFlip() in main.js on a timer, not scroll — this is a small,
