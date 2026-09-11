@@ -330,9 +330,11 @@
   }
 
   /* ---------------- Treadmill mascot = the assistant, running on the bar (homepage only) ----------------
-     A puffed-rice-cake-bodied stickman: the circular body IS the rice cake (a
-     cream disc with a scatter of puffed-grain dots and a simple face drawn on
-     it), with thin stick arms/legs. Appended inside `.marquee` (its
+     A puffed-rice-cake head (a cream disc with a scatter of puffed-grain
+     dots and a face drawn on it) worn like a kid's — navy cap with a
+     gradient logo dot, navy hoodie collar, dark trousers — matching the
+     brand's mascot reference art rather than a bare rice-ball. Appended
+     inside `.marquee` (its
      positioned ancestor — see style.css), so it never leaves the trust
      marquee band: it runs left-to-right along the TOP OF THAT BAR as the
      visitor scrolls down, and — because position is a pure function of
