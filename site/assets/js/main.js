@@ -21,7 +21,6 @@
     initImageCarousel();
     initProductShowcase();
     initAssistant();
-    initTreadmillMascot();
     initWordFlip();
   });
 
