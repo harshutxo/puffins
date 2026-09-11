@@ -54,12 +54,12 @@ section{ padding:64px 0; }
 @media (min-width:900px){ section{ padding:96px 0; } }
 
 .eyebrow{
-  display:inline-flex; align-items:center; gap:8px;
-  font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--orange-dk); margin-bottom:14px;
+  display:inline-flex; align-items:center; gap:9px;
+  font-size:1rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--orange-dk); margin-bottom:16px;
 }
 .eyebrow::before{
-  content:""; width:22px; height:3px; border-radius:3px;
+  content:""; width:26px; height:4px; border-radius:3px;
   background:var(--gradient-brand); background-size:200% 100%;
   animation:eyebrow-shimmer 3.5s ease-in-out infinite;
 }
