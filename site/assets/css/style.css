@@ -267,17 +267,16 @@ section{ padding:64px 0; }
 @keyframes blob-spin{ 0%{ transform:rotate(0deg) scale(1); } 50%{ transform:rotate(180deg) scale(1.08); } 100%{ transform:rotate(360deg) scale(1); } }
 @media (prefers-reduced-motion:reduce){ .hero-blob{ animation:none; } }
 
-.hero-copy .eyebrow,.hero-copy .h1,.hero-copy .lead,.hero-copy .btnrow,.hero-copy .hero-stats{
+.hero-copy .eyebrow,.hero-copy .h1,.hero-copy .lead,.hero-copy .btnrow{
   animation:hero-fade-up .7s ease both;
 }
 .hero-copy .eyebrow{ animation-delay:.05s; }
 .hero-copy .h1{ animation-delay:.15s; }
 .hero-copy .lead{ animation-delay:.32s; }
 .hero-copy .btnrow{ animation-delay:.48s; }
-.hero-copy .hero-stats{ animation-delay:.62s; }
 @keyframes hero-fade-up{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:translateY(0); } }
 @media (prefers-reduced-motion:reduce){
-  .hero-copy .eyebrow,.hero-copy .h1,.hero-copy .lead,.hero-copy .btnrow,.hero-copy .hero-stats{ animation:none; }
+  .hero-copy .eyebrow,.hero-copy .h1,.hero-copy .lead,.hero-copy .btnrow{ animation:none; }
 }
 
 .hero-hl{ position:relative; color:var(--orange); display:inline-block; }
