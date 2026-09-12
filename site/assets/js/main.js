@@ -12,7 +12,6 @@
     renderProductCards();
     renderProductDetail();
     initHeaderScroll();
-    initBackToTop();
     initScrollProgress();
     initMagneticButtons();
     initTiltEffect();
