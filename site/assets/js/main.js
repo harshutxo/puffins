@@ -532,22 +532,6 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
-  /* ---------------- Back to top ---------------- */
-  function initBackToTop() {
-    var btn = document.createElement("button");
-    btn.className = "back-to-top";
-    btn.type = "button";
-    btn.setAttribute("aria-label", "Back to top");
-    btn.innerHTML = "↑";
-    document.body.appendChild(btn);
-    btn.addEventListener("click", function () {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    window.addEventListener("scroll", function () {
-      btn.classList.toggle("is-visible", window.scrollY > 600);
-    }, { passive: true });
-  }
-
   /* Scroll-linked reveal animations (cards, Our Story, hero canister, etc.)
      live in assets/js/scroll-motion.js — a continuous scroll-progress
      system, not an enter-viewport-once trigger. See that file. */
