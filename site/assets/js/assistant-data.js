@@ -7,15 +7,22 @@
  * anything regulated (nutrition numbers, allergens, shelf life, pricing,
  * FSSAI, shipping/returns promises) must stay as an honest "not published
  * yet" answer until SIF confirms it — never invent a figure here.
+ *
+ * General (non-brand-specific) education on food grains, rice cakes as a
+ * category, and healthy snacking lives separately in grains-knowledge.js,
+ * searched via unsupervised TF-IDF retrieval (tfidf-search.js) rather than
+ * this file's exact keyword rules — see initAssistant() in main.js.
  */
 window.PUFFINS_ASSISTANT = {
-  greeting: "Hey, I'm Puff! Ask me about our ingredients, how Puffins are made, or the story behind the brand.",
+  greeting: "Hey, I'm Puff! Ask me about our ingredients, how Puffins are made, the story behind the brand — or anything general about grains, rice cakes, or healthy snacking.",
   quickReplies: [
     { label: "What's in a Rice Cake?", topic: "ingredients" },
     { label: "How are they made?", topic: "method" },
     { label: "The founder's story", topic: "story" },
     { label: "Is it gluten free?", topic: "allergens" },
     { label: "When do Rice Chips launch?", topic: "chips" },
+    { label: "Why are whole grains healthy?", query: "why are whole grains healthy" },
+    { label: "Benefits of healthy snacking", query: "benefits of healthy snacking" },
     { label: "Contact us", topic: "contact" }
   ],
   topics: [
