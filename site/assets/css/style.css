@@ -936,18 +936,6 @@ section{ padding:64px 0; }
 /* ---------- Header scroll state ---------- */
 .site-header.is-scrolled{ box-shadow:0 4px 20px rgba(15,39,64,.08); }
 
-/* ---------- Back to top ---------- */
-.back-to-top{
-  position:fixed; right:20px; bottom:20px; z-index:90; width:46px; height:46px; border-radius:50%;
-  background:var(--navy); color:#fff; border:0; display:flex; align-items:center; justify-content:center;
-  font-size:1.1rem; box-shadow:var(--shadow-md); opacity:0; transform:translateY(12px) scale(.9); pointer-events:none;
-  transition:opacity .25s ease, transform .25s ease, background .15s ease;
-}
-.back-to-top.is-visible{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-.back-to-top:hover{ background:var(--orange); color:var(--navy); }
-.back-to-top.is-visible:hover{ transform:translateY(0) scale(1.08); }
-@media (prefers-reduced-motion:reduce){ .back-to-top.is-visible:hover{ transform:translateY(0) scale(1); } }
-
 /* ---------- Image carousel (The Crunch) — auto-advancing slide carousel, JS-driven ---------- */
 .image-carousel{
   position:relative; overflow:hidden; border-radius:var(--radius-lg); box-shadow:var(--shadow-md);
