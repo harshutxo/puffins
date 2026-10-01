@@ -70,6 +70,12 @@ body.pf-page .form-field input, body.pf-page .form-field select, body.pf-page .f
 body.pf-page .form-field input:focus, body.pf-page .form-field select:focus, body.pf-page .form-field textarea:focus{
   outline:none; box-shadow:4px 5px 0 var(--pf-pink);
 }
+/* radio / checkbox groups: keep the controls compact (the generic input rule makes them full-width) */
+body.pf-page .form-field .radio-group{ gap:12px 22px; }
+body.pf-page .form-field .radio-group label{ white-space:nowrap; cursor:pointer; }
+body.pf-page .form-field input[type="radio"], body.pf-page .form-field input[type="checkbox"]{
+  width:18px; height:18px; padding:0; flex:none; margin:0; border-radius:50%; accent-color:var(--pf-navy);
+}
 body.pf-page .accordion-item{ border-bottom:2px solid rgba(20,26,92,.15); }
 body.pf-page .accordion-q{ font-family:'Sora',sans-serif; font-weight:800; color:var(--pf-navy); }
 body.pf-page .accordion-q .plus{ color:var(--pf-orange); }
