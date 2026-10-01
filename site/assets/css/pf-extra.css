@@ -10,12 +10,13 @@
     opacity:0; box-shadow:inset -3px -4px 0 rgba(255,138,0,.18);
     animation:pf-drift var(--d) linear var(--delay) infinite; will-change:transform;
   }
+  .pf-puffs.is-section{ z-index:-1; --o:.55; }
   .pf-puffs.is-paused i{ animation-play-state:paused; }
   @keyframes pf-drift{
     0%{ transform:translate(0,0) rotate(0); opacity:0; }
-    10%{ opacity:.85; }
+    10%{ opacity:var(--o,.85); }
     50%{ transform:translate(var(--dx),-45vh) rotate(160deg); }
-    90%{ opacity:.7; }
+    90%{ opacity:calc(var(--o,.85) * .8); }
     100%{ transform:translate(calc(var(--dx) * -.6),-95vh) rotate(340deg); opacity:0; }
   }
 
@@ -55,5 +56,12 @@
   .pf-badge::after{ content:"\2605"; position:absolute; inset:0; display:grid; place-items:center; font-size:30px; color:#ff8a00; animation:pf-badge-pulse 2.4s ease-in-out infinite; }
   @keyframes pf-badge-spin{ to{ transform:rotate(360deg); } }
   @keyframes pf-badge-pulse{ 50%{ transform:scale(1.25) rotate(18deg); } }
+  .hero-photo .pf-badge{ left:auto; top:auto; right:380px; bottom:26px; width:100px; height:100px; }
   @media (max-width:1100px){ .pf-badge{ display:none; } }
+
+  /* ---------- ribbon above the footer (reuses the .marquee strip, runs the other way) ---------- */
+  .marquee.pf-ribbon{ background:#ff5a1f; border:0; transform:rotate(-1deg); margin:36px -10px -6px; position:relative; z-index:2; }
+  .marquee.pf-ribbon .marquee-track{ animation-direction:reverse; animation-duration:32s; }
+  .marquee.pf-ribbon .marquee-track span{ color:#fff; font-family:'Sora',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
+  .marquee.pf-ribbon .marquee-track span::before{ content:"\2605"; color:#ffc257; font-size:.8rem; }
 }
