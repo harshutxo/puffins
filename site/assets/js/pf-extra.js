@@ -51,13 +51,13 @@
   /* rotating "puffed, not fried" badge on the homepage hero */
   var home = document.querySelector(".pf-hero");
   if (home) {
-    var t = "PUFFED NOT FRIED • PUFFED NOT FRIED • ";
+    var t = "PUFFED NOT FRIED • ";
     var badge = document.createElement("div");
     badge.className = "pf-badge";
     badge.setAttribute("aria-hidden", "true");
     badge.innerHTML = '<svg viewBox="0 0 120 120"><defs><path id="pf-circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>' +
       '<circle cx="60" cy="60" r="58" fill="#141a5c"/>' +
-      '<text font-family="Sora,sans-serif" font-weight="800" font-size="11.5" letter-spacing="1.6" fill="#ffc257"><textPath href="#pf-circ">' + t + '</textPath></text></svg>';
+      '<text font-family="Sora,sans-serif" font-weight="800" font-size="12" fill="#ffc257"><textPath href="#pf-circ" textLength="270" lengthAdjust="spacing">' + t + '</textPath></text></svg>';
     home.appendChild(badge);
   }
 })();
